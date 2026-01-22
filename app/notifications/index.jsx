@@ -4,19 +4,18 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useDrawer } from '@/contexts/DrawerProvider';
 
-// export const unstable_settings = {
-//   headerShown: false, // hide header
-// };
 const Notifications = () => {
-  
   const router = useRouter();
+  const drawer = useDrawer(); 
+
   return (
     <View style={styles.container}>
       <Appbar.Header style={{backgroundColor:'#FFFFFF', paddingEnd:16}}>
         <Appbar.BackAction onPress={() => router.back()} />
         <Appbar.Content title="Notifications" variant="titleMedium" titleStyle={{fontWeight:'700'}} />
-        <Pressable onPress={() => {}}>
+        <Pressable onPress={drawer.toggle}>
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>

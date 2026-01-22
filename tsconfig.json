@@ -3,16 +3,22 @@
   "compilerOptions": {
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "**/*.jsx",
+    "app/**/*.jsx",
+    "components/**/*.js",
+    "components/**/*.jsx",
+    "constants/**/*.js",
+    "contexts/**/*.js",
+    "hooks/**/*.js",
+    "lib/**/*.js",
+    "services/**/*.js",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/_layout.jsx", "app/index.jsx", "hooks/use-color-scheme.js", "hooks/use-color-scheme.web.js"  ]
+    "expo-env.d.ts",
+  ]
 }

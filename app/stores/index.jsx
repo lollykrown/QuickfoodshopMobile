@@ -1,54 +1,69 @@
-import { View, Text, Pressable, StyleSheet, FlatList, ActivityIndicator, Keyboard } from 'react-native'
-import { useRouter } from "expo-router";
+import { View, Text, Pressable, StyleSheet, FlatList, ActivityIndicator, Keyboard,  } from 'react-native'
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import useFetch from "@/hooks/usefetch";
 import SearchBar from '@/components/SearchBar';
-import { fetchAllData } from "@/services/api";
-import { ItemCard } from '@/components/ItemCard';
+import { fetchAllStores } from "@/services/api";
+import {StoreCard} from '@/components/ItemCard';
+import { useLocalSearchParams, useRouter , usePathname} from "expo-router";
 import { useDrawer } from '@/contexts/DrawerProvider';
 
 
-const Search = () => {
+const Stores = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  // const [filtered, setFiltered] = useState([])
   const router = useRouter();
+  const pathname = usePathname();
   const drawer = useDrawer(); 
+
+console.log(pathname)
+  // Memoize fetch function to prevent infinite re-render
+  // const fetchFn = useCallback(() => {
+  //   return fetchRestaurants({
+  //     query: searchQuery.trim() || undefined,
+  //     limit: 100, // optional
+  //   });
+  // }, [searchQuery]);
 
   const {
     data:items= [],
     loading,
     error,
     refetch: loadData,
-    reset
-  } = useFetch(() => fetchAllData({ query: searchQuery}), false);
-  useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      if (searchQuery.trim()) {
-        await loadData();
-      } else {
-        reset();
-      }
-    }, 500);
+  } = useFetch(() => fetchAllStores(searchQuery), false);
 
-    return () => clearTimeout(timeoutId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchQuery]);
+  useEffect(() => {
+    loadData();
+  }, []);
   
+
+  // useEffect(() => {
+  //   setFiltered(items);
+  // }, [items]);
+
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(async () => {
+  //     await loadData();
+  //   }, 700);
+  //   return () => clearTimeout(timeoutId);
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [searchQuery]);
+
   return (
     <View style={styles.container}>
       <Appbar.Header style={{backgroundColor:'#F8F8F8', paddingEnd:16}}>
         <Appbar.BackAction onPress={() => router.back()} />
-        <Appbar.Content title="Search" variant="titleMedium" titleStyle={{fontWeight:'700'}} />
+        <Appbar.Content title="All Stores" variant="titleMedium" titleStyle={{fontWeight:'700'}} />
         <Pressable onPress={drawer.toggle}>
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>
 
       {/* Searchbar */}
-      <View style={{marginBottom:8, paddingHorizontal:16,justifyContent:'space-between',flexDirection:'row'}}>
+      <View style={{marginBottom:12, paddingHorizontal:16,justifyContent:'space-between',flexDirection:'row'}}>
         <SearchBar
           placeholder="Search Food and Restaurants"
           onChangeText={setSearchQuery}
@@ -62,15 +77,9 @@ const Search = () => {
 
       </View>
       <FlatList
-        numColumns={2}
         data={items}
-        style={{paddingHorizontal:12}}
-        renderItem = {({item}) => <ItemCard data={item} storeType={item?.categoryId?.name?.toLowerCase()||'groceries'}/>}
-        columnWrapperStyle={{
-          justifyContent: "space-between",
-          gap: 20,
-          marginBottom: 18,
-        }}
+        style={{flex:1,paddingHorizontal:12, gap:12}}
+        renderItem = {({item}) => <StoreCard data={item} storeType={'restaurants'}/>}
         keyExtractor={(item) => item._id.toString()}
         ListHeaderComponent={
           <View style={{paddingVertical:30}}>
@@ -99,23 +108,23 @@ const Search = () => {
               )}
           </View>
         }
-        ListEmptyComponent={
-          !loading && !error ? (
-            <View style={{marginTop:10, padding:8}}>
-              <Text style={{textAlign:'center', fontSize:16, color:'gray',paddingHorizontal:10}} numberOfLines={2}>
-                {searchQuery.trim()
-                  ? `No groceries, food or restaurants found with by the word ${searchQuery}`
-                  : "Start typing in the search box above to search for groceries or food items"}
-              </Text>
-            </View>
-          ) : null
-        }
+        // ListEmptyComponent={
+        //   !loading && !error ? (
+        //     <View style={{marginTop:10, padding:8}}>
+        //       <Text style={{textAlign:'center', fontSize:16, color:'gray',paddingHorizontal:10}} numberOfLines={2}>
+        //         {(searchQuery.trim()&&filtered.length===0)
+        //           ? `No groceries, food or restaurants found with by the word ${searchQuery}`
+        //           : "Start typing in the search box above to search for groceries or food items"}
+        //       </Text>
+        //     </View>
+        //   ) : null
+        // }
       />
     </View>
   )
 }
 
-export default Search
+export default Stores
 
 const styles = StyleSheet.create({
   container: {

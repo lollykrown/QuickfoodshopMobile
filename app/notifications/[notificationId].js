@@ -1,14 +1,14 @@
-import { View, Text, Pressable, StyleSheet, FlatList } from 'react-native'
-import { Link, useLocalSearchParams, useRouter } from "expo-router";
+import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { useLocalSearchParams, useRouter } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
-import { Colors } from '@/constants/colors';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image } from 'expo-image';
+import { useDrawer } from '@/contexts/DrawerProvider';
 
 export default function NotificationDetail() {
   const { notificationId } = useLocalSearchParams();
   const router = useRouter();
+  const drawer = useDrawer(); 
 
   return (
     <View style={styles.container}>
@@ -19,7 +19,7 @@ export default function NotificationDetail() {
           variant="titleMedium"
           titleStyle={{ fontWeight: '700' }}
         />
-        <Pressable onPress={() => {}}>
+        <Pressable onPress={drawer.toggle}>
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>

@@ -1,0 +1,156 @@
+
+//unprotected
+export const CONFIG = {
+  BASE_URL: 'https://app.quickfoodshop.co.uk/v1',
+  headers: {
+    accept: "application/json",
+    // cache: 'no-store',
+  },
+};
+
+
+export const fetchPopularStores = async () => {
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/popular-dishes`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch popular stores`);
+  }
+
+  const data = await response.json();
+// console.log('DATA', data)
+  return data;
+};
+export const fetchPopularDishes = async () => {
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/popular-dishes`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch popular dishes`);
+  }
+
+  const data = await response.json();
+// console.log('DATA', data)
+  return data;
+};
+export const fetchAllData = async ({query,limit}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/all?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+// console.log('DATA', res)
+  return res.data;
+};
+export const fetchAllStores = async ({query,limit}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/stores?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+// console.log('DATA', res.data.stores)
+  return res.data.stores;
+};
+export const fetchStoreByID = async ({id}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/stores/${id}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+// console.log('DATA', res.data)
+  return res.data;
+};
+export const fetchGroceriesStores = async ({query,limit}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/stores/groceries?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+// console.log('DATA', data)
+  return res.data.stores;
+};
+export const fetchFood = async ({query,limit}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/food?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+// console.log('DATA', res)
+  return res.data;
+};
+export const fetchFoodByID = async ({id}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/${id}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+console.log('DATA', res)
+  return res.data;
+};
+export const fetchFoodExtras = async ({query}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/extras?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+  return res.data;
+};
+export const fetchRestaurants = async ({query}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/stores/restaurant?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
+  }
+
+  const res = await response.json();
+// console.log('DATA', res.data)
+  return res.data.stores;
+};
+export const fetchGroceries = async ({query}) => {
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/groceries?search=${encodeURIComponent(query)}`, {
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data groceries`);
+  }
+
+  const res = await response.json();
+// console.log('DATA', res.data)
+  return res.data;
+};
+
+
