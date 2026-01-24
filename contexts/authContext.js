@@ -3,11 +3,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import * as LocalAuthentication from 'expo-local-authentication';
 import {
   login as authLogin,
-  logout as authLogout,
   refreshToken as authRefreshToken,
   getAccessToken,
-  getUserData,
+  getUserData, 
 } from '../services/auth';
+import {   logout as authLogout,} from '../services/api'
 import { saveItem, getItem } from '../lib/secureStore';
 
 
@@ -18,9 +18,23 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // debugging
+//   useEffect(() => {
+//   console.log('🟢 AUTH PROVIDER STATE UPDATED:', {
+//     userToken,
+//     user,
+//     isLoggedIn: Boolean(userToken),
+//   });
+// }, [userToken, user]);
+
   // Bootstrap: check existing token + user data
   useEffect(() => {
     const bootstrap = async () => {
+      // simulate delay
+      // await new Promise((res) => setTimeout(() => {
+      //   res(null)
+      // }, 2000))
+
       const token = await getAccessToken();
       const userData = await getUserData();
       setUserToken(token);
@@ -33,14 +47,16 @@ export const AuthProvider = ({ children }) => {
   // Standard login
   const login = async (email, password) => {
     const data = await authLogin(email, password);
+    // console.log('Context',data)
     if (data) {
-      setUserToken(data.accessToken);
+      setUserToken(data.token);
       setUser(data.user);
       return true;
     }
     return false;
   };
 
+  
   // Standard logout
   const logout = async () => {
     await authLogout();
@@ -92,8 +108,9 @@ export const AuthProvider = ({ children }) => {
     return true;
   };
 
+    const isLoggedIn = Boolean(userToken);
   return (
-    <AuthContext.Provider value={{ userToken, user, loading, login, logout, biometricLogin, refresh }}>
+    <AuthContext.Provider value={{ userToken, isLoggedIn, user, loading, login, logout, biometricLogin, refresh }}>
       {!loading && children}
     </AuthContext.Provider>
   );

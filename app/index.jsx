@@ -4,13 +4,12 @@ import Onboarding from '@/components/Onboarding'
 import { View, ActivityIndicator } from 'react-native'
 import OnbdOptions from '@/components/OnbdOptions'
 import { useRouter } from 'expo-router'
-
-
-
+import { useAuth } from "@/contexts/authContext";
 
 export default function Index() {  
   const [isFirstLaunch, setIsFirstLaunch] = useState(null)
   const router = useRouter()
+    const { isLoggedIn } = useAuth();
 
   useEffect(() => {
     //testing purposes
@@ -25,6 +24,12 @@ export default function Index() {
       }
     })
   }, [])
+  useEffect(() => {
+    //testing purposes
+     if(isLoggedIn){
+       router.push('/home')
+    }
+  }, [])
 
 
   if (isFirstLaunch === null) {
@@ -35,7 +40,7 @@ export default function Index() {
     )
   }
 
-  return isFirstLaunch ? <Onboarding /> : <OnbdOptions />
+  return isFirstLaunch ? <Onboarding /> :<OnbdOptions />
 }
 
 

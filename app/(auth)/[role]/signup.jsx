@@ -1,98 +1,112 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  Keyboard,
-} from 'react-native';
+import { Image } from 'expo-image';
+import { StyleSheet, View, Text, Keyboard , Pressable, Platform, KeyboardAvoidingView, Dimensions, ScrollView, ImageBackground} from 'react-native';
+import FormInput from '@/components/FormInput';
+
 import { useForm } from 'react-hook-form';
 import { signupSchema } from '@/lib/zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import FormInput from '@/components/FormInput'
+import { Colors } from '@/constants/colors';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
+import GoogleLogo from '@/components/GoogleLogo';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
+const { height } = Dimensions.get('window')
+const dat = [
+      {name:'firstName',label:'first name',placeholder:"First name"},
+      {name:'lastName',label:'last name',placeholder:"Last name"},
+      {name:'email',label:'Email',placeholder:"Email"},
+      {name:'phone',label:'Phone Number',placeholder:"Phone number"},
+      {name:'password',label:'Password',placeholder:"Password"},
+      {name:'confirmPassword',label:'Confirm Password',placeholder:"Confirm Password"},
+    ]
 
 export default function SignupForm() {
+  const {role}= useLocalSearchParams()
+  const router = useRouter();
+  
   const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(signupSchema),
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
-    },
-  });
-
-  const onSubmit = async (data) => {
-    Keyboard.dismiss();
-
-    const { confirmPassword, ...payload } = data;
-    console.log('Signup payload:', payload);
-  };
+      control,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+    } = useForm({
+      resolver: zodResolver(signupSchema),
+      defaultValues: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        password: '',
+        confirmPassword: '',
+      },
+    });
+  
+    const onSubmit = async (data) => {
+      Keyboard.dismiss();
+  
+      const { confirmPassword, ...payload } = data;
+      console.log('Signup payload:', payload);
+    };
 
   return (
-    <View style={styles.container}>
-      <FormInput
-        control={control}
-        name="firstName"
-        placeholder="First name"
-        error={errors.firstName?.message}
-      />
+    <View style={styles.container} >
+      <ImageBackground style={styles.imageCont}  source={require('../../../assets/images/onboardingBg.webp')} contentFit="cover">
+          <Pressable style={styles.backBtn} onPress={()=>router.back()}>
+            <MaterialIcons style={{textAlign:'center'}} name="arrow-back-ios-new" size={18} color="black" />
+          </Pressable>
+          <Image
+            source={require('../../../assets/images/onboarding3.webp')}
+            width={'70%'}
+            height={height * 0.45}
+            contentPosition={{top:20, right:0}}
+            accessibilityLabel={'sign up image'}
+          />
+          <View style={styles.overlay} />
+      </ImageBackground>
+      <KeyboardAvoidingView style={styles.textArea}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
+        <View style={styles.bar}></View>
+        <ScrollView showsVerticalScrollIndicator={false} style={{paddingBottom:20}}>
+        <Text style={{fontSize:20, color:Colors.primary, textAlign:'center', fontWeight:700}}>Create Account</Text>
+        <Text style={{textAlign:'center',marginBottom:12}}>Already have an account? {" "}
+        <Link href={`${role}/login`} asChild>
+          <Text style={{color:Colors.orange, fontWeight:500,textDecorationColor: Colors.orange,textDecorationStyle: 'solid',textDecorationLine: 'underline',}}>Login</Text></Link></Text>
 
-      <FormInput
-        control={control}
-        name="lastName"
-        placeholder="Last name"
-        error={errors.lastName?.message}
-      />
+          {dat.map(d=>(
+          <FormInput
+            control={control}
+            name={d.name}
+            label={d.label}
+            placeholder={d.placeholder}
+            error={errors?.[d.name]?.message}
+            autoCapitalize="none"
+            keyboardType={d.name==='phone'?"phone-pad":"email-address"}
+            secureTextEntry={d.name.includes('assword')?true:false}
+            key={d.name}
+          />
+          ))}
 
-      <FormInput
-        control={control}
-        name="email"
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        error={errors.email?.message}
-      />
+        <Pressable
+          style={styles.button}
+          onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+        >
+          <Text style={styles.buttonText}>
+            {isSubmitting ? 'Creating account...' : 'Sign Up'}
+          </Text>
+        </Pressable>
 
-      <FormInput
-        control={control}
-        name="phone"
-        placeholder="Phone number"
-        keyboardType="phone-pad"
-        error={errors.phone?.message}
-      />
-
-      <FormInput
-        control={control}
-        name="password"
-        placeholder="Password"
-        secureTextEntry
-        error={errors.password?.message}
-      />
-
-      <FormInput
-        control={control}
-        name="confirmPassword"
-        placeholder="Confirm password"
-        secureTextEntry
-        error={errors.confirmPassword?.message}
-      />
-
-      <Pressable
-        style={styles.button}
-        onPress={handleSubmit(onSubmit)}
-        disabled={isSubmitting}
-      >
-        <Text style={styles.buttonText}>
-          {isSubmitting ? 'Creating account...' : 'Sign Up'}
-        </Text>
-      </Pressable>
+        <Pressable
+          style={styles.button2}
+          onPress={()=>{}}
+        >  
+        <GoogleLogo width={18} height={18} />
+          <Text style={{fontSize: 14,fontWeight: '500',}}>
+            Sign up with Google
+          </Text>
+        </Pressable>
+      </ScrollView> 
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -100,22 +114,72 @@ export default function SignupForm() {
 /* -------- Styles -------- */
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    flex: 1,
+    backgroundColor:'white',
   },
-  error: {
+  imageCont:{
+    height:height * 0.3,
+    paddingTop:20, 
+    position:'relative',
+    width:'100%', 
+    alignItems:'center',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.4)', 
+  },
+  backBtn:{
+    backgroundColor:'white',
+    borderRadius:12, 
+    position:'absolute', 
+    left:24, 
+    top:54,
+    zIndex:10,
+    padding:6,
+  },
+  textArea:{
+    backgroundColor:'white',
+    paddingHorizontal:20,
+    // borderTopLeftRadius:48,
+    // borderTopRightRadius:48
+  },
+  bar:{
+    width:60,
+    height:16,
+    borderBottomWidth:6,
+    marginHorizontal:'auto',
+    borderBottomColor:'#dfdddd',
+    borderRadius:4,
+    marginBottom:12,
+  },
+    error: {
     color: '#ef4444',
     fontSize: 12,
     marginTop: 4,
   },
   button: {
-    backgroundColor: '#0f766e',
+    backgroundColor: Colors.primary,
     padding: 14,
-    borderRadius: 8,
+    borderRadius: 12,
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 18,
+  },
+  button2: {
+    padding: 14,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 18,
+    marginBottom:320,
+    height: 48,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap:12,
+    borderColor: '#DADCE0',
+    backgroundColor: '#F3f3f3',
   },
   buttonText: {
     color: '#fff',
     fontWeight: '600',
   },
 });
+

@@ -1,57 +1,33 @@
-import React from 'react';
-import { View, Text, Pressable, StyleSheet, Keyboard } from 'react-native';
-import { useForm } from 'react-hook-form';
-import { loginSchema } from '@/lib/zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import FormInput from '@/components/FormInput'
+import React, { useEffect } from 'react';
+import { StyleSheet, Dimensions } from 'react-native';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Image } from 'expo-image';
+import StackedBackground from '@/components/StackedBG';
+
+const { height } = Dimensions.get('window')
 
 export default function LoginForm() {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
+  const {role, prev}= useLocalSearchParams()
 
-  const onSubmit = async (data) => {
-    Keyboard.dismiss();
-    console.log('Login data:', data);
-  };
+    const router = useRouter();
+    useEffect(() => {
+      router.replace(`/modal?role=${role}&prev=${prev}`);
+    }, []);
+  
 
   return (
-    <View style={styles.container}>
-      <FormInput
-        control={control}
-        name="email"
-        placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        error={errors.email?.message}
+    <StackedBackground style={styles.container}>
+      {/* <Pressable style={styles.backBtn} onPress={()=>router.back()}>
+        <MaterialIcons style={{textAlign:'center'}} name="arrow-back-ios-new" size={18} color="black" />
+      </Pressable> */}
+
+      <Image
+        source={require('../../../assets/images/onboarding3.webp')}
+        width={'100%'}
+        height={height * 0.6}
       />
 
-      <FormInput
-        control={control}
-        name="password"
-        placeholder="Password"
-        secureTextEntry
-        error={errors.password?.message}
-      />
-
-      <Pressable
-        style={styles.button}
-        onPress={handleSubmit(onSubmit)}
-        disabled={isSubmitting}
-      >
-        <Text style={styles.buttonText}>
-          {isSubmitting ? 'Logging in...' : 'Login'}
-        </Text>
-      </Pressable>
-    </View>
+    </StackedBackground>
   );
 }
 
@@ -59,6 +35,16 @@ export default function LoginForm() {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    position:'relative'
+  },
+  backBtn:{
+    backgroundColor:'white',
+    borderRadius:12, 
+    position:'absolute', 
+    left:24, 
+    top:54,
+    zIndex:100,
+    padding:6,
   },
   error: {
     color: '#ef4444',
@@ -75,5 +61,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontWeight: '600',
+  },
+
+  fab: {
+    position: 'absolute',
+    margin: 16,
+    left: 0,
+    top: 50,
   },
 });

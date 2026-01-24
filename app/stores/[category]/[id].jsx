@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Pressable } from 'react-native'
 import { useLocalSearchParams, useRouter , usePathname, Link} from "expo-router";
 import { fetchStoreByID, fetchFoodByID } from "@/services/api";
 import { useCallback, useEffect, useState } from 'react';
@@ -10,7 +10,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import { Button, Snackbar } from 'react-native-paper';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { useCart } from '@/contexts/cartContext'; // Context we created
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+// import { useCart } from '@/contexts/cartContext'; // Context we created
 
 const { height } = Dimensions.get('window')
 
@@ -21,7 +22,7 @@ export default function StoreDetails() {
   if(!id){
    router.back()
   }
-  const { cartItems, updateQuantity, removeItem, clearCart, totalPrice } = useCart();
+  // const { cartItems, updateQuantity, removeItem, clearCart, totalPrice } = useCart();
 
   const fnChoice = useCallback(() => {
       return (category === 'restaurants' ||category === 'grocery-stores')?fetchStoreByID:fetchFoodByID
@@ -30,12 +31,17 @@ export default function StoreDetails() {
     const fetchFn = useCallback(() => fnChoice()({ id }), [fnChoice, id]);
     
   const {data: details = {},loading,refetch: loadDetails} = useFetch(() => fetchFn({id}), false);
+  
   useEffect(() => {
     loadDetails();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-console.log(details)
+    const handleX = () => {
+      router.dismiss()
+    }
+    // const tt = category === resta
+// console.log('ll',details)
   return (
     <>
     <ScrollView style={styles.container}>             
@@ -46,8 +52,14 @@ console.log(details)
           style={{marginVertical:'auto'}}/>
           </View>}
       <View style={{ height: height * 0.3 }}>
+        <Pressable style={styles.backBtn} onPress={handleX}>
+          <Ionicons style={{textAlign:'center', fontWeight:700}} name="close" size={19} color="black" />
+        </Pressable>
+        <Pressable style={styles.backBtn2} onPress={()=>{}}>
+          <Ionicons style={{textAlign:'center', fontWeight:700}} name="heart-outline" size={19} color="black" />
+        </Pressable>
         <ShimmerExpoImage
-          uri={details?.store?.image}
+          uri={details?.store?.image||details?.image}
           width={'100%'}
           height={height * 0.3}
           accessibilityLabel={details.itemName}
@@ -56,12 +68,19 @@ console.log(details)
       <View style={styles.scrollList}>
         <View style={styles.sectCont}>
           <Text style={{ fontWeight: '600', marginTop: 8, fontSize: 18 }}>
-            {details?.store?.businessName}
+            {details?.store?.businessName|| details?.itemName}
           </Text>
           <Text numberOfLines={5} style={{ marginVertical: 8, color: '#687076', lineHeight: 24 }}>
-            {details?.store?.businessDescription}
+            {details?.store?.businessDescription||details?.description}
           </Text>
         </View>
+      { (category === 'food' ||category === 'groceries')&&
+      <Pressable onPress={()=> router.push(`/stores//${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)} asChild>
+        <View style={{paddingHorizontal:18,gap:8, flexDirection:'row', marginBottom:32}}>
+          <ShimmerExpoImage uri={details.vendorId?.image} width={40} height={40} accessibilityLabel={details?.itemName} styles={{borderRadius:20}} />
+          <Text style={{alignSelf:'center', marginLeft:8, fontWeight:'600',fontSize:16}}>{details?.vendorId?.businessName}</Text>
+          <MaterialIcons style={{alignSelf:'center'}} name="arrow-outward" size={24} color={Colors.green}/>
+        </View></Pressable>}
         <View style={{ flexDirection:'row', marginBottom:18, justifyContent:'space-around',paddingHorizontal:18 }}>
           <View style={{ paddingRight:18, gap:8, justifyContent:'center',alignItems:'center',}}>
             <MaterialCommunityIcons style={{borderRadius:12}} name="clock" size={20} color={Colors.green} />
@@ -71,7 +90,7 @@ console.log(details)
           <View style={{borderRightWidth:1, borderColor:'#EEE4E4'}}></View>
           <View style={{ paddingRight:18, gap:8, justifyContent:'center',alignItems:'center',}}>
             <Ionicons name="location-sharp" size={22} style={{borderRadius:12}} color={Colors.green}/>
-            <Text numberOfLines={1} style={{fontSize:14, fontWeight:500, maxWidth:150, }}>{details?.store?.businessAddress}</Text>
+            <Text numberOfLines={1} style={{fontSize:14, fontWeight:500, maxWidth:150, }}>{details?.store?.businessAddress||details?.vendorId?.businessAddress}</Text>
             <Text style={{fontSize:14, color:'#687076', fontWeight:'600'}}>Location</Text>
           </View>
           <View style={{borderRightWidth:1, borderColor:'#EEE4E4'}}></View>
@@ -157,6 +176,40 @@ const styles = StyleSheet.create({
     fontSize: 14,
     maxWidth:100,
     width:100
-  }
+  },
+  backBtn: {
+    position: 'absolute',
+    top: 46,
+    left: 24,
+    zIndex: 10,
+    padding:7,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4, // shadow for Android
+    // iOS shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+  },
+  backBtn2: {
+    position: 'absolute',
+    top: 46,
+    right: 24,
+    zIndex: 10,
+    padding:7,
+    borderRadius: 12,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4, // shadow for Android
+    // iOS shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+  },
 });
 

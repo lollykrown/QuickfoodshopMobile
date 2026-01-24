@@ -4,12 +4,12 @@ import { Image } from 'expo-image';
 import { ActivityIndicator, Avatar, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Colors } from '@/constants/colors';
 import featured from '@/assets/images/featured.webp'
 import useFetch from "@/hooks/usefetch";
-import { fetchPopularStores, fetchPopularDishes } from "@/services/api";
+import { fetchPopularStores, fetchPopularDishes, getProfile } from "@/services/api";
 import { useEffect, useState } from 'react';
 import { ItemCard } from '@/components/ItemCard';
 import { useDrawer } from '@/contexts/DrawerProvider';
@@ -85,11 +85,16 @@ const Home = () => {
   useEffect(() => {
     loadpopDishes();
   }, []);
+  const {data = [],loading,error,refetch,} = useFetch(() => getProfile(), false);
+  useEffect(() => {
+    refetch();
+  }, []);
 
+// console.log('Profile', data)
   const renderFeaturedItems = ({ item }) => (
     <Image source={featured} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
   );
-
+  const { user, isLoggedIn, logout, unlockWithBiometrics } = useAuth();
   
   // const { user, logout, biometricLogin } = useAuth();
   // useEffect(() => {
@@ -98,19 +103,27 @@ const Home = () => {
   // }, []);
 
 
-
   return (
       <SafeAreaView style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header section */}
           <View style={styles.headerCont}>
+            {isLoggedIn?
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
-              <Avatar.Image size={48} source={require('@/assets/images/avatar.png')} />
+              <Avatar.Image size={48} source={{uri:data?.image} }/>
               <View>
                 <Text style={{fontSize:12}}>Good {timeOfDay} 👋</Text>
-                <Text style={{fontWeight:700, fontSize:18}}>Kayode Agboola</Text>
+                <Text style={{fontWeight:700, fontSize:18, textTransform:'capitalize'}}>{user?`${user?.firstName} ${user?.lastName}`:'Victor Bayem'}</Text>
               </View>
-            </View>
+            </View>:
+            <Pressable onPress={()=>router.push('/customer/login?prev=home')} style={{flexDirection:'row', alignItems:'center',gap:8}}>
+              <MaterialCommunityIcons
+                name='login'
+                size={24}
+                color='#000'
+              />
+                <Text style={{fontWeight:'bold'}}>Login</Text>
+              </Pressable>}
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
                 <Link href='/notifications' >
                   <View style={{position:'relative'}}>

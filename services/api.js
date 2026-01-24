@@ -1,3 +1,10 @@
+import { deleteItem } from "@/lib/secureStore";
+import fetchWithCred from "./axios";
+
+const API_BASE = 'https://app.quickfoodshop.co.uk/v1';
+const ACCESS_TOKEN_KEY = 'accessToken';
+// const REFRESH_TOKEN_KEY = 'refreshToken';
+const USER_DATA_KEY = 'userData';
 
 //unprotected
 export const CONFIG = {
@@ -7,7 +14,6 @@ export const CONFIG = {
     // cache: 'no-store',
   },
 };
-
 
 export const fetchPopularStores = async () => {
   const response = await fetch(`${CONFIG.BASE_URL}/items/customers/popular-dishes`, {
@@ -100,20 +106,27 @@ export const fetchFood = async ({query,limit}) => {
 // console.log('DATA', res)
   return res.data;
 };
+
 export const fetchFoodByID = async ({id}) => {
-  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/${id}`, {
-    method: 'GET',
-    headers: CONFIG.headers,
-  });
+  try {
+    const response = await fetchWithCred.get(`/items/customers/${id}`);
+    const {data, rating} = response.data
+    return data;
+  } catch (error) {
+    if (error.response) {
+      // Server responded with non-2xx
+      throw new Error(error.response.data?.message ?? 'Server error');
+    }
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch data: ${response.statusText}`);
+    if (error.request) {
+      // No response
+      throw new Error('Network error');
+    }
+
+    throw new Error('Unexpected error');
   }
-
-  const res = await response.json();
-console.log('DATA', res)
-  return res.data;
 };
+
 export const fetchFoodExtras = async ({query}) => {
   const response = await fetch(`${CONFIG.BASE_URL}/items/customers/extras?search=${encodeURIComponent(query)}`, {
     method: 'GET',
@@ -152,5 +165,57 @@ export const fetchGroceries = async ({query}) => {
 // console.log('DATA', res.data)
   return res.data;
 };
+
+export const getProfile = async () => {
+  try {
+    const response = await fetchWithCred('https://app.quickfoodshop.co.uk/v1/auth/profile');
+    // console.log('dfyguioytfdrtfiu',response.data.data)
+    return response.data.data;
+  } catch (error) {
+    if (error.response) {
+      // Server responded with non-2xx
+      throw new Error(error.response.data?.message ?? 'Server error');
+    }
+
+    if (error.request) {
+      // No response
+      throw new Error('Network error');
+    }
+
+    console.log(error)
+    throw new Error('Unexpected error');
+  }
+};
+
+
+
+
+
+
+const logoutAction = async () => {
+  try {
+    const response = await fetchWithCred.get('https://app.quickfoodshop.co.uk/v1/auth/logout');
+    return response;
+  } catch (error) {
+    if (error.response) {
+      // Server responded with non-2xx
+      throw new Error(error.response.data?.message ?? 'Server error');
+    }
+
+    if (error.request) {
+      // No response
+      throw new Error('Network error');
+    }
+
+    console.log(error)
+    throw new Error('Unexpected error');
+  }
+};
+export async function logout() {
+  await logoutAction()
+  await deleteItem(ACCESS_TOKEN_KEY);
+  // await deleteItem(REFRESH_TOKEN_KEY);
+  await deleteItem(USER_DATA_KEY);
+}
 
 

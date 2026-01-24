@@ -2,13 +2,14 @@ import { Controller } from 'react-hook-form';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 
-const FormInput = ({ control, name, error, ...props }) =>{
+const FormInput = ({ control, name,label, error, ...props }) =>{
   return (
     <Controller
       control={control}
       name={name}
       render={({ field: { onChange, onBlur, value } }) => (
-        <View style={{ marginBottom: 12 }}>
+        <View style={{ marginBottom: 12,}}>
+          <Text style={{textTransform:'capitalize', padding:4}}>{label}</Text>
           <TextInput
             style={[styles.input, error && styles.inputError]}
             onBlur={onBlur}
@@ -27,8 +28,9 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
+    borderRadius: 12,
     padding: 12,
+    width:'100%'
   },
   inputError: {
     borderColor: '#ef4444',

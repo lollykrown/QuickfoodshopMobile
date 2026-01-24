@@ -1,4 +1,4 @@
-'use client'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { createContext, useContext, useReducer, useEffect, useRef, useMemo } from "react";
 
 // ✅ Initial state
@@ -71,7 +71,7 @@ export const CartProvider = ({ children }) => {
 
     async function loadCart() {
       try {
-        const localCart = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        const localCart = JSON.parse(AsyncStorage.getItem('cartItems') || '[]');
         // const res = await fetch('/api/cart');
         const res = {ok:false}
         const serverCart = res.ok ? await res.json() : [];
@@ -106,8 +106,8 @@ export const CartProvider = ({ children }) => {
 
       if (JSON.stringify(prevCart) !== JSON.stringify(currentCart)) {
         try {
-          localStorage.setItem('cartItems', JSON.stringify(currentCart));
-          localStorage.setItem('cartCount', currentCart.length);
+          AsyncStorage.setItem('cartItems', JSON.stringify(currentCart));
+          AsyncStorage.setItem('cartCount', currentCart.length);
           window.dispatchEvent(new Event('cart-updated')); // for navbar update
         } catch (err) {
           console.error('Failed to save cart:', err);

@@ -1,10 +1,11 @@
 import { Text, Image, View, TouchableOpacity, Dimensions, StyleSheet, Animated, Pressable } from 'react-native'
 import { useRouter } from 'expo-router'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as Haptics from 'expo-haptics'
 import { Colors } from '@/constants/colors'
 import Octicons from '@expo/vector-icons/Octicons';
 import { Snackbar } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const { width } = Dimensions.get('window')
 const options = ['browse store', 'customer', 'vendor']
@@ -14,6 +15,23 @@ export default function OnbdOptions() {
   const buttonScale = useRef(new Animated.Value(1)).current
   const [selected, setSelected] = useState(null)
   const [visible, setVisible] = useState(false);
+  const [authRoute, setAuthRoute] = useState('/signup')
+
+
+    useEffect(() => {
+    //testing purposes
+    // AsyncStorage.removeItem('isRegUser')
+    // AsyncStorage.setItem('isRegUser', 'true')
+
+    AsyncStorage.getItem('isRegUser').then(value => {
+      if (value === null) {
+        setAuthRoute('/signup')
+      } else {
+        setAuthRoute('/login')
+      }
+    })
+  }, [])
+
 
   const onDismissSnackBar = () => setVisible(false);
 
@@ -27,7 +45,7 @@ export default function OnbdOptions() {
   const handleClick = (option)=>{
     setSelected(option)
     return option === 'browse store' ? router.replace({pathname:'/home'}):
-    router.push(`/${option}/login`)
+    router.push(`/${option}/${authRoute}`)
   }
 
   const message = 'Please select an option above to continue'
@@ -37,8 +55,8 @@ export default function OnbdOptions() {
       setVisible(true)
       return
     }
-    return selected === 'browse store' ? router.replace('/home'):
-    router.push(`/${selected}/login`)  }
+    return selected === 'browse store' ? router.replace('/search'):
+    router.push(`/${selected}/${authRoute}`)  }
 
   return (
     <>

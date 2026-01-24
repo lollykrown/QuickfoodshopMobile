@@ -19,7 +19,7 @@ const Stores = () => {
   const pathname = usePathname();
   const drawer = useDrawer(); 
 
-console.log(pathname)
+// console.log(pathname)
   // Memoize fetch function to prevent infinite re-render
   // const fetchFn = useCallback(() => {
   //   return fetchRestaurants({

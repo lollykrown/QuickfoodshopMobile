@@ -7,6 +7,7 @@ import StackedBackground from './StackedBG'
 
 
 const { width, height } = Dimensions.get('window')
+
 const parseYellow = (text) => {
   return text.split("**").map((part, index) => (
     <Text key={index} style={index % 2 ? styles.yellow : null}>
@@ -140,16 +141,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    // justifyContent: 'space-between',
-    // paddingBottom: 40,
   },
   slide: {
     justifyContent: 'space-evenly',
-    // alignItems: 'center',
   },
   image: {
     width: width * 0.8,   
-    height: height * 0.52,  
+    height: height * 0.55,  
     contentFit: 'contain', 
   },
   lowerSect:{
@@ -159,14 +157,14 @@ const styles = StyleSheet.create({
     paddingHorizontal:20,
     borderTopLeftRadius:30,
     borderTopRightRadius:30,
-    height: height * 0.5,  
+    height: height * 0.45,  
     paddingBottom:20,
   },
   title: {
     fontSize: 28,
     fontWeight: '700',
     textAlign: 'center',
-    marginBottom: 10,
+    marginVertical: 20,
     color: 'white',
   },
   text: {
@@ -180,13 +178,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     position:'absolute',
-    top: height * 0.59,
+    top: height * 0.63,
     width: '100%',
     // marginTop: 80,
   },
   dot: {
-    height: 8,
-    width: 8,
+    height: 9,
+    width: 9,
     borderRadius: 4,
     // backgroundColor: '#FF6600',
     marginHorizontal: 6,
