@@ -9,7 +9,7 @@ const FormInput = ({ control, name,label, error, ...props }) =>{
 
   const isPasswordField = props.secureTextEntry || name.toLowerCase().includes('assword');
 
-
+console.log(error)
   return (
     <Controller
       control={control}
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   inputError: {
     borderColor: '#ef4444',
   },
-    iconButton: {
+  iconButton: {
     paddingHorizontal: 10,
     justifyContent: 'center',
     alignItems: 'center',

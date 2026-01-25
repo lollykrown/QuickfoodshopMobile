@@ -75,12 +75,12 @@ export default function StoreDetails() {
           </Text>
         </View>
       { (category === 'food' ||category === 'groceries')&&
-      <Pressable onPress={()=> router.push(`/stores//${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)} asChild>
+      <TouchableOpacity onPress={()=> router.push(`/stores/${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)} asChild>
         <View style={{paddingHorizontal:18,gap:8, flexDirection:'row', marginBottom:32}}>
           <ShimmerExpoImage uri={details.vendorId?.image} width={40} height={40} accessibilityLabel={details?.itemName} styles={{borderRadius:20}} />
           <Text style={{alignSelf:'center', marginLeft:8, fontWeight:'600',fontSize:16}}>{details?.vendorId?.businessName}</Text>
           <MaterialIcons style={{alignSelf:'center'}} name="arrow-outward" size={24} color={Colors.green}/>
-        </View></Pressable>}
+        </View></TouchableOpacity>}
         <View style={{ flexDirection:'row', marginBottom:18, justifyContent:'space-around',paddingHorizontal:18 }}>
           <View style={{ paddingRight:18, gap:8, justifyContent:'center',alignItems:'center',}}>
             <MaterialCommunityIcons style={{borderRadius:12}} name="clock" size={20} color={Colors.green} />

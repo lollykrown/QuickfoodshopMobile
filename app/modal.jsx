@@ -8,12 +8,14 @@ import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { Colors } from '@/constants/colors';
 import GoogleLogo from '@/components/GoogleLogo';
 import { useAuth } from '@/contexts/authContext'
+import { useState } from 'react';
 
 
 export default function ModalScreen() {
   const {role, prev}= useLocalSearchParams()
   const router = useRouter()
   const { login, loading } = useAuth();
+  const [loginError, setLoginError] = useState('')
 
   const {
       control,
@@ -35,19 +37,26 @@ export default function ModalScreen() {
       }
     }
     const onSubmit = async (data) => {
+      setLoginError('')
       Keyboard.dismiss();
   
       const { email,password} = data;
       // const res = await login('joe_kayu@yahoo.com', 'Kvothe01!')
 
       const res = await login(email,password)
-      if(res) router.replace('/home')
+      if (res.error ) {
+        setLoginError(res.error)
+        return
+      }
+      router.replace('/home')
       return  
     };
     const dat = [
       {name:'email',label:'Email',placeholder:"Email"},
       {name:'password',label:'Password',placeholder:"Password"},
     ]
+      console.log('mod',loginError)
+
   return (
     <KeyboardAvoidingView style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -75,6 +84,7 @@ export default function ModalScreen() {
           key={d.name}
         />
         ))}
+        <Text style={{ color: '#ef4444', fontSize: 12, marginTop: 4,}}>{loginError}</Text>
         <Text style={{textAlign:'right', color:Colors.primary,fontWeight:600}}>Forgot Password?</Text>
         <Pressable
           style={styles.button}
@@ -85,7 +95,6 @@ export default function ModalScreen() {
             {isSubmitting||loading ? 'Submitting..' : 'Login'}
           </Text>
         </Pressable>
-
         <Pressable
           style={styles.button2}
           onPress={()=>{}}

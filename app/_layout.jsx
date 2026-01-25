@@ -5,8 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 import DrawerProvider from '@/contexts/DrawerProvider';
 import { AuthProvider, useAuth } from "@/contexts/authContext";
-import { useEffect, useRef } from "react";
-import { Protected } from "@/components/Guard";
+import { useEffect, useRef, useState } from "react";
 // import { CartProvider } from '@/contexts/cartContext';
 
 SplashScreen.preventAutoHideAsync()
@@ -25,46 +24,50 @@ export default function RootLayout() {
 function AppLayout() {
   const router = useRouter();
   const pathname = usePathname();
-  const { logout,isLoggedIn, loading } = useAuth();
+  const { logout,isLoggedIn,user, loading } = useAuth();
+    const [appReady, setAppReady] = useState(false); // track when app is ready
+
   const splashHidden = useRef(false);
 
   // console.log(pathname)
 
-      useEffect(() => {
-        if (!loading && !splashHidden.current) {
+    useEffect(() => {
+    async function prepare() {
+      if (!loading) {
+        // Optional: any async setup like fonts, data fetch
+        setAppReady(true);
+      }
+    }
+    prepare();
+  }, [loading]);
+
+
+  useEffect(() => {
+    if (appReady && !splashHidden.current) {
           splashHidden.current = true;
           SplashScreen.hideAsync().catch(() => {});
         }
-      }, [loading]);
+  }, [appReady]);
 
-      if (loading) return null;
+  if (!appReady) {
+    // Keep splash screen visible until appReady is true
+    return null;
+  }
 
-      const logoutBtn = {
-        label: 'Log Out',
-        icon: 'logout',
-        active: pathname === '/logout',
-        onPress: () => logout(),
-      };
       const drawerItems = isLoggedIn? [
-        {
-          label: 'Home',
-          icon: 'home',
-          active: pathname.includes('/home'),
-          onPress: () => router.push('/home'),
-        },
         {
           label: 'Dashboard',
           icon: 'view-dashboard',
-          active: pathname.includes('/searcg'),
-          onPress: () => router.push('/search'),
+          active: pathname === '/dashboard',
+          onPress: () => router.push('/dashboard'),
         },
-        {
-          label: 'Notifications',
-          icon: 'bell',
-          badge: 3,
-          active: pathname.includes('/notifications'),
-          onPress: () => router.push('/notifications'),
-        },
+        // {
+        //   label: 'Notifications',
+        //   icon: 'bell',
+        //   badge: 3,
+        //   active: pathname.includes('/notifications'),
+        //   onPress: () => router.push('/dashboard/notifications'),
+        // },
         {
           label: 'Orders',
           icon: 'human-queue',
@@ -97,13 +100,13 @@ function AppLayout() {
           onPress: () => router.push('/dashboard/settings'),
         },
       ]: [{
-        label: 'Log In',
+        label: 'Login to account',
         icon: 'login',
         active: pathname === '/login',
-        onPress: () => logout(),
+        onPress: () => router.push('/customer/login'),
       }];
   return (
-    <DrawerProvider drawerItems={drawerItems} logout={logoutBtn} isLoggedIn={isLoggedIn} side="left">
+    <DrawerProvider drawerItems={drawerItems} user={user}logout={logout} isLoggedIn={isLoggedIn} side="left">
         {/* <CartProvider> */}
           <SafeAreaProvider>
             <PaperProvider>
@@ -111,10 +114,6 @@ function AppLayout() {
                 <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="stores" options={{ headerShown: false }} />
-                <Stack.Protected guard={isLoggedIn}>
-                  <Stack.Screen name="dashboard" options={{ headerShown: false }} />
-                </Stack.Protected>
-                <Stack.Screen name="notifications" options={{ headerShown: false }} />
                 <Stack.Screen name="index" 
                   options={{ 
                     headerShown: false,  

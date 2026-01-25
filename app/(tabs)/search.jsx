@@ -1,7 +1,7 @@
-import { View, Text, Pressable, StyleSheet, FlatList, ActivityIndicator, Keyboard } from 'react-native'
+import { View, Text, Pressable, StyleSheet, FlatList, ActivityIndicator, Keyboard, ScrollView } from 'react-native'
 import { useRouter } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { Appbar } from 'react-native-paper';
+import { Appbar, Button } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
 import { useEffect, useState } from 'react';
 import Fontisto from '@expo/vector-icons/Fontisto';
@@ -12,10 +12,20 @@ import { ItemCard } from '@/components/ItemCard';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import { Image } from 'expo-image';
 import featured from '@/assets/images/featured.webp'
+import featured2 from '@/assets/images/featured2.webp'
+import featured3 from '@/assets/images/featured3.webp'
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-  const renderFeaturedItems = ({ item }) => (
-    <Image source={featured} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
+const feat = [featured3,featured2,featured]
+const feat2 = [featured2,featured,featured3]
+
+const renderFeaturedItems = ({ item }) => (
+    <Image source={item} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
   );
+const categories = ['amala','milo', 'ofada','jollof rice', 'puff puff', 'fried rice', 'moi moi']
+
+
+
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
@@ -78,12 +88,7 @@ const Search = () => {
               borderRadius: 12,
             }}
           >
-            <Fontisto
-              style={{ transform: 'rotate(90deg)' }}
-              name="equalizer"
-              size={18}
-              color="white"
-            />
+            <Fontisto style={{ transform: 'rotate(90deg)' }} name="equalizer" size={18} color="white" />
           </View>
         </Pressable>
       </View>
@@ -104,7 +109,7 @@ const Search = () => {
         }}
         keyExtractor={(item) => item._id.toString()}
         ListHeaderComponent={
-          <View style={{ paddingVertical: 30 }}>
+          <View style={{ paddingBottom: 30 }}>
             {loading && (
               <ActivityIndicator
                 size="large"
@@ -125,10 +130,33 @@ const Search = () => {
                 Error: {error.message}
               </Text>
             )}
-
+              {/* Popular searches section */}
+              {searchQuery&&<View style={styles.featuredCont}>
+                <Text style={{fontWeight:700, fontSize:16}}>Popular Searches</Text>
+                <ScrollView
+                    horizontal={true} 
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{marginTop:10, flexDirection:'row', alignItems:'center'}}
+                  >
+                    {categories.map((cat, index) => (
+                      <Button 
+                        key={index}
+                        style={{borderColor: Colors.primary, marginRight: 10, textAlign:'center'}}
+                        mode={"outlined"}
+                        textColor={Colors.primary}
+                        background={Colors.primary}
+                        labelStyle={{fontWeight:'600', textTransform:'capitalize'}}
+                        rippleColor="rgba(255, 255, 255, 0.32)"
+                        onPress={() => setSearchQuery(cat)}>
+                          {cat} <FontAwesome style={{alignSelf:'baseline'}} name="search" size={16} color={Colors.primary} />
+                        </Button>
+                      ))}
+                </ScrollView>
+              </View>}
+            
             {!loading && !error && searchQuery.trim() && items?.length > 0 && (
-              <Text style={{ fontSize: 24, fontWeight: 600 }}>
-                Search Results for{' '}
+              <Text style={{ fontSize: 20, fontWeight: 600, marginTop:12 }}>
+                Showing search Results for{' '}
                 <Text
                   style={{ color: Colors.primary, textTransform: 'capitalize' }}
                 >
@@ -147,9 +175,7 @@ const Search = () => {
                   fontSize: 16,
                   color: 'gray',
                   paddingHorizontal: 10,    
-                  // borderBottomWidth: 1, 
                   paddingBottom: 14,
-                  // borderBottomColor: '#E2E2E2',
                 }}
                 numberOfLines={2}
               >
@@ -157,6 +183,29 @@ const Search = () => {
                   ? `No groceries, food or restaurants found with by the word ${searchQuery}`
                   : 'Start typing in the search box above to search for groceries or food items'}
               </Text>
+              {/* Popular searches section */}
+              <View style={styles.featuredCont}>
+                <Text style={{fontWeight:700, fontSize:16}}>Popular Searches</Text>
+                <ScrollView
+                    horizontal={true} 
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{marginTop:10, flexDirection:'row', alignItems:'center'}}
+                  >
+                    {categories.map((cat, index) => (
+                      <Button 
+                        key={index}
+                        style={{borderColor: Colors.primary, marginRight: 10, textAlign:'center'}}
+                        mode={"outlined"}
+                        textColor={Colors.primary}
+                        background={Colors.primary}
+                        labelStyle={{fontWeight:'600', textTransform:'capitalize'}}
+                        rippleColor="rgba(255, 255, 255, 0.32)"
+                        onPress={() => setSearchQuery(cat)}>
+                          {cat} <FontAwesome style={{alignSelf:'baseline'}} name="search" size={16} color={Colors.primary} />
+                        </Button>
+                      ))}
+                </ScrollView>
+              </View> 
               {/* Featured section */}
               <View style={styles.featuredCont}>
                 <View
@@ -182,7 +231,7 @@ const Search = () => {
                 </View>
                 <FlatList
                   horizontal={true}
-                  data={[1, 2, 3, 4]}
+                  data={feat}
                   renderItem={renderFeaturedItems}
                   keyExtractor={(item) => item.toString()}
                   showsHorizontalScrollIndicator={false}
@@ -213,7 +262,7 @@ const Search = () => {
                 </View>
                 <FlatList
                   horizontal={true}
-                  data={[1, 2, 3, 4]}
+                  data={feat2}
                   renderItem={renderFeaturedItems}
                   keyExtractor={(item) => item.toString()}
                   showsHorizontalScrollIndicator={false}
@@ -236,11 +285,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#F8F8F8',
   },
-    featuredCont:{
+  featuredCont:{
     marginTop: 20,
     paddingHorizontal: 20,
     borderBottomWidth: 1, 
     paddingBottom: 18,
     borderBottomColor: '#E2E2E2',
   },
+
 })

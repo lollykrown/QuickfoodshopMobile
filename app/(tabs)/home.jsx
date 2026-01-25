@@ -1,13 +1,16 @@
 import { View, Text,BackHandler, StyleSheet, FlatList, ScrollView, TouchableOpacity, Pressable } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { Image } from 'expo-image';
-import { ActivityIndicator, Avatar, Button } from 'react-native-paper';
+import { ActivityIndicator, Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Colors } from '@/constants/colors';
 import featured from '@/assets/images/featured.webp'
+import featured2 from '@/assets/images/featured2.webp'
+import featured3 from '@/assets/images/featured3.webp'
+import avatar from '@/assets/images/avatar.png'
 import useFetch from "@/hooks/usefetch";
 import { fetchPopularStores, fetchPopularDishes, getProfile } from "@/services/api";
 import { useEffect, useCallback } from 'react';
@@ -15,6 +18,9 @@ import { ItemCard } from '@/components/ItemCard';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import {useAuth } from '../../contexts/authContext'
 import { useFocusEffect } from '@react-navigation/native';
+import ShimmerExpoImage from '@/components/ShimmerImg';
+
+const feat = [featured3,featured2,featured]
 
 const stores = [
   {
@@ -76,6 +82,7 @@ const Home = () => {
   const timeOfDay = getTimeOfDay();
   const router = useRouter();
   const drawer = useDrawer(); 
+  const { isOnline } = useFetch();
 
   useFocusEffect(
     useCallback(() => {
@@ -106,8 +113,9 @@ const Home = () => {
   }, []);
 
 // console.log('Profile', data)
+
   const renderFeaturedItems = ({ item }) => (
-    <Image source={featured} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
+    <Image source={item} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
   );
   const { user, isLoggedIn, logout, unlockWithBiometrics } = useAuth();
   
@@ -125,7 +133,7 @@ const Home = () => {
           <View style={styles.headerCont}>
             {isLoggedIn?
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
-              <Avatar.Image size={48} source={{uri:data?.image} }/>
+              <ShimmerExpoImage width={48} height={48} styles={{borderRadius:24}} uri={data?.image||avatar}/>
               <View>
                 <Text style={{fontSize:12}}>Good {timeOfDay} 👋</Text>
                 <Text style={{fontWeight:700, fontSize:18, textTransform:'capitalize'}}>{user?`${user?.firstName} ${user?.lastName}`:'Victor Bayem'}</Text>
@@ -140,7 +148,7 @@ const Home = () => {
                 <Text style={{fontWeight:'bold'}}>Login</Text>
               </Pressable>}
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
-                <Link href='/notifications' >
+                <Link href='/dashboard/notifications' >
                   <View style={{position:'relative'}}>
                     <Ionicons name="notifications" size={24} color={Colors.primary} />
                     <View style={{position:'absolute', top:0, right:0, padding:1.5, backgroundColor:'white', borderRadius:12}}>
@@ -184,9 +192,9 @@ const Home = () => {
             </View>
             <FlatList
                 horizontal={true}
-                data={[1,2,3,4]}
+                data={feat}
                 renderItem={renderFeaturedItems}
-                keyExtractor={(item)=>item.toString()}
+                keyExtractor={(item)=>item}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{gap:12}}
               />
@@ -337,9 +345,5 @@ const styles = StyleSheet.create({
   },
     overlayStyle:{
     position: 'absolute', top: 0, left: 260, bottom: 0, right: 0 }
-  // side === 'left'
-  //   ? { position: 'absolute', top: 0, left: DRAWER_WIDTH, bottom: 0, right: 0 }
-  //   : { position: 'absolute', top: 0, left: 0, bottom: 0, right: DRAWER_WIDTH }
-
 });
 

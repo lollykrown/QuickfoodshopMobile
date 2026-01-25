@@ -48,12 +48,12 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     const data = await authLogin(email, password);
     // console.log('Context',data)
-    if (data) {
+    if (data.token) {
       setUserToken(data.token);
       setUser(data.user);
       return true;
     }
-    return false;
+    return {error:data};
   };
 
   

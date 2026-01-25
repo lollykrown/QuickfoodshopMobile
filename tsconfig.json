@@ -20,5 +20,6 @@
     "services/**/*.js",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
+    "utils/axios.js"
   ]
 }

@@ -24,7 +24,7 @@ const Notifications = () => {
       <FlatList
         data={[1,2,3,4]}
         renderItem={({ item }) => (
-          <Link href={`/notifications/${item}`} >
+          <Link href={`/dashboard/notifications/${item}`} >
             <View style={styles.notificationsList}> 
             <View style={{flexDirection:'column', gap:12,width:'95%'}}>
               <Text style={{fontWeight:'600'}}>New restaurant added !</Text>

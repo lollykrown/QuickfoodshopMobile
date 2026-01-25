@@ -30,7 +30,7 @@ export default function ShimmerExpoImage({ uri, width = 200, height = 200,access
     <View style={{ width, height, overflow: 'hidden', backgroundColor: '#eee', ...styles }}>
       {/* Expo Image with blurhash placeholder */}
       <Image
-        source={{ uri }}
+        source={ uri }
         placeholder={blurhash}   // blurhash placeholder
         contentFit="cover"
         transition={300}         // smooth fade

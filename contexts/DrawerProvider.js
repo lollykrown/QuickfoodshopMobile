@@ -1,3 +1,4 @@
+import ShimmerExpoImage from '@/components/ShimmerImg';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Image } from 'expo-image';
 import React, {
@@ -18,8 +19,12 @@ import {
   Platform,
   Easing,
   Text,
+  TouchableOpacity,
 } from 'react-native';
 import { Drawer, Divider } from 'react-native-paper';
+import avatar from '@/assets/images/avatar.png'
+import { Colors } from '@/constants/colors';
+import { Link, useRouter } from 'expo-router';
 
 const DrawerContext = createContext(null);
 export const useDrawer = () => useContext(DrawerContext);
@@ -29,11 +34,13 @@ const DRAWER_WIDTH = 260;
 export default function DrawerProvider({
   children,
   drawerItems = [],
+  user,
   logout,
   isLoggedIn,
   side = 'left',
 }) {
   const [open, setOpen] = useState(false);
+  const router=  useRouter()
 
   // Drawer position
   const translateX = useRef(
@@ -108,7 +115,6 @@ export default function DrawerProvider({
     close: () => setOpen(false),
     toggle: () => setOpen(v => !v),
   };
-
   return (
     <DrawerContext.Provider value={api}>
       {children}
@@ -188,29 +194,41 @@ export default function DrawerProvider({
                 />
               ))}
               <Divider bold={true}/>
-              {isLoggedIn&&<Drawer.Item
-                label={logout.label}
-                active={logout.active}
-                icon={({ color, size }) => (
-                    <MaterialCommunityIcons
-                      name={logout.icon}
-                      size={size}
-                      color={logout.active ? '#22c55e' : '#64748b'} // active/inactive color
-                    />
-                  )}
-                style={[
-                    styles.drawerItem,
-                    logout.active && styles.drawerItemActive,
-                  ]}
+
+              {isLoggedIn&&
+              <>
+              <Pressable
+                onPress={()=>{
+                  logout();
+                  setOpen(false)
+                }}
+                style={{ paddingLeft: 28,marginVertical:12, alignItems:'center', flexDirection:'row'}}
+              >
+                <MaterialCommunityIcons name="logout" size={24} color='red'/>
+                <Text style={{ color: 'red',marginLeft:13, fontWeight:600}}>Log Out</Text>
+              </Pressable>
+              <Divider bold={true}/>
+              <Drawer.Item
+                label={  
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                  <ShimmerExpoImage width={40} height={40} styles={{borderRadius:24}} uri={user?.image||avatar} accessibilityLabel={user?.firstName}/>
+                  <View>
+                    <Text style={{ fontSize: 13,fontWeight:'600', textTransform:'capitalize' }}>{`${user?.firstName} ${user?.lastName}`}</Text>
+                    <Text style={{ fontSize: 12,  }}>Customer</Text>
+                  </View>
+                </View> }
+                style={{borderRadius: 12, marginHorizontal: 8,marginTop:40}}
                   labelStyle={[
                     styles.drawerLabel,
-                    logout.active && styles.drawerLabelActive,
                   ]}
                   onPress={() => {
-                    logout.onPress?.();
+                    router.push('/dashboard/profile')
                     setOpen(false);
-                  }}
-              />}
+                  }}  
+                  right={() => (
+                    <MaterialCommunityIcons name='arrow-right-circle'size='24' color={Colors.primary}/>
+                  )}
+              /></>}
             </Drawer.Section>
           </KeyboardAvoidingView>
         </Animated.View>
@@ -228,9 +246,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     elevation: 20,
   },
-    drawerItem: {
+  drawerItem: {
     borderRadius: 12,
     marginHorizontal: 8,
+    color:'red'
   },
 
   drawerItemActive: {
@@ -249,7 +268,7 @@ const styles = StyleSheet.create({
   overlay: {
     backgroundColor: 'rgba(0,0,0,0.35)',
   },
-    badge: {
+  badge: {
     backgroundColor: '#ff3b30',
     borderRadius: 10,
     minWidth: 20,
@@ -264,3 +283,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+
+ const LOG = {
+   email: 'joe_kayu@yahoo.com',
+   firstName: 'kayode',
+   id: '68af3a65f6922f7ea7017ac2',
+   lastName: 'agboola',
+   phoneNumber: '07425932661',
+ };

@@ -5,8 +5,10 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Tabs } from 'expo-router';
 
 import { Colors } from '@/constants/colors';
+import { useAuth } from '@/contexts/authContext';
 
 export default function TabLayout() {
+  const { isLoggedIn } = useAuth();
 
   return (
       <Tabs
@@ -66,6 +68,14 @@ export default function TabLayout() {
               ),
           }}
         />
+        {/* Hide dashboard routes from tab bar */}
+        <Tabs.Protected guard={isLoggedIn}>
+          <Tabs.Screen
+            name="dashboard"
+            options={{ href: null }}
+          />
+        </Tabs.Protected>
+
       </Tabs>
   );
 }

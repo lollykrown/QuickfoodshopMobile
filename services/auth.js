@@ -57,7 +57,7 @@ export async function login(email, password) {
     return { token, user };
   } else {
     Alert.alert('Login Failed', data.message || 'Unknown error');
-    return null;
+    return data.message ;
   }
 }
 
