@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useAuth } from "@/contexts/authContext";
 
 
-const MyCart = () => {
+const Settings = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
     const [emailEnabled, setEmailEnabled] = useState(true);
@@ -71,7 +71,7 @@ const MyCart = () => {
   )
 }
 
-export default MyCart
+export default Settings
 
 const styles = StyleSheet.create({
   container: {

@@ -26,6 +26,8 @@ export default function TabLayout() {
               ) : (
                 <Ionicons name="home-outline" size={24} color={color} />
               ),
+              headerLeft: () => null,
+              gestureEnabled: false,
           }}
         />
         <Tabs.Screen

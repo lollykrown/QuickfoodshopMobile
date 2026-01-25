@@ -21,23 +21,23 @@ const Stores = () => {
 
 // console.log(pathname)
   // Memoize fetch function to prevent infinite re-render
-  // const fetchFn = useCallback(() => {
-  //   return fetchRestaurants({
-  //     query: searchQuery.trim() || undefined,
-  //     limit: 100, // optional
-  //   });
-  // }, [searchQuery]);
+  const fetchFn = useCallback(() => {
+    return fetchAllStores({
+      query: searchQuery.trim() || undefined,
+      limit: 100, // optional
+    });
+  }, [searchQuery]);
 
   const {
     data:items= [],
     loading,
     error,
     refetch: loadData,
-  } = useFetch(() => fetchAllStores(searchQuery), false);
+  } = useFetch(() => fetchFn(searchQuery), false);
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [searchQuery]);
   
 
   // useEffect(() => {

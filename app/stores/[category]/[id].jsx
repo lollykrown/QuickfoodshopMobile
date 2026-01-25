@@ -41,7 +41,7 @@ export default function StoreDetails() {
       router.dismiss()
     }
     // const tt = category === resta
-// console.log('ll',details)
+// console.log('ll',details.)
   return (
     <>
     <ScrollView style={styles.container}>             
@@ -108,7 +108,7 @@ export default function StoreDetails() {
             <Link href='/search' asChild>
               <TouchableOpacity style={{flexDirection:'row',gap:4, alignItems:'center'}}>
                 <FontAwesome name="search" size={16} color="black" />
-                <Text style={{ fontSize:16, fontWeight:600}}>Search Foods</Text>
+                <Text style={{ fontSize:16, fontWeight:600}}>Search {details?.items?.list[0]?.categoryId?.name||'Foods'}</Text>
             </TouchableOpacity>
             </Link>            
           </View>
@@ -119,18 +119,21 @@ export default function StoreDetails() {
             details?.items?.list.slice(0,9).map(item=>(
               <View style={styles.item} key={item._id.toString()}>
                 <ShimmerExpoImage uri={item.image} width={40} height={40} accessibilityLabel={item.itemName} styles={{borderRadius:18}} />
-                
                   <Text style={styles.title}>{item.itemName}</Text>
                   <Text style={{}}>X</Text>
                   <Text style={{fontSize:18}}>0</Text>
-                  <FontAwesome name="minus-square-o" size={24} color={Colors.green} />
-                  <FontAwesome name="plus-square-o" size={24} color={Colors.green} />
+                  <TouchableOpacity onPress={()=>console.log('-')}>
+                    <FontAwesome style={{alignSelf:'center'}} name="minus-square-o" size={24} color={Colors.green} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={(e)=>console.log('+')}>
+                    <FontAwesome name="plus-square-o" size={24} color={Colors.green} />
+                  </TouchableOpacity>
                 </View>
             ))}
             </ScrollView>
           </View>
         </View>
-        <Button style={{ backgroundColor:Colors.primary, borderRadius:12, marginHorizontal:12}}  textColor={'white'} mode="contained" onPress={() => console.log('Pressed')}>Add To Cart</Button>
+        <Button style={{ backgroundColor:Colors.primary, borderRadius:12, marginHorizontal:18}}  textColor={'white'} mode="contained" onPress={() => console.log('Pressed')}>Add To Cart</Button>
       </View>
     </ScrollView>
     </>
@@ -145,8 +148,8 @@ const styles = StyleSheet.create({
 
   scrollList: {
     width: '100%',
-    marginTop: -20,       
     zIndex: 10,
+    paddingBottom:40
   },
 
   sectCont: {

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, ScrollView, TouchableOpacity, Pressable } from 'react-native'
+import { View, Text,BackHandler, StyleSheet, FlatList, ScrollView, TouchableOpacity, Pressable } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { Image } from 'expo-image';
 import { ActivityIndicator, Avatar, Button } from 'react-native-paper';
@@ -10,10 +10,11 @@ import { Colors } from '@/constants/colors';
 import featured from '@/assets/images/featured.webp'
 import useFetch from "@/hooks/usefetch";
 import { fetchPopularStores, fetchPopularDishes, getProfile } from "@/services/api";
-import { useEffect, useState } from 'react';
+import { useEffect, useCallback } from 'react';
 import { ItemCard } from '@/components/ItemCard';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import {useAuth } from '../../contexts/authContext'
+import { useFocusEffect } from '@react-navigation/native';
 
 const stores = [
   {
@@ -76,6 +77,19 @@ const Home = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
 
+  useFocusEffect(
+    useCallback(() => {
+      // addEventListener returns a subscription object
+      const subscription = BackHandler.addEventListener(
+        'hardwareBackPress',
+        () => true // returning true disables back
+      );
+
+      // clean up
+      return () => subscription.remove();
+    }, [])
+  );
+
   const {data: popStores = [],loading:popLoad,error:popError,refetch: loadPopStores,} = useFetch(() => fetchPopularStores(), false);
   useEffect(() => {
     loadPopStores();
@@ -85,6 +99,7 @@ const Home = () => {
   useEffect(() => {
     loadpopDishes();
   }, []);
+
   const {data = [],loading,error,refetch,} = useFetch(() => getProfile(), false);
   useEffect(() => {
     refetch();

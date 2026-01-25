@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const useFetch = (fetchFunction, autoFetch = true) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -19,7 +19,7 @@ const useFetch = (fetchFunction, autoFetch = true) => {
     } finally {
       setLoading(false);
     }
-  };
+  },[fetchFunction]);
 
   const reset = () => {
     setData(null);

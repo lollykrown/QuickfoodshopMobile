@@ -140,8 +140,8 @@ const styles = StyleSheet.create({
   textArea:{
     backgroundColor:'white',
     paddingHorizontal:20,
-    // borderTopLeftRadius:48,
-    // borderTopRightRadius:48
+    borderTopLeftRadius:48,
+    borderTopRightRadius:48
   },
   bar:{
     width:60,

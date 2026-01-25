@@ -30,6 +30,7 @@ export default function DrawerProvider({
   children,
   drawerItems = [],
   logout,
+  isLoggedIn,
   side = 'left',
 }) {
   const [open, setOpen] = useState(false);
@@ -187,7 +188,7 @@ export default function DrawerProvider({
                 />
               ))}
               <Divider bold={true}/>
-              <Drawer.Item
+              {isLoggedIn&&<Drawer.Item
                 label={logout.label}
                 active={logout.active}
                 icon={({ color, size }) => (
@@ -209,7 +210,7 @@ export default function DrawerProvider({
                     logout.onPress?.();
                     setOpen(false);
                   }}
-              />
+              />}
             </Drawer.Section>
           </KeyboardAvoidingView>
         </Animated.View>

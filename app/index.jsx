@@ -24,6 +24,7 @@ export default function Index() {
       }
     })
   }, [])
+  
   useEffect(() => {
     //testing purposes
      if(isLoggedIn){

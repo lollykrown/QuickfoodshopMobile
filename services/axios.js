@@ -1,6 +1,7 @@
 // apiClient.ts
 import axios from 'axios';
-import { getAccessToken, refreshToken, logout } from '../services/auth';
+import { getAccessToken, refreshToken } from '../services/auth';
+// import { logout } from './api';
 
 const fetchWithCred = axios.create(
     { 
@@ -31,7 +32,7 @@ fetchWithCred.interceptors.response.use(
       //   originalRequest.headers.Authorization = `Bearer ${newToken}`;
       //   return fetchWithCred(originalRequest);
       // } else {
-        await logout();
+        // await logout();
       // }
     }
     return Promise.reject(error);

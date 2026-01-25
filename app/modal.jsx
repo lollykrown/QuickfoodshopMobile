@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Keyboard , Pressable, Platform, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, View, Text, Keyboard , Pressable, Platform, KeyboardAvoidingView, TouchableOpacity } from 'react-native';
 import FormInput from '@/components/FormInput';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useForm } from 'react-hook-form';
@@ -60,11 +60,8 @@ export default function ModalScreen() {
       <Text style={{fontSize:20, color:Colors.primary, textAlign:'center', fontWeight:700}}>Login </Text>
 
       <Text style={{textAlign:'center',marginBottom:22, marginTop:10}}>Don&apos;t have an account? {" "}
-      <Link href={`${role}/login`} asChild><Text style={{color:Colors.orange, fontWeight:500,textDecorationColor: Colors.orange,textDecorationStyle: 'solid',textDecorationLine: 'underline',}}>Sign up</Text></Link></Text>
-      <View
-        // contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
-        // keyboardShouldPersistTaps="handled"
-        >
+      <TouchableOpacity onPress={()=>router.replace(`${role}/signup`)} asChild><Text style={{color:Colors.orange, fontWeight:500,textDecorationColor: Colors.orange,textDecorationStyle: 'solid',textDecorationLine: 'underline',}}>Sign up</Text></TouchableOpacity></Text>
+      <View>
         {dat.map(d=>(
         <FormInput
           control={control}

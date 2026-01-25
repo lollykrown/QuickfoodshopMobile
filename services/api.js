@@ -55,17 +55,21 @@ export const fetchAllData = async ({query,limit}) => {
   return res.data;
 };
 export const fetchAllStores = async ({query,limit}) => {
-  const response = await fetch(`${CONFIG.BASE_URL}/stores?search=${encodeURIComponent(query)}`, {
+  const q = query ?`/search?name=${encodeURIComponent(query)}`:''
+  const response = await fetch(`${CONFIG.BASE_URL}/stores${q}`, {
     method: 'GET',
     headers: CONFIG.headers,
   });
+
   if (!response.ok) {
+    console.log('statuscode',response.status)
     throw new Error(`Failed to fetch data: ${response.statusText}`);
   }
 
   const res = await response.json();
-// console.log('DATA', res.data.stores)
-  return res.data.stores;
+  const stores = res.data?.stores || res.data
+console.log('DATA', 'stores')
+  return stores;
 };
 export const fetchStoreByID = async ({id}) => {
   const response = await fetch(`${CONFIG.BASE_URL}/stores/${id}`, {
@@ -217,5 +221,4 @@ export async function logout() {
   // await deleteItem(REFRESH_TOKEN_KEY);
   await deleteItem(USER_DATA_KEY);
 }
-
 

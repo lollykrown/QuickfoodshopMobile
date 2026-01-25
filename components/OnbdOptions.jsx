@@ -55,7 +55,7 @@ export default function OnbdOptions() {
       setVisible(true)
       return
     }
-    return selected === 'browse store' ? router.replace('/search'):
+    return selected === 'browse store' ? router.replace('/home'):
     router.push(`/${selected}/${authRoute}`)  }
 
   return (
