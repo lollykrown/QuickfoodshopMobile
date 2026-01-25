@@ -7,8 +7,9 @@ import {
   getAccessToken,
   getUserData, 
 } from '../services/auth';
-import {   logout as authLogout,} from '../services/api'
+import {   logout as authLogout, updateProfile} from '../services/api'
 import { saveItem, getItem } from '../lib/secureStore';
+import img from '@/assets/images/avatar.png'
 
 
 const AuthContext = createContext(undefined);
@@ -16,6 +17,7 @@ const AuthContext = createContext(undefined);
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
   const [user, setUser] = useState(null);
+  const [avatar, setAvatar] = useState(null);
   const [loading, setLoading] = useState(true);
 
   // debugging
@@ -34,11 +36,11 @@ export const AuthProvider = ({ children }) => {
       // await new Promise((res) => setTimeout(() => {
       //   res(null)
       // }, 2000))
-
+      setAvatar(img)
       const token = await getAccessToken();
       const userData = await getUserData();
       setUserToken(token);
-      setUser(userData);
+      setUser({...userData,image:'https://quickfoods.lon1.digitaloceanspaces.com/quickfoods/5ee24051-f0b1-43b5-bf0c-b8bb932cfbe9_1769210301204_2996F1DD-1F92-4340-B4A8-B8FA9AEA56B6.png'});
       setLoading(false);
     };
     bootstrap();
@@ -51,6 +53,17 @@ export const AuthProvider = ({ children }) => {
     if (data.token) {
       setUserToken(data.token);
       setUser(data.user);
+      return true;
+    }
+    return {error:data};
+  };
+  // Standard login
+  const update = async (payload) => {
+    const data = await updateProfile(payload);
+    // console.log('Context',data)
+    if (data.email) {
+      const {id,firstName, lastName, phoneNumber, email,photo} = data
+      setUser({id,firstName, lastName, phoneNumber, email,photo});
       return true;
     }
     return {error:data};
@@ -110,7 +123,7 @@ export const AuthProvider = ({ children }) => {
 
     const isLoggedIn = Boolean(userToken);
   return (
-    <AuthContext.Provider value={{ userToken, isLoggedIn, user, loading, login, logout, biometricLogin, refresh }}>
+    <AuthContext.Provider value={{ userToken,avatar, isLoggedIn, user, loading, login,update, logout, biometricLogin, refresh }}>
       {!loading && children}
     </AuthContext.Provider>
   );

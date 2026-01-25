@@ -55,7 +55,6 @@ export default function ModalScreen() {
       {name:'email',label:'Email',placeholder:"Email"},
       {name:'password',label:'Password',placeholder:"Password"},
     ]
-      console.log('mod',loginError)
 
   return (
     <KeyboardAvoidingView style={styles.container}

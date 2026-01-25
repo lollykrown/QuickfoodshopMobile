@@ -107,12 +107,12 @@ const Home = () => {
     loadpopDishes();
   }, []);
 
-  const {data = [],loading,error,refetch,} = useFetch(() => getProfile(), false);
-  useEffect(() => {
-    refetch();
-  }, []);
+//   const {data = [],loading,error,refetch,} = useFetch(() => getProfile(), false);
+//   useEffect(() => {
+//     refetch();
+//   }, []);
 
-// console.log('Profile', data)
+// // console.log('Profile', data)
 
   const renderFeaturedItems = ({ item }) => (
     <Image source={item} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
@@ -132,14 +132,16 @@ const Home = () => {
           {/* Header section */}
           <View style={styles.headerCont}>
             {isLoggedIn?
+            <TouchableOpacity onPress={()=>router.push('dashboard/account')} asChild>
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
-              <ShimmerExpoImage width={48} height={48} styles={{borderRadius:24}} uri={data?.image||avatar}/>
+              <ShimmerExpoImage width={48} height={48} styles={{borderRadius:24}} uri={user?.image||avatar}/>
               <View>
                 <Text style={{fontSize:12}}>Good {timeOfDay} 👋</Text>
                 <Text style={{fontWeight:700, fontSize:18, textTransform:'capitalize'}}>{user?`${user?.firstName} ${user?.lastName}`:'Victor Bayem'}</Text>
               </View>
-            </View>:
-            <Pressable onPress={()=>router.push('/customer/login?prev=home')} style={{flexDirection:'row', alignItems:'center',gap:8}}>
+            </View>
+             </TouchableOpacity>:
+            <Pressable onPress={()=>router.push('customer/login?prev=home')} style={{flexDirection:'row', alignItems:'center',gap:8}}>
               <MaterialCommunityIcons
                 name='login'
                 size={24}
@@ -217,7 +219,7 @@ const Home = () => {
                     background={Colors.primary}
                     labelStyle={{fontWeight:'600', textTransform:'capitalize'}}
                     rippleColor="rgba(255, 255, 255, 0.32)"
-                    onPress={() => cat==='all'?router.push('/stores'):router.push(`/stores/${cat.replace(/ /g, "-")}`)}>
+                    onPress={() => cat==='all'?router.push('/stores'):router.push(`stores/${cat.replace(/ /g, "-")}`)}>
                       {cat}
                     </Button>
                   ))}

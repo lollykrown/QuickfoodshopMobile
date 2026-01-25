@@ -45,7 +45,7 @@ export default function OnbdOptions() {
   const handleClick = (option)=>{
     setSelected(option)
     return option === 'browse store' ? router.replace({pathname:'/home'}):
-    router.push(`/${option}/${authRoute}`)
+    router.push(`${option}/${authRoute}`)
   }
 
   const message = 'Please select an option above to continue'
@@ -56,7 +56,7 @@ export default function OnbdOptions() {
       return
     }
     return selected === 'browse store' ? router.replace('/home'):
-    router.push(`/${selected}/${authRoute}`)  }
+    router.push(`${selected}/${authRoute}`)  }
 
   return (
     <>

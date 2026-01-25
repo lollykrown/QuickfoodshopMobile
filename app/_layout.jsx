@@ -71,39 +71,44 @@ function AppLayout() {
         {
           label: 'Orders',
           icon: 'human-queue',
-          onPress: () => router.push('/orders'),
+          active: pathname.includes('/dashboard/orders'),
+          onPress: () => router.push('dashboard/orders'),
         },
         {
           label: 'Tracking',
           icon: 'map-marker',
-          active: pathname.includes('/tracking'),
-          onPress: () => router.push('tracking'),
+          active: pathname.includes('/dashboard/tracking'),
+          onPress: () => router.push('dashboard/tracking'),
         },
         {
           label: 'Transactions',
           icon: 'compare-horizontal',
-          onPress: () => router.push('transactions'),
+          active: pathname.includes('/dashboard/transactions'),
+          onPress: () => router.push('dashboard/transactions'),
         },
         {
           label: 'My Invoice',
           icon: 'invoice-edit',
-          onPress: () => router.push('invoice'),
+          active: pathname.includes('/dashboard/invoice'),
+          onPress: () => router.push('dashboard/invoice'),
         },
         {
           label: 'My favorites',
           icon: 'cards-heart',
-          onPress: () => router.push('/favorites'),
+          active: pathname.includes('/dashboard/favorites'),
+          onPress: () => router.push('dashboard/favorites'),
         },
         {
           label: 'Settings',
           icon: 'cog',
-          onPress: () => router.push('/dashboard/settings'),
+          active: pathname.includes('/dashboard/settings'),
+          onPress: () => router.push('dashboard/settings'),
         },
       ]: [{
         label: 'Login to account',
         icon: 'login',
         active: pathname === '/login',
-        onPress: () => router.push('/customer/login'),
+        onPress: () => router.push('customer/login'),
       }];
   return (
     <DrawerProvider drawerItems={drawerItems} user={user}logout={logout} isLoggedIn={isLoggedIn} side="left">
