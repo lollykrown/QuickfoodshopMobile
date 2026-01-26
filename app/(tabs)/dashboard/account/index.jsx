@@ -36,11 +36,11 @@ const Account = () => {
         </View>
         <Divider bold={true}/>
 
-        <TouchableOpacity onPress={()=>router.push('dashboard/account/edit-profile')} style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center', marginTop:20, paddingVertical:10, paddingHorizontal:18,borderRadius:24, borderColor:'#c6e3e5', borderWidth:1,}}>
+        <TouchableOpacity onPress={()=>router.push('/dashboard/account/edit-profile')} style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center', marginTop:20, paddingVertical:10, paddingHorizontal:18,borderRadius:24, borderColor:'#c6e3e5', borderWidth:1,}}>
             <Text style={{fontWeight:600,fontSize:14,}}>Edit Profile</Text>
             <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>router.push('dashboard/account/change-password')} style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center', marginVertical:20, paddingVertical:10, paddingHorizontal:18,borderRadius:24, borderColor:'#c6e3e5', borderWidth:1,}}>
+        <TouchableOpacity onPress={()=>router.push('/dashboard/account/change-password')} style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center', marginVertical:20, paddingVertical:10, paddingHorizontal:18,borderRadius:24, borderColor:'#c6e3e5', borderWidth:1,}}>
             <Text style={{fontWeight:600,fontSize:14,}}>Change Pasword </Text>
             <MaterialCommunityIcons name="lock-reset" size={24} color="black" />
         </TouchableOpacity>

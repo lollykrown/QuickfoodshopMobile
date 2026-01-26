@@ -7,6 +7,7 @@ import { Tabs } from 'expo-router';
 import { Colors } from '@/constants/colors';
 import { useAuth } from '@/contexts/authContext';
 
+
 export default function TabLayout() {
   const { isLoggedIn } = useAuth();
 
@@ -16,7 +17,9 @@ export default function TabLayout() {
           tabBarActiveTintColor: Colors.primary,
           headerShown: false,
           tabBarLabelStyle: { fontSize: 12, fontWeight: '600' },
+          // backbehaviour:'order'
         }}
+        initialRouteName="home"
       >
         <Tabs.Screen
           name="home"
@@ -72,7 +75,10 @@ export default function TabLayout() {
         <Tabs.Protected guard={isLoggedIn}>
           <Tabs.Screen
             name="dashboard"
-            options={{ href: null }}
+            options={{ 
+              headerShown:false,
+              href: null 
+            }}
           />
         </Tabs.Protected>
 

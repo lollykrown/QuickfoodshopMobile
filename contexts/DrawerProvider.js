@@ -189,7 +189,9 @@ export default function DrawerProvider({
                   }
                   onPress={() => {
                     item.onPress?.();
-                    setOpen(false);
+                    requestAnimationFrame(() => {
+                        setOpen(false);
+                    });
                   }}
                 />
               ))}
@@ -222,7 +224,7 @@ export default function DrawerProvider({
                     styles.drawerLabel,
                   ]}
                   onPress={() => {
-                    router.push('dashboard/account')
+                    router.push('/account')
                     setOpen(false);
                   }}  
                   right={() => (
@@ -283,11 +285,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-
- const LOG = {
-   email: 'joe_kayu@yahoo.com',
-   firstName: 'kayode',
-   id: '68af3a65f6922f7ea7017ac2',
-   lastName: 'agboola',
-   phoneNumber: '07425932661',
- };

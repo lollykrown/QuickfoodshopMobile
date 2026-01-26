@@ -1,5 +1,5 @@
 import { View, Text, Pressable, StyleSheet, FlatList } from 'react-native'
-import { Link, useRouter } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
@@ -9,6 +9,9 @@ import { useDrawer } from '@/contexts/DrawerProvider';
 const Notifications = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
+  const {prev} = useLocalSearchParams()
+
+  const path = prev==='home'?'/home':'/dashboard/overview'
 
   return (
     <View style={styles.container}>

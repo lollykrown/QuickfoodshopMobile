@@ -1,5 +1,5 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native'
-import { Link, useRouter } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
@@ -12,8 +12,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 const Dashboard = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
-    const { logout, user } = useAuth();
 
+  const { logout, user } = useAuth();
     // const {data = [],loading,error,refetch,} = useFetch(() => getProfile(), false);
     // useEffect(() => {
     //     refetch();
@@ -37,8 +37,8 @@ const Dashboard = () => {
             <Text style={{ fontSize: 14}}>Welcome Back!</Text>
             <Text style={{ fontSize: 24, fontWeight: '600', textTransform: 'capitalize', }}>{`${user?.firstName} ${user?.lastName}`}</Text>
         </View>
-          <Link href='/dashboard/notifications'asChild >
-            <View style={{position:'relative', alignSelf:'center'}}>
+          <Link href='/dashboard/notifications?prev=dash' style={{alignSelf:'center'}} >
+            <View style={{position:'relative',}}>
               <Ionicons name="notifications-outline" size={38} color={Colors.green} />
               <View style={{position:'absolute', top:0, right:0, padding:1.5, backgroundColor:'white', borderRadius:12}}>
                 <View name="circle" style={{width:18,overflow:'hidden',flexDirection:'col',justifyContent:'center',alignItems:'center', borderRadius:12,height:18,backgroundColor:Colors.red}}>

@@ -132,7 +132,7 @@ const Home = () => {
           {/* Header section */}
           <View style={styles.headerCont}>
             {isLoggedIn?
-            <TouchableOpacity onPress={()=>router.push('dashboard/account')} asChild>
+            <TouchableOpacity onPress={()=>router.push('/dashboard/account')} asChild>
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
               <ShimmerExpoImage width={48} height={48} styles={{borderRadius:24}} uri={user?.image||avatar}/>
               <View>
@@ -141,7 +141,7 @@ const Home = () => {
               </View>
             </View>
              </TouchableOpacity>:
-            <Pressable onPress={()=>router.push('customer/login?prev=home')} style={{flexDirection:'row', alignItems:'center',gap:8}}>
+            <Pressable onPress={()=>router.push('/customer/login?prev=home')} style={{flexDirection:'row', alignItems:'center',gap:8}}>
               <MaterialCommunityIcons
                 name='login'
                 size={24}
@@ -150,7 +150,7 @@ const Home = () => {
                 <Text style={{fontWeight:'bold'}}>Login</Text>
               </Pressable>}
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
-                <Link href='/dashboard/notifications' >
+                <Link href='/dashboard/notifications?prev=home' >
                   <View style={{position:'relative'}}>
                     <Ionicons name="notifications" size={24} color={Colors.primary} />
                     <View style={{position:'absolute', top:0, right:0, padding:1.5, backgroundColor:'white', borderRadius:12}}>

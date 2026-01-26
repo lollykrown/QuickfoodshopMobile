@@ -5,14 +5,14 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
 import DrawerProvider from '@/contexts/DrawerProvider';
 import { AuthProvider, useAuth } from "@/contexts/authContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 // import { CartProvider } from '@/contexts/cartContext';
 
 SplashScreen.preventAutoHideAsync()
 
-// export const unstable_settings = {
-//   anchor: 'index', // Anchor to the index route
-// };
+
+
+
 
 export default function RootLayout() {
   return (
@@ -29,8 +29,74 @@ function AppLayout() {
 
   const splashHidden = useRef(false);
 
-  // console.log(pathname)
+  console.log(pathname)
 
+      const drawerItems = useMemo(() => {
+        if (!isLoggedIn) {
+          return [{
+      label: 'Login to account',
+      icon: 'login',
+      active: pathname === '/login',
+      href: '/customer/login',
+    }];
+  }
+        return [
+        {
+          label: 'Dashboard',
+          icon: 'view-dashboard',
+          active: pathname === '/dashboard',
+          onPress: () => router.push('/dashboard/overview'),
+        },
+        // {
+        //   label: 'Notifications',
+        //   icon: 'bell',
+        //   badge: 3,
+        //   active: pathname.includes('/notifications'),
+        //   onPress: () => router.push('/dashboard/notifications'),
+        // },
+        {
+          label: 'Orders',
+          icon: 'human-queue',
+          active: pathname.includes('/orders'),
+          href:'/dashboard/orders',
+          onPress: () => router.push('/dashboard/orders'),
+        },
+        {
+          label: 'Tracking',
+          icon: 'map-marker',
+          active: pathname.includes('/tracking'),
+                    href:'/dashboard/tracking',
+
+          onPress: () => router.push('/dashboard/tracking'),
+        },
+        {
+          label: 'Transactions',
+          icon: 'compare-horizontal',
+          active: pathname.includes('/transactions'),
+                    href:'/dashboard/transactions',
+
+          onPress: () => router.push('/dashboard/transactions'),
+        },
+        {
+          label: 'My Invoice',
+          icon: 'invoice-edit',
+          active: pathname.includes('/invoice'),
+          onPress: () => router.push('/dashboard/invoice'),
+        },
+        {
+          label: 'My favorites',
+          icon: 'cards-heart',
+          active: pathname.includes('/favorites'),
+          onPress: () => router.push('/dashboard/favorites'),
+        },
+        {
+          label: 'Settings',
+          icon: 'cog',
+          active: pathname.includes('/settings'),
+          onPress: () => router.push('/dashboard/settings'),
+        },
+      ]},[isLoggedIn, pathname]);
+      
     useEffect(() => {
     async function prepare() {
       if (!loading) {
@@ -54,62 +120,6 @@ function AppLayout() {
     return null;
   }
 
-      const drawerItems = isLoggedIn? [
-        {
-          label: 'Dashboard',
-          icon: 'view-dashboard',
-          active: pathname === '/dashboard',
-          onPress: () => router.push('/dashboard'),
-        },
-        // {
-        //   label: 'Notifications',
-        //   icon: 'bell',
-        //   badge: 3,
-        //   active: pathname.includes('/notifications'),
-        //   onPress: () => router.push('/dashboard/notifications'),
-        // },
-        {
-          label: 'Orders',
-          icon: 'human-queue',
-          active: pathname.includes('/dashboard/orders'),
-          onPress: () => router.push('dashboard/orders'),
-        },
-        {
-          label: 'Tracking',
-          icon: 'map-marker',
-          active: pathname.includes('/dashboard/tracking'),
-          onPress: () => router.push('dashboard/tracking'),
-        },
-        {
-          label: 'Transactions',
-          icon: 'compare-horizontal',
-          active: pathname.includes('/dashboard/transactions'),
-          onPress: () => router.push('dashboard/transactions'),
-        },
-        {
-          label: 'My Invoice',
-          icon: 'invoice-edit',
-          active: pathname.includes('/dashboard/invoice'),
-          onPress: () => router.push('dashboard/invoice'),
-        },
-        {
-          label: 'My favorites',
-          icon: 'cards-heart',
-          active: pathname.includes('/dashboard/favorites'),
-          onPress: () => router.push('dashboard/favorites'),
-        },
-        {
-          label: 'Settings',
-          icon: 'cog',
-          active: pathname.includes('/dashboard/settings'),
-          onPress: () => router.push('dashboard/settings'),
-        },
-      ]: [{
-        label: 'Login to account',
-        icon: 'login',
-        active: pathname === '/login',
-        onPress: () => router.push('customer/login'),
-      }];
   return (
     <DrawerProvider drawerItems={drawerItems} user={user}logout={logout} isLoggedIn={isLoggedIn} side="left">
         {/* <CartProvider> */}
