@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet, Switch } from 'react-native'
+import { View, Text, Pressable, StyleSheet, SectionList } from 'react-native'
 import { useRouter } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
@@ -8,11 +8,73 @@ import { useState } from 'react';
 import { useAuth } from "@/contexts/authContext";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import EmptyState from '@/components/EmptyState';
+import ShimmerExpoImage from '@/components/ShimmerImg';
+
+const transactions = [
+  {
+    date: 'Mar 4, 2025',
+    data: [{
+      vendor: 'Open Sea Restaurant',
+      status: 'Completed',
+      price:250
+    },
+    {
+      vendor: 'Gillian Store',
+      status: 'Pending',
+      price:250
+    },
+    {
+      vendor: "Lara's Kitchen Store",
+      status: 'Completed',
+      price:250
+    },
+    {
+      vendor: 'Gillian Store',
+      status: 'Failed',
+      price:250
+    },
+  ]},
+  {
+    date: 'Mar 7, 2025',
+    data: [{
+      vendor: 'Open Sea Restaurant',
+      status: 'Completed',
+      price:390
+    },
+    {
+      vendor: 'Gillian Store',
+      status: 'Completed',
+      price:390
+    },
+]},
+  {
+    date: 'Mar 14, 2025',
+    data: [{
+      vendor: 'Open Sea Restaurant',
+      status: 'Completed',
+      price:390
+    },
+    {
+      vendor: 'Gillian Store',
+      status: 'Completed',
+      price:390
+    },
+]},
+  {
+    date: 'Mar 22, 2025',
+    data: [ {
+      vendor: 'Gillian Store',
+      status: 'Completed',
+      price:390
+    },
+  ]},
+];
+
 
 const Transactions = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
-    const { logout, loading } = useAuth();
+    const { user, avatar } = useAuth();
 
   return (
     <View style={styles.container}>
@@ -23,7 +85,27 @@ const Transactions = () => {
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>
-      <EmptyState text='Transactions Empty' icon={<FontAwesome6 name="hand-holding-dollar" size={120} color="#C4C4C4" />}/>
+      {transactions.length===0&&<EmptyState text='Transactions Empty' icon={<FontAwesome6 name="hand-holding-dollar" size={120} color="#C4C4C4" />}/>}
+      <SectionList
+        sections={transactions}
+        keyExtractor={(item, index) => 'i' + index}
+        renderItem={({item}) => (
+          <View style={{flexDirection:'row',marginHorizontal:12, gap:10, marginTop:12, borderWidth:1, padding:12,borderColor:Colors.border,borderRadius:24,alignItems: 'center',}}>
+            <ShimmerExpoImage width={48} height={48} styles={{ borderRadius:24 }} uri={user?.image||avatar}/>
+            <View style={{ flex: 1, gap: 6 }}>
+              <Text style={{fontSize:16,fontWeight:600}} numberOfLines={1} ellipsizeMode="tail">{item.vendor}</Text>
+              <Text style={{color:Colors.grey }} numberOfLines={1} ellipsizeMode="tail">Jollof rice and chicken </Text>
+            </View>
+            <View style={{alignItems: 'flex-end',gap: 6}}>
+              <Text style={{fontWeight:600,fontSize:16,}}>${item.price}</Text>
+              <Text style={[{color: item.status === 'Failed' ? 'red' : item.status === 'Pending' ?'orange':Colors.green,fontWeight: '600',},]}>{item.status}</Text>
+            </View>
+          </View>
+        )}
+        renderSectionHeader={({section: {date}}) => (
+          <Text style={{fontWeight:600, fontSize:20,padding:12,marginTop:12}}>{date}</Text>
+        )}
+      />
     </View>
   )
 }

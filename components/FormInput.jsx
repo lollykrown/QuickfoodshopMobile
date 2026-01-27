@@ -11,6 +11,7 @@ const FormInput = ({
   leftIcon,        // 👈 new prop
   leftIconColor = '#555',
   contStyles,
+  labelStyles,
   textInputStyles,
   ...props
 }) => {
@@ -26,7 +27,7 @@ const FormInput = ({
       render={({ field: { onChange, onBlur, value } }) => (
         <View style={{ marginBottom: 12 }}>
           {label && (
-            <Text style={{ textTransform: 'capitalize', marginBottom: 4 }}>
+            <Text style={{ textTransform: 'capitalize', marginBottom: 4, ...labelStyles }}>
               {label}
             </Text>
           )}

@@ -162,7 +162,7 @@ function AppLayout() {
                     }}
                 />
               </Stack>
-              <StatusBar style="auto" />
+              <StatusBar style="auto"  />
             </PaperProvider>
           </SafeAreaProvider>
         {/* </CartProvider> */}

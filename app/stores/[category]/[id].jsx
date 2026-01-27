@@ -10,6 +10,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Fontisto from '@expo/vector-icons/Fontisto';
 import { Button, Snackbar } from 'react-native-paper';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { StatusBar } from 'expo-status-bar';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 // import { useCart } from '@/contexts/cartContext'; // Context we created
 
@@ -44,6 +45,7 @@ export default function StoreDetails() {
 // console.log('ll',details.)
   return (
     <>
+    <StatusBar hidden />
     <ScrollView style={styles.container}>             
     {loading&&<View style={{height:'100%'}}>
       <ActivityIndicator

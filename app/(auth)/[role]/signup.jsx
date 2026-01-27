@@ -131,8 +131,6 @@ export default function SignupForm() {
               placeholder={d.placeholder}
               error={errors?.[d.name]?.message}
               autoCapitalize="none"
-              keyboardType={d.name === 'phone' ? 'phone-pad' : 'email-address'}
-              secureTextEntry={d.name.includes('assword') ? true : false}
               key={d.name}
             />
           ))}

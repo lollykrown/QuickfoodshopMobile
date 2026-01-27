@@ -4,7 +4,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
 import { useDrawer } from '@/contexts/DrawerProvider';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from "@/contexts/authContext";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -13,6 +13,7 @@ import ShimmerExpoImage from '@/components/ShimmerImg';
 const Dashboard = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
+  const scrollRef = useRef(null);
 
   const { logout, user, avatar } = useAuth();
     // const {data = [],loading,error,refetch,} = useFetch(() => getProfile(), false);
@@ -33,7 +34,7 @@ const Dashboard = () => {
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>
-      <View style={{padding: 20, }}>
+      <View style={{padding:20,flex:1 }}>
         <View style={{ flexDirection:'row',justifyContent:'space-between'}}>          
           <View style={{flexDirection:'column', gap:6}}>
               <Text style={{ fontSize: 14}}>Welcome Back!</Text>
@@ -70,10 +71,9 @@ const Dashboard = () => {
             </View>
           </View>
         </View>
-        <View style={{paddingTop:20, paddingBottom:160}}>
-          <Text style={{fontWeight:600, fontSize:16,marginTop:18, marginBottom:8}}>Recent Orders</Text>
-          <ScrollView style={{}}>
-            {[1,2,3,4,5,6].map(a => (
+        <Text style={{fontWeight:600, fontSize:16,marginTop:38, marginBottom:8}}>Recent Orders</Text>
+        <ScrollView    style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+            {[1,2,3,4,5,6,7,8,9].map(a => (
               <View key={a} style={{flexDirection:'row', gap:10, marginTop:12, borderWidth:1, padding:12,borderColor:Colors.border,borderRadius:24,alignItems: 'center',}}>
                 <ShimmerExpoImage width={48} height={48} styles={{ borderRadius:24 }} uri={user?.image||avatar}/>
                 <View style={{ flex: 1, gap: 6 }}>
@@ -86,8 +86,7 @@ const Dashboard = () => {
                 </View>
               </View>
             ))}
-          </ScrollView>
-        </View>
+        </ScrollView>
       </View>
     </View>
   );

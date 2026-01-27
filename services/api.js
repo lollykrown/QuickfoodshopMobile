@@ -1,10 +1,24 @@
-import { deleteItem } from '@/lib/secureStore';
+import { deleteItem, getItem } from '@/lib/secureStore';
 import fetchWithCred from '../utils/axios';
 
 const API_BASE = 'https://app.quickfoodshop.co.uk/v1';
 const ACCESS_TOKEN_KEY = 'accessToken';
 // const REFRESH_TOKEN_KEY = 'refreshToken';
 const USER_DATA_KEY = 'userData';
+
+async function apiFetch(url, options = {}) {
+  const token = await getItem(ACCESS_TOKEN_KEY);
+  //add token refresh
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+}
+
+
 
 //unprotected
 export const CONFIG = {

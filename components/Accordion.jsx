@@ -7,17 +7,23 @@ import {
   UIManager,
   LayoutAnimation,
   Platform,
-  FlatList,
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  interpolate,
+  interpolate,  
+  useAnimatedProps,
+  withRepeat,
+  withTiming,
+  Easing,
 } from 'react-native-reanimated';
 import { Divider } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import Svg, { Line } from 'react-native-svg';
+import DottedLines from './DottedLines';
 
 // Enable LayoutAnimation on Android
 if (
@@ -26,6 +32,7 @@ if (
 ) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
+const AnimatedLine = Animated.createAnimatedComponent(Line);
 
 const SLIDE_DISTANCE = 50;
 
@@ -33,7 +40,26 @@ const Accordion = ({ item, isExpanded, onToggle }) => {
   const rotation = useSharedValue(0);
   const translateX = useSharedValue(-SLIDE_DISTANCE);
   const opacity = useSharedValue(0);
+  const dashOffset = useSharedValue(0);
+  const pulse = useSharedValue(0);
 
+  // Animate the dashed line
+  dashOffset.value = withRepeat(
+    withTiming(8, { duration: 500, easing: Easing.linear }),
+    -1 // infinite
+  );
+
+  pulse.value = withRepeat(
+    withTiming(1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
+    -1,
+    true // reverse
+  );
+
+  const animatedProps = useAnimatedProps(() => ({
+    strokeDashoffset: dashOffset.value,
+    strokeWidth: interpolate(pulse.value, [0, 1], [2, 5]), // line grows/shrinks
+    strokeOpacity: interpolate(pulse.value, [0, 1], [0.6, 1]), // fade effect
+  }));
   // Animate arrow & slide
   useEffect(() => {
     rotation.value = withSpring(isExpanded ? 1 : 0, { damping: 20, stiffness: 200 });
@@ -86,24 +112,29 @@ const Accordion = ({ item, isExpanded, onToggle }) => {
           </View>
         <View style={styles.row}>
             <Text style={{ fontWeight: 600 }}>Item</Text>
-            <Text style={{ fontWeight: 400, color:Colors.grey}}>Qty</Text>
-          </View>
-        <FlatList
-          data={[
-            { key: 'Tokyo' },
-            { key: 'Delhi' },
-            { key: 'Shanghai' },
-            { key: 'Sao Paolo' },
-          ]}
-          renderItem={({ item }) => {
-            return (
-                <View style={styles.row}>
-                <Text style={{fontWeight: 600, marginStart:6, color:Colors.grey }}>{`\u29BF ${item.key}`}</Text>
-                <Text style={{fontWeight: 400, color:Colors.grey,marginEnd:8,}}>2</Text>
+            <Text style={{ fontWeight: 600,}}>Qty</Text>
+        </View>
+        {item.items.map((i,index) => (
+            <View style={styles.column} key={`${item.name}+${index}`}>
+                <Text style={{fontWeight: 600, marginStart:6, color:Colors.grey }}>{`\u29BF ${i.name}`}</Text>
+                <Text style={{fontWeight: 400, color:Colors.grey,marginEnd:8,}}>{i.quantity}</Text>
+            </View>
+          ))}
+        <View style={styles.row}>
+            <Text style={{ fontWeight: 600 }}>Extras</Text>
+            <Text style={{ fontWeight: 600,}}>Qty</Text>
+        </View>
+        <View>
+          {item.extras.map((i,index) => (
+              <View style={styles.column} key={`${item.name}+${index}`}>
+                  <Text style={{fontWeight: 600, marginStart:6, color:Colors.grey }}>{`\u29BF ${i.name}`}</Text>
+                  <Text style={{fontWeight: 400, color:Colors.grey,marginEnd:8,}}>{i.quantity}</Text>
               </View>
-            );
-          }}
-        />
+            ))}
+        </View>
+        <Divider bold style={{ marginVertical: 12 }} />
+        <DottedLines/>
+
         </Animated.View>
       )}
     </View>
@@ -133,6 +164,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginVertical: 8,
+  },
+  column: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 4,
   },
 });
