@@ -224,7 +224,7 @@ export default function DrawerProvider({
                     styles.drawerLabel,
                   ]}
                   onPress={() => {
-                    router.push('/account')
+                    router.push('/dashboard/account')
                     setOpen(false);
                   }}  
                   right={() => (

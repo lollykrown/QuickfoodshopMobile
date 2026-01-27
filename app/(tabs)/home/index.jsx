@@ -16,7 +16,7 @@ import { fetchPopularStores, fetchPopularDishes, getProfile } from "@/services/a
 import { useEffect, useCallback } from 'react';
 import { ItemCard } from '@/components/ItemCard';
 import { useDrawer } from '@/contexts/DrawerProvider';
-import {useAuth } from '../../contexts/authContext'
+import {useAuth } from '../../../contexts/authContext'
 import { useFocusEffect } from '@react-navigation/native';
 import ShimmerExpoImage from '@/components/ShimmerImg';
 

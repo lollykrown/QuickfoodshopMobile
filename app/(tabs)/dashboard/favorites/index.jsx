@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet, Switch } from 'react-native'
+import { View, Text, Pressable, StyleSheet, Switch, ScrollView } from 'react-native'
 import { useRouter } from "expo-router";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { Appbar } from 'react-native-paper';
@@ -6,12 +6,13 @@ import { Colors } from '@/constants/colors';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import { useState } from 'react';
 import { useAuth } from "@/contexts/authContext";
-
+import ShimmerExpoImage from '@/components/ShimmerImg';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const Favorites = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
-    const { logout, loading } = useAuth();
+    const { logout, loading, user, avatar } = useAuth();
 
   return (
     <View style={styles.container}>
@@ -22,6 +23,22 @@ const Favorites = () => {
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>
+      <ScrollView style={{padding:20}}>
+        {[1,2,3].map(o=>(
+          <View key={o} style={{flexDirection:'row', gap:10, marginTop:12, borderWidth:1, padding:12,borderColor:Colors.border,borderRadius:24,alignItems: 'center',}}>
+            <ShimmerExpoImage width={52} height={52} styles={{ borderRadius:24 }} uri={user?.image||avatar}/>
+            <View style={{ flex: 1, gap: 6 }}>
+              <View style={{marginBottom:12, gap:4}}>
+                <Text style={{fontSize:16,fontWeight:600}} numberOfLines={1} ellipsizeMode="tail">Rice and Jollof with vegetables salad</Text>
+                <Text style={{color:Colors.grey }} numberOfLines={1} ellipsizeMode="tail">Open Sea Restaurant</Text>
+              </View>
+              <Text style={{color:Colors.green, fontWeight:500}}>$150.00</Text>
+            </View>
+            <FontAwesome name="trash" size={24} color="red" />
+          </View>
+        ))}
+        
+      </ScrollView>
     </View>
   )
 }

@@ -9,6 +9,8 @@ export const Colors = {
     yellow:'#F7C904',
     orange:'#FF6600',
     green: '#1ab854',
+    grey:'#748189',
+    border:'#DADCE0',
     light: {
         text: '#11181C',
         background: '#fff',

@@ -6,6 +6,8 @@ import { Colors } from '@/constants/colors';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import { useState } from 'react';
 import { useAuth } from "@/contexts/authContext";
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import EmptyState from '@/components/EmptyState';
 
 
 const Invoice = () => {
@@ -22,6 +24,7 @@ const Invoice = () => {
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>
+      <EmptyState text='Invoice is Empty' icon={<FontAwesome6 name="file-invoice" size={120} color="#C4C4C4" />}/>
     </View>
   )
 }
@@ -33,5 +36,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#F8F8F8',
+  },
+  button: {
+    backgroundColor: Colors.primary,
+    padding: 18,
+    borderRadius: 12,
+    alignItems: 'center',
+    marginTop: 18,
+    marginBottom:24
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '600',
+    textTransform:'uppercase'
   },
 })

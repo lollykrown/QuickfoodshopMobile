@@ -19,10 +19,10 @@ export default function TabLayout() {
           tabBarLabelStyle: { fontSize: 12, fontWeight: '600' },
           // backbehaviour:'order'
         }}
-        initialRouteName="home"
+        initialRouteName="home/index"
       >
         <Tabs.Screen
-          name="home"
+          name="home/index"
           options={{
             title: 'Home',
             tabBarIcon: ({ color, focused }) =>
@@ -36,7 +36,7 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="search"
+          name="search/index"
           options={{
             title: 'Search',
             tabBarIcon: ({ color, focused }) =>
@@ -48,7 +48,7 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="myCart"
+          name="myCart/index"
           options={{
             title: 'My Cart',
             tabBarIcon: ({ color, focused }) =>
@@ -60,7 +60,7 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="support"
+          name="support/index"
           options={{
             title: 'Support',
             tabBarIcon: ({ color, focused }) =>
