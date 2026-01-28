@@ -5,6 +5,7 @@ import { Appbar } from 'react-native-paper';
 import { Colors } from '@/constants/colors';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useDrawer } from '@/contexts/DrawerProvider';
+import RipplePressable from '@/components/RipplePressable';
 
 const Notifications = () => {
   const router = useRouter();
@@ -27,15 +28,13 @@ const Notifications = () => {
       <FlatList
         data={[1,2,3,4]}
         renderItem={({ item }) => (
-          <Link href={`/dashboard/notifications/${item}`} >
-            <View style={styles.notificationsList}> 
+            <RipplePressable onPress={()=>router.push(`/dashboard/notifications/${item}`)} style={styles.notificationsList}> 
             <View style={{flexDirection:'column', gap:12,width:'95%'}}>
               <Text style={{fontWeight:'600'}}>New restaurant added !</Text>
               <Text style={{marginTop:4, color:'#687076', lineHeight:24}}>Hi there! A new restaurant has been added to our platform, you might want to check it out.</Text>
             </View>
             <MaterialIcons style={{alignSelf:'center'}} name="keyboard-arrow-right" size={20} color="black" />
-            </View>
-          </Link>
+            </RipplePressable>
         )}
         keyExtractor={(item) => item.toString()}
       />
@@ -52,14 +51,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   notificationsList:{
-    width:'100%',  
+    width:'92%',  
     flexDirection:'row', 
     justifyContent:'space-between', 
     overflow: 'hidden', 
     backgroundColor:'#fbfbfb', 
     marginVertical:4, 
     paddingVertical:20, 
-    paddingHorizontal:18,
+    paddingLeft:18,
     marginHorizontal:16, 
     borderRadius:12
   }

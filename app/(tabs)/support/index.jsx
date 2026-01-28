@@ -7,6 +7,8 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
+import * as Linking from 'expo-linking';
+import RipplePressable from '@/components/RipplePressable';
 
 const Support = () => {
   const router = useRouter();
@@ -27,7 +29,7 @@ const Support = () => {
       </Appbar.Header>
       <View style={{ padding: 20 }}>
         <Text style={{ fontWeight: 600, fontSize: 16 }}>Call us!</Text>
-        <View
+        <RipplePressable onPress={() => Linking.openURL('tel:+447597399738')}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -38,9 +40,9 @@ const Support = () => {
             borderWidth: 1,
           }}
         >
-          <View style={{ gap: 6 }}>
+          <View  style={{ gap: 6 }}>
             <Text style={{ fontWeight: 600, fontSize: 16 }}>
-              +234 903 3484 3947
+              +44 (07) 597 399 738
             </Text>
             <Text style={{ color: Colors.grey, fontSize: 16 }}>
               Customer Care Line
@@ -60,7 +62,7 @@ const Support = () => {
               color={Colors.green}
             />
           </View>
-        </View>
+        </RipplePressable>
       </View>
       <View style={{ padding: 20 }}>
         <Text style={{ fontWeight: 600, fontSize: 16 }}>

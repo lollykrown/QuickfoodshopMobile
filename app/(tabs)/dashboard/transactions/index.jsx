@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/authContext";
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import EmptyState from '@/components/EmptyState';
 import ShimmerExpoImage from '@/components/ShimmerImg';
+import RipplePressable from '@/components/RipplePressable';
 
 const transactions = [
   {
@@ -90,7 +91,7 @@ const Transactions = () => {
         sections={transactions}
         keyExtractor={(item, index) => 'i' + index}
         renderItem={({item}) => (
-          <View style={{flexDirection:'row',marginHorizontal:12, gap:10, marginTop:12, borderWidth:1, padding:12,borderColor:Colors.border,borderRadius:24,alignItems: 'center',}}>
+          <RipplePressable style={{flexDirection:'row',marginHorizontal:12, gap:10, marginTop:12, borderWidth:1, padding:12,borderColor:Colors.border,borderRadius:24,alignItems: 'center',}}>
             <ShimmerExpoImage width={48} height={48} styles={{ borderRadius:24 }} uri={user?.image||avatar}/>
             <View style={{ flex: 1, gap: 6 }}>
               <Text style={{fontSize:16,fontWeight:600}} numberOfLines={1} ellipsizeMode="tail">{item.vendor}</Text>
@@ -100,10 +101,10 @@ const Transactions = () => {
               <Text style={{fontWeight:600,fontSize:16,}}>${item.price}</Text>
               <Text style={[{color: item.status === 'Failed' ? 'red' : item.status === 'Pending' ?'orange':Colors.green,fontWeight: '600',},]}>{item.status}</Text>
             </View>
-          </View>
+          </RipplePressable>
         )}
         renderSectionHeader={({section: {date}}) => (
-          <Text style={{fontWeight:600, fontSize:20,padding:12,marginTop:12}}>{date}</Text>
+          <Text style={{fontWeight:600, fontSize:20,padding:12,marginTop:12, backgroundColor:'#F8F8F8'}}>{date}</Text>
         )}
       />
     </View>

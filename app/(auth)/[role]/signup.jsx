@@ -20,6 +20,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
+import RipplePressable from '@/components/RipplePressable';
 
 const { height } = Dimensions.get('window');
 const dat = [
@@ -135,22 +136,23 @@ export default function SignupForm() {
             />
           ))}
 
-          <Pressable
+          <RipplePressable
             style={styles.button}
             onPress={handleSubmit(onSubmit)}
             disabled={isSubmitting}
+          rippleColor='rgba(255,255,255,0.6)'
           >
             <Text style={styles.buttonText}>
               {isSubmitting ? 'Creating account...' : 'Sign Up'}
             </Text>
-          </Pressable>
+          </RipplePressable>
 
-          <Pressable style={styles.button2} onPress={() => {}}>
+          <RipplePressable style={styles.button2} onPress={() => {}}>
             <GoogleLogo width={18} height={18} />
             <Text style={{ fontSize: 14, fontWeight: '500' }}>
               Sign up with Google
             </Text>
-          </Pressable>
+          </RipplePressable>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

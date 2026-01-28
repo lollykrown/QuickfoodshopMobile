@@ -1,4 +1,5 @@
 import FormInput from '@/components/FormInput';
+import RipplePressable from '@/components/RipplePressable';
 import ShimmerExpoImage from '@/components/ShimmerImg';
 import { Colors } from '@/constants/colors';
 import { useAuth } from '@/contexts/authContext';
@@ -100,15 +101,16 @@ const ChangePassword = () => {
             key={d.name}
           />
         ))}
-        <Pressable
+        <RipplePressable
           style={styles.button}
           onPress={handleSubmit(onSubmit)}
           disabled={isSubmitting}
+          rippleColor='rgba(255,255,255,0.6)'
         >
           <Text style={styles.buttonText}>
             {isSubmitting || loading ? 'Submitting..' : 'Save'}
           </Text>
-        </Pressable>
+        </RipplePressable>
       </View>
     </View>
   );

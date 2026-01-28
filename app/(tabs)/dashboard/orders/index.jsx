@@ -132,26 +132,25 @@ const Orders = () => {
         <Text style={{fontWeight:600, fontSize:18}}>Active Orders</Text>
         <View style={{paddingVertical:20}}>       
         {orders.map((order) => (
-              <TouchableOpacity onPress={()=>{router.push(`/dashboard/orders/${order.id}`)}} key={order.id}>
+              // <TouchableOpacity onPress={()=>{router.push(`/dashboard/orders/${order.id}`)}} key={order.id}>
                 <Accordion
+                onPress={()=>{router.push(`/dashboard/orders/${order.id}`)}} key={order.id}
                   item={order}
                   isExpanded={expandedIds.includes(order.id)}
                   onToggle={() => toggle(order.id)}
                 />
-              </TouchableOpacity>
+              // </TouchableOpacity>
             ))}
         </View>
         <Text style={{fontWeight:600, fontSize:18,}}>Past Orders</Text>
         <View style={{paddingVertical:20}}>       
             {orders2.map((order) => (
-              <TouchableOpacity onPress={()=>{router.push(`/dashboard/orders/${order.id}`)}} key={order.id}>
                 <Accordion
-                  key={order.id}
+                onPress={()=>{router.push(`/dashboard/orders/${order.id}`)}} key={order.id}
                   item={order}
                   isExpanded={expandedIds2.includes(order.id)}
                   onToggle={() => toggle2(order.id)}
                 />              
-              </TouchableOpacity>
             ))}
         </View>
       </ScrollView>

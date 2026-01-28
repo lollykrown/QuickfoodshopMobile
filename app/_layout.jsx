@@ -37,7 +37,7 @@ function AppLayout() {
       label: 'Login to account',
       icon: 'login',
       active: pathname === '/login',
-      href: '/customer/login',
+      href: '/customer/login?prev=home',
     }];
   }
         return [
@@ -45,7 +45,7 @@ function AppLayout() {
           label: 'Dashboard',
           icon: 'view-dashboard',
           active: pathname === '/dashboard',
-          onPress: () => router.push('/dashboard/overview'),
+          onPress: () => router.push('/dashboard'),
         },
         // {
         //   label: 'Notifications',

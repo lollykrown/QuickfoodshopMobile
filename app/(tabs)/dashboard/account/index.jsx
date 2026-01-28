@@ -1,3 +1,4 @@
+import RipplePressable from '@/components/RipplePressable';
 import ShimmerExpoImage from '@/components/ShimmerImg';
 import { Colors } from '@/constants/colors';
 import { useAuth } from '@/contexts/authContext';
@@ -6,13 +7,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Appbar, Divider } from 'react-native-paper';
 
 const Account = () => {
@@ -66,7 +61,7 @@ const Account = () => {
         </View>
         <Divider bold={true} />
 
-        <TouchableOpacity
+        <RipplePressable
           onPress={() => router.push('/dashboard/account/edit-profile')}
           style={{
             flexDirection: 'row',
@@ -82,8 +77,8 @@ const Account = () => {
         >
           <Text style={{ fontWeight: 600, fontSize: 14 }}>Edit Profile</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
-        </TouchableOpacity>
-        <TouchableOpacity
+        </RipplePressable>
+        <RipplePressable
           onPress={() => router.push('/dashboard/account/change-password')}
           style={{
             flexDirection: 'row',
@@ -99,7 +94,7 @@ const Account = () => {
         >
           <Text style={{ fontWeight: 600, fontSize: 14 }}>Change Pasword </Text>
           <MaterialCommunityIcons name="lock-reset" size={24} color="black" />
-        </TouchableOpacity>
+        </RipplePressable>
       </View>
 
       <Pressable

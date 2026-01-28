@@ -1,11 +1,12 @@
 import FormInput from '@/components/FormInput';
 import GoogleLogo from '@/components/GoogleLogo';
+import RipplePressable from '@/components/RipplePressable';
 import { Colors } from '@/constants/colors';
 import { useAuth } from '@/contexts/authContext';
 import { loginSchema } from '@/lib/zod';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
@@ -89,26 +90,22 @@ export default function ModalScreen() {
       >
         Login{' '}
       </Text>
-
-      <Text style={{ textAlign: 'center', marginBottom: 22, marginTop: 10 }}>
-        Don&apos;t have an account?{' '}
-        <TouchableOpacity
-          onPress={() => router.replace(`${role}/signup`)}
-          asChild
-        >
-          <Text
-            style={{
-              color: Colors.orange,
-              fontWeight: 500,
-              textDecorationColor: Colors.orange,
-              textDecorationStyle: 'solid',
-              textDecorationLine: 'underline',
-            }}
-          >
-            Sign up
+          <Text style={{ textAlign: 'center', marginBottom: 12 }}>
+            Don&apos;t have an account?{' '}
+            <Link href={`${role}/signup`} asChild>
+              <Text
+                style={{
+                  color: Colors.orange,
+                  fontWeight: 500,
+                  textDecorationColor: Colors.orange,
+                  textDecorationStyle: 'solid',
+                  textDecorationLine: 'underline',
+                }}
+              >
+                Sign up
+              </Text>
+            </Link>
           </Text>
-        </TouchableOpacity>
-      </Text>
       <View>
         {dat.map((d) => (
           <FormInput
@@ -119,7 +116,6 @@ export default function ModalScreen() {
             error={errors?.[d.name]?.message}
             autoCapitalize="none"
             keyboardType={d.name === 'phone' ? 'phone-pad' : 'email-address'}
-            secureTextEntry={d.name.includes('assword') ? true : false}
             key={d.name}
           />
         ))}
@@ -131,21 +127,22 @@ export default function ModalScreen() {
         >
           Forgot Password?
         </Text>
-        <Pressable
+        <RipplePressable
           style={styles.button}
           onPress={handleSubmit(onSubmit)}
           disabled={isSubmitting}
+          rippleColor='rgba(255,255,255,0.6)'
         >
           <Text style={styles.buttonText}>
             {isSubmitting || loading ? 'Submitting..' : 'Login'}
           </Text>
-        </Pressable>
-        <Pressable style={styles.button2} onPress={() => {}}>
+        </RipplePressable>
+        <RipplePressable style={styles.button2} onPress={() => {}}>
           <GoogleLogo width={18} height={18} />
           <Text style={{ fontSize: 14, fontWeight: '500' }}>
             Login with Google
           </Text>
-        </Pressable>
+        </RipplePressable>
       </View>
     </KeyboardAvoidingView>
   );

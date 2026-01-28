@@ -24,6 +24,7 @@ import { Colors } from '@/constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Svg, { Line } from 'react-native-svg';
 import DottedLines from './DottedLines';
+import RipplePressable from './RipplePressable';
 
 // Enable LayoutAnimation on Android
 if (
@@ -36,7 +37,7 @@ const AnimatedLine = Animated.createAnimatedComponent(Line);
 
 const SLIDE_DISTANCE = 50;
 
-const Accordion = ({ item, isExpanded, onToggle }) => {
+const Accordion = ({ item, isExpanded, onToggle, onPress }) => {
   const rotation = useSharedValue(0);
   const translateX = useSharedValue(-SLIDE_DISTANCE);
   const opacity = useSharedValue(0);
@@ -80,7 +81,7 @@ const Accordion = ({ item, isExpanded, onToggle }) => {
   }));
 
   return (
-    <View style={styles.card}>
+    <RipplePressable style={styles.card} onPress={onPress}>
         <View style={styles.cardHeader}>
             <Text style={{ fontWeight: 600 }}>
             Order: <Text style={{ fontWeight: 300 }}>{item.orderNumber}</Text>
@@ -137,7 +138,7 @@ const Accordion = ({ item, isExpanded, onToggle }) => {
 
         </Animated.View>
       )}
-    </View>
+    </RipplePressable>
   );
 };
 

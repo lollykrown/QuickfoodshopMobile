@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useAuth } from "@/contexts/authContext";
 import ShimmerExpoImage from '@/components/ShimmerImg';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import RipplePressable from '@/components/RipplePressable';
 
 const Favorites = () => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const Favorites = () => {
       </Appbar.Header>
       <ScrollView style={{padding:20}}>
         {[1,2,3].map(o=>(
-          <View key={o} style={{flexDirection:'row', gap:10, marginTop:12, borderWidth:1, padding:12,borderColor:Colors.border,borderRadius:24,alignItems: 'center',}}>
+          <RipplePressable key={o} style={{flexDirection:'row', gap:10, marginTop:12, borderWidth:1, padding:12,borderColor:Colors.border,borderRadius:24,alignItems: 'center',}}>
             <ShimmerExpoImage width={52} height={52} styles={{ borderRadius:24 }} uri={user?.image||avatar}/>
             <View style={{ flex: 1, gap: 6 }}>
               <View style={{marginBottom:12, gap:4}}>
@@ -35,7 +36,7 @@ const Favorites = () => {
               <Text style={{color:Colors.green, fontWeight:500}}>$150.00</Text>
             </View>
             <FontAwesome name="trash" size={24} color="red" />
-          </View>
+          </RipplePressable>
         ))}
         
       </ScrollView>
