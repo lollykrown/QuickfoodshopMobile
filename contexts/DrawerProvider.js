@@ -19,12 +19,13 @@ import {
   Platform,
   Easing,
   Text,
-  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { Drawer, Divider } from 'react-native-paper';
 import avatar from '@/assets/images/avatar.png'
 import { Colors } from '@/constants/colors';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
+import RipplePressable from '@/components/RipplePressable';
 
 const DrawerContext = createContext(null);
 export const useDrawer = () => useContext(DrawerContext);
@@ -42,6 +43,16 @@ export default function DrawerProvider({
   const [open, setOpen] = useState(false);
   const router=  useRouter()
 
+  const confirmLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Logout', onPress: logout, style: 'destructive' },
+      ]
+    );
+  };
   // Drawer position
   const translateX = useRef(
     new Animated.Value(side === 'left' ? -DRAWER_WIDTH : DRAWER_WIDTH)
@@ -154,10 +165,17 @@ export default function DrawerProvider({
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           >
             <Drawer.Section title="Menu" showDivider={false}>
+              <RipplePressable onPress={() => {
+                router.replace('/home')
+                requestAnimationFrame(() => {
+                        setOpen(false);
+                    });
+                }}>
               <Image
                 source={require('../assets/images/logo_transparent.png')}
                 style={{ width: 200, height: 150, marginHorizontal:'auto', contentFit: 'contain' }}
-              />              
+              />  
+              </RipplePressable>            
               {drawerItems.map((item, i) => (
                 <Drawer.Item
                   key={i}
@@ -196,27 +214,27 @@ export default function DrawerProvider({
                 />
               ))}
               <Divider bold={true}/>
-
               {isLoggedIn&&
               <>
-              <Pressable
+              <RipplePressable
                 onPress={()=>{
-                  logout();
+                  confirmLogout();
                   setOpen(false)
                 }}
-                style={{ paddingLeft: 28,marginVertical:12, alignItems:'center', flexDirection:'row'}}
+                style={{ paddingLeft: 28,paddingVertical:12, alignItems:'center', flexDirection:'row'}}
               >
                 <MaterialCommunityIcons name="logout" size={24} color='red'/>
                 <Text style={{ color: 'red',marginLeft:13, fontWeight:600}}>Log Out</Text>
-              </Pressable>
+              </RipplePressable>              
               <Divider bold={true}/>
+
               <Drawer.Item
                 label={  
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
                   <ShimmerExpoImage width={40} height={40} styles={{borderRadius:24}} uri={user?.image||avatar} accessibilityLabel={user?.firstName}/>
                   <View>
                     <Text style={{ fontSize: 13,fontWeight:'600', textTransform:'capitalize' }}>{`${user?.firstName} ${user?.lastName}`}</Text>
-                    <Text style={{ fontSize: 12,  }}>Customer</Text>
+                    <Text style={{ fontSize: 12, textTransform:'capitalize' }}>{user?.role}</Text>
                   </View>
                 </View> }
                 style={{borderRadius: 12, marginHorizontal: 8,marginTop:40}}

@@ -1,4 +1,4 @@
-import { Stack, useRouter, usePathname, SplashScreen  } from "expo-router";
+import { Stack, useRouter, usePathname  } from "expo-router";
 import { StatusBar } from 'expo-status-bar';
 import { PaperProvider } from 'react-native-paper';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -6,15 +6,17 @@ import 'react-native-reanimated';
 import DrawerProvider from '@/contexts/DrawerProvider';
 import { AuthProvider, useAuth } from "@/contexts/authContext";
 import { useEffect, useMemo, useRef, useState } from "react";
-// import { CartProvider } from '@/contexts/cartContext';
+import { CartProvider } from '@/contexts/cartContext';
+import { menuOptions } from "@/utils/misc";
+import * as SplashScreen from "expo-splash-screen";
+import LogoutScreen from "@/components/LogoutScreen";
+import { View } from "react-native";
 
 SplashScreen.preventAutoHideAsync()
 
 
-
-
-
 export default function RootLayout() {
+  
   return (
     <AuthProvider>
       <AppLayout />
@@ -24,80 +26,13 @@ export default function RootLayout() {
 function AppLayout() {
   const router = useRouter();
   const pathname = usePathname();
-  const { logout,isLoggedIn,user, loading } = useAuth();
-    const [appReady, setAppReady] = useState(false); // track when app is ready
-
+  const [appReady, setAppReady] = useState(false); // track when app is ready
   const splashHidden = useRef(false);
+  const { logout,isLoggedIn,user, loading } = useAuth();
 
-  console.log(pathname)
+  const drawerItems = useMemo(() => menuOptions(pathname, router, user?.role, isLoggedIn),[isLoggedIn, pathname]);
 
-      const drawerItems = useMemo(() => {
-        if (!isLoggedIn) {
-          return [{
-      label: 'Login to account',
-      icon: 'login',
-      active: pathname === '/login',
-      href: '/customer/login?prev=home',
-    }];
-  }
-        return [
-        {
-          label: 'Dashboard',
-          icon: 'view-dashboard',
-          active: pathname === '/dashboard',
-          onPress: () => router.push('/dashboard'),
-        },
-        // {
-        //   label: 'Notifications',
-        //   icon: 'bell',
-        //   badge: 3,
-        //   active: pathname.includes('/notifications'),
-        //   onPress: () => router.push('/dashboard/notifications'),
-        // },
-        {
-          label: 'Orders',
-          icon: 'human-queue',
-          active: pathname.includes('/orders'),
-          href:'/dashboard/orders',
-          onPress: () => router.push('/dashboard/orders'),
-        },
-        {
-          label: 'Tracking',
-          icon: 'map-marker',
-          active: pathname.includes('/tracking'),
-                    href:'/dashboard/tracking',
-
-          onPress: () => router.push('/dashboard/tracking'),
-        },
-        {
-          label: 'Transactions',
-          icon: 'compare-horizontal',
-          active: pathname.includes('/transactions'),
-                    href:'/dashboard/transactions',
-
-          onPress: () => router.push('/dashboard/transactions'),
-        },
-        {
-          label: 'My Invoice',
-          icon: 'invoice-edit',
-          active: pathname.includes('/invoice'),
-          onPress: () => router.push('/dashboard/invoice'),
-        },
-        {
-          label: 'My favorites',
-          icon: 'cards-heart',
-          active: pathname.includes('/favorites'),
-          onPress: () => router.push('/dashboard/favorites'),
-        },
-        {
-          label: 'Settings',
-          icon: 'cog',
-          active: pathname.includes('/settings'),
-          onPress: () => router.push('/dashboard/settings'),
-        },
-      ]},[isLoggedIn, pathname]);
-      
-    useEffect(() => {
+  useEffect(() => {
     async function prepare() {
       if (!loading) {
         // Optional: any async setup like fonts, data fetch
@@ -106,7 +41,6 @@ function AppLayout() {
     }
     prepare();
   }, [loading]);
-
 
   useEffect(() => {
     if (appReady && !splashHidden.current) {
@@ -120,14 +54,18 @@ function AppLayout() {
     return null;
   }
 
+  console.log(pathname)
+      
+
   return (
+    <View style={{ flex: 1 }}>
     <DrawerProvider drawerItems={drawerItems} user={user}logout={logout} isLoggedIn={isLoggedIn} side="left">
-        {/* <CartProvider> */}
+        <CartProvider>
           <SafeAreaProvider>
             <PaperProvider>
               <Stack>
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                 <Stack.Screen name="stores" options={{ headerShown: false }} />
                 <Stack.Screen name="index" 
                   options={{ 
@@ -137,7 +75,6 @@ function AppLayout() {
                     }} />
                 <Stack.Screen name="modal" 
                     options={{
-                      
                       presentation: 'formSheet',
                       sheetAllowedDetents: [0.6, 0.8],
                       headerShown:false,
@@ -150,22 +87,22 @@ function AppLayout() {
                       },   
                    }}
                 />
-                <Stack.Screen name="modal2" 
-                    options={{
-                      presentation: 'formSheet',
-                      sheetAllowedDetents: [0.3, 0.5, 0.7],
-                      // headerShown:false,
-                      sheetGrabberVisible: true,
-                      sheetCornerRadius: 48,
-                      title: 'Login',
-                      gestureEnabled: false,
+                {/* Hide dashboard routes from tab bar */}
+                <Stack.Protected guard={isLoggedIn}>
+                  <Stack.Screen
+                    name="dashboard"
+                    options={{ 
+                      headerShown:false,
                     }}
-                />
+                  />
+                </Stack.Protected>
               </Stack>
               <StatusBar style="auto"  />
             </PaperProvider>
           </SafeAreaProvider>
-        {/* </CartProvider> */}
+        </CartProvider>
     </DrawerProvider>
+    {loading && <LogoutScreen />}
+    </View>
   );
 }

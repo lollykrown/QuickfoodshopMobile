@@ -14,31 +14,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Snackbar } from 'react-native-paper';
+import { useToast } from '@/hooks/useToast';
+
 
 const { width } = Dimensions.get('window');
-const options = ['browse store', 'customer', 'vendor'];
+const options = ['browse store', 'customer', 'vendor', 'rider'];
+const options2 = ['customer', 'vendor', 'rider'];
 
-export default function OnbdOptions() {
+export default function OnbdOptions({auth}) {
   const router = useRouter();
   const buttonScale = useRef(new Animated.Value(1)).current;
   const [selected, setSelected] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [authRoute, setAuthRoute] = useState('/signup');
-
-  useEffect(() => {
-    //testing purposes
-    // AsyncStorage.removeItem('isRegUser')
-    // AsyncStorage.setItem('isRegUser', 'true')
-
-    AsyncStorage.getItem('isRegUser').then((value) => {
-      if (value === null) {
-        setAuthRoute('/signup');
-      } else {
-        setAuthRoute('/login');
-      }
-    });
-  }, []);
+  const [authRoute, setAuthRoute] = useState(auth||'signup');
+  const { show, Toast } = useToast();
+  const o = auth === 'login' ? options2 : options;
 
   const onDismissSnackBar = () => setVisible(false);
 
@@ -51,16 +41,18 @@ export default function OnbdOptions() {
   };
   const handleClick = (option) => {
     setSelected(option);
-    return option === 'browse store'
-      ? router.replace({ pathname: '/home' })
+    // console.log('Selected option:', option);
+    const opt = option === 'browse store'
+      ? router.replace('/home')
       : router.push(`${option}/${authRoute}`);
+      return opt;
   };
 
   const message = 'Please select an option above to continue';
   const continueHandler = () => {
     animateButton();
     if (selected === null) {
-      setVisible(true);
+      show(message,'error')
       return;
     }
     return selected === 'browse store'
@@ -83,10 +75,10 @@ export default function OnbdOptions() {
         />
 
         <Text style={{ fontSize: 18, marginBottom: 40 }}>
-          How do you want to sign up?
+          How do you want to {auth||'sign up'}?
         </Text>
         <View style={styles.buttonGroup}>
-          {options.map((option, i) => {
+          {o.map((option, i) => {
             const isActive = selected === option;
             return (
               <Pressable
@@ -122,19 +114,7 @@ export default function OnbdOptions() {
           </TouchableOpacity>
         </Animated.View>
       </View>
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        duration={4000}
-        action={{
-          label: 'Undo',
-          onPress: () => {
-            // Do something
-          },
-        }}
-      >
-        {message}
-      </Snackbar>
+      <Toast />
     </>
   );
 }

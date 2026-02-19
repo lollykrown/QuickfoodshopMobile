@@ -11,7 +11,7 @@ const RipplePressable = ({
   onPress,
   onLongPress,
   disabled = false,
-  rippleColor = 'rgba(0,0,0,0.15)',
+  rippleColor = 'rgba(0, 102, 52,0.15)',
   style,
 }) => {
   const [layout, setLayout] = useState({ width: 0, height: 0 });

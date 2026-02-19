@@ -1,7 +1,7 @@
 import { View, Text,BackHandler, StyleSheet, FlatList, ScrollView, TouchableOpacity, Pressable } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { Image } from 'expo-image';
-import { ActivityIndicator, Button } from 'react-native-paper';
+import { ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
@@ -12,13 +12,17 @@ import featured2 from '@/assets/images/featured2.webp'
 import featured3 from '@/assets/images/featured3.webp'
 import avatar from '@/assets/images/avatar.png'
 import useFetch from "@/hooks/usefetch";
-import { fetchPopularStores, fetchPopularDishes, getProfile } from "@/services/api";
-import { useEffect, useCallback } from 'react';
+import { fetchPopularStores, fetchPopularDishes } from "@/services/api";
+import { useEffect, useCallback, useState } from 'react';
 import { ItemCard } from '@/components/ItemCard';
 import { useDrawer } from '@/contexts/DrawerProvider';
-import {useAuth } from '../../../contexts/authContext'
+import {useAuth } from '@/contexts/authContext'
 import { useFocusEffect } from '@react-navigation/native';
 import ShimmerExpoImage from '@/components/ShimmerImg';
+import RipplePressable from '@/components/RipplePressable';
+import { useCart } from '@/contexts/cartContext'; 
+import OnbdOptions from '@/components/OnbdOptions';
+
 
 const feat = [featured3,featured2,featured]
 
@@ -69,7 +73,7 @@ const stores = [
     },
   },
 ];
-      
+  
 const categories = ['all', 'restaurants','grocery stores', 'groceries', 'food', 'extras']
 const getTimeOfDay = () => {
   const hour = new Date().getHours(); // 0 - 23
@@ -83,6 +87,8 @@ const Home = () => {
   const router = useRouter();
   const drawer = useDrawer(); 
   const { isOnline } = useFetch();
+  const { cartCount } = useCart();
+  const [ show, setShow] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -96,6 +102,7 @@ const Home = () => {
       return () => subscription.remove();
     }, [])
   );
+
 
   const {data: popStores = [],loading:popLoad,error:popError,refetch: loadPopStores,} = useFetch(() => fetchPopularStores(), false);
   useEffect(() => {
@@ -117,17 +124,16 @@ const Home = () => {
   const renderFeaturedItems = ({ item }) => (
     <Image source={item} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
   );
-  const { user, isLoggedIn, logout, unlockWithBiometrics } = useAuth();
-  
-  // const { user, logout, biometricLogin } = useAuth();
+  const { user, isLoggedIn, } = useAuth();
+
   // useEffect(() => {
   //   // Try biometric login on app start
   //   biometricLogin();
   // }, []);
-
-
+  
   return (
       <SafeAreaView style={styles.container}>
+        {show?<OnbdOptions auth={'login'}/>:
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Header section */}
           <View style={styles.headerCont}>
@@ -141,14 +147,14 @@ const Home = () => {
               </View>
             </View>
              </TouchableOpacity>:
-            <Pressable onPress={()=>router.push('/customer/login?prev=home')} style={{flexDirection:'row', alignItems:'center',gap:8}}>
+            <TouchableOpacity onPress={()=>setShow(true)} style={{flexDirection:'row', alignItems:'center',gap:8}}>
               <MaterialCommunityIcons
                 name='login'
                 size={24}
                 color='#000'
               />
                 <Text style={{fontWeight:'bold'}}>Login</Text>
-              </Pressable>}
+              </TouchableOpacity>}
             <View style={{flexDirection:'row', alignItems:'center', gap:16}}>
                 <Link href='/dashboard/notifications?prev=home' >
                   <View style={{position:'relative'}}>
@@ -185,7 +191,6 @@ const Home = () => {
               />
           </View> */}
 
-
           {/* Featured section */}
           <View style={styles.featuredCont}>
             <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:10}}>
@@ -210,18 +215,13 @@ const Home = () => {
                 contentContainerStyle={{marginTop:10, flexDirection:'row', alignItems:'center'}}
               >
                 {categories.map((cat, index) => (
-                  <Button 
+                  <RipplePressable 
                     key={index}
-                    style={{borderColor: Colors.primary, marginRight: 10}}
-                    mode={index===0?"contained": "outlined"}
-                    textColor={index===0?'white':Colors.primary}
-                    buttonColor={index===0?Colors.primary:null}
-                    background={Colors.primary}
-                    labelStyle={{fontWeight:'600', textTransform:'capitalize'}}
-                    rippleColor="rgba(255, 255, 255, 0.32)"
+                    style={[styles.catStyle, index===0&&styles.categoryActive]}
+                    rippleColor={index===0?"rgba(255, 255, 255, 0.6)":'rgba(0, 102, 52,0.15)'}
                     onPress={() => cat==='all'?router.push('/stores'):router.push(`stores/${cat.replace(/ /g, "-")}`)}>
-                      {cat}
-                    </Button>
+                      <Text style={[{color:index===0?'white':Colors.primary, paddingVertical:14, paddingHorizontal:20, fontSize:16, fontWeight:'600', textTransform:'capitalize'}]}>{cat}</Text>
+                    </RipplePressable>
                   ))}
               </ScrollView>
           </View> 
@@ -303,7 +303,7 @@ const Home = () => {
                 }
               />
           </View>  
-        </ScrollView>
+        </ScrollView>}
       </SafeAreaView>
     // </AnimatedDrawer>
   )
@@ -340,6 +340,16 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1, 
     paddingBottom: 14,
     borderBottomColor: '#E2E2E2',
+  },
+  catStyle:{
+    borderColor: Colors.primary, 
+    marginRight: 10,
+    backgroundColor:'white',
+    borderRadius:22,
+    borderWidth:1
+  },
+  categoryActive:{
+    backgroundColor: Colors.primary
   },
   popularCont:{
     marginVertical: 20,

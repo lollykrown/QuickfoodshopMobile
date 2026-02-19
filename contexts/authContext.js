@@ -1,33 +1,26 @@
 // authContext.tsx
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import img from '@/assets/images/avatar.png';
 import * as LocalAuthentication from 'expo-local-authentication';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import {
   login as authLogin,
   refreshToken as authRefreshToken,
   getAccessToken,
-  getUserData, 
-} from '../services/auth';
-import {   logout as authLogout, updateProfile} from '../services/api'
-import { saveItem, getItem } from '../lib/secureStore';
-import img from '@/assets/images/avatar.png'
-
+  getUserData,
+  logout as authLogout, updateProfile
+} from '../lib/auth';
+import { Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
   const [userToken, setUserToken] = useState(null);
+  const [isExisting, setIsExisting] = useState(null);
   const [user, setUser] = useState(null);
   const [avatar, setAvatar] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // debugging
-//   useEffect(() => {
-//   console.log('🟢 AUTH PROVIDER STATE UPDATED:', {
-//     userToken,
-//     user,
-//     isLoggedIn: Boolean(userToken),
-//   });
-// }, [userToken, user]);
+  const [loading, setLoading] = useState(false);
+const isLoggingOutRef = useRef(false);
 
   // Bootstrap: check existing token + user data
   useEffect(() => {
@@ -36,47 +29,83 @@ export const AuthProvider = ({ children }) => {
       // await new Promise((res) => setTimeout(() => {
       //   res(null)
       // }, 2000))
-      setAvatar(img)
+      const existing = await AsyncStorage.getItem('existing');
+      if (existing){ 
+        setIsExisting(true)
+      }
+      //testing
+      //AsyncStorage.removeItem('existing')
+
       const token = await getAccessToken();
       const userData = await getUserData();
       setUserToken(token);
-      setUser({...userData,image:'https://quickfoods.lon1.digitaloceanspaces.com/quickfoods/5ee24051-f0b1-43b5-bf0c-b8bb932cfbe9_1769210301204_2996F1DD-1F92-4340-B4A8-B8FA9AEA56B6.png'});
+      if (!userData?.location) {
+        setUser({
+          ...userData,
+          image:
+            'https://quickfoods.lon1.digitaloceanspaces.com/quickfoods/5ee24051-f0b1-43b5-bf0c-b8bb932cfbe9_1769210301204_2996F1DD-1F92-4340-B4A8-B8FA9AEA56B6.png',
+        });
+      } else {
+        setUser(userData);
+      }
+      setAvatar(img);
+
       setLoading(false);
     };
     bootstrap();
   }, []);
-
   // Standard login
-  const login = async (email, password) => {
-    const data = await authLogin(email, password);
-    // console.log('Context',data)
+  const login = async (email, password, role) => {
+    const data = await authLogin(email, password, role);
+    const existing = await AsyncStorage.getItem('existing');
+
     if (data.token) {
       setUserToken(data.token);
-      setUser(data.user);
+      setUser({...data.user});
+      if (existing===null ){ 
+        await AsyncStorage.setItem('existing','true')
+        setIsExisting(true)
+      }else{
+        setIsExisting(true)
+      }
+
       return true;
     }
-    return {error:data};
+    return { error: data };
   };
   // Standard login
   const update = async (payload) => {
     const data = await updateProfile(payload);
     // console.log('Context',data)
     if (data.email) {
-      const {id,firstName, lastName, phoneNumber, email,photo} = data
-      setUser({id,firstName, lastName, phoneNumber, email,photo});
+      const { id, firstName, lastName, phoneNumber, email, photo } = data;
+      setUser({ id, firstName, lastName, phoneNumber, email, photo });
       return true;
     }
-    return {error:data};
+    return { error: data };
   };
 
-  
   // Standard logout
-  const logout = async () => {
+const logout = async () => {
+    if (isLoggingOutRef.current) return; // 🔒 true lock
+    isLoggingOutRef.current = true; // 🔒 engage lock
+
+  try {
+    setLoading(true);
+
     await authLogout();
     setUserToken(null);
     setUser(null);
-  };
 
+    Alert.alert('Logged out', 'You have been successfully logged out.');
+  } catch (err) {
+    console.error('Logout error:', err);
+    Alert.alert('Error', 'Failed to log out.');
+  } finally {
+    setLoading(false);
+    isLoggingOutRef.current = false;
+  }
+};
   // Refresh token manually
   const refresh = async () => {
     const newToken = await authRefreshToken();
@@ -121,9 +150,23 @@ export const AuthProvider = ({ children }) => {
     return true;
   };
 
-    const isLoggedIn = Boolean(userToken);
+  const isLoggedIn = Boolean(userToken);
   return (
-    <AuthContext.Provider value={{ userToken,avatar, isLoggedIn, user, loading, login,update, logout, biometricLogin, refresh }}>
+    <AuthContext.Provider
+      value={{
+        userToken,
+        avatar,
+        isLoggedIn,
+        isExisting,
+        user,
+        loading,
+        login,
+        update,
+        logout,
+        biometricLogin,
+        refresh,
+      }}
+    >
       {!loading && children}
     </AuthContext.Provider>
   );

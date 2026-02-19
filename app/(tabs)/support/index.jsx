@@ -1,14 +1,14 @@
+import RipplePressable from '@/components/RipplePressable';
 import { Colors } from '@/constants/colors';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import * as Linking from 'expo-linking';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
-import * as Linking from 'expo-linking';
-import RipplePressable from '@/components/RipplePressable';
 
 const Support = () => {
   const router = useRouter();
@@ -17,11 +17,11 @@ const Support = () => {
   return (
     <View style={styles.container}>
       <Appbar.Header style={{ backgroundColor: '#F8F8F8', paddingEnd: 16 }}>
-        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.BackAction color="black" onPress={() => router.back()} />
         <Appbar.Content
           title="Support"
           variant="titleMedium"
-          titleStyle={{ fontWeight: '700' }}
+          titleStyle={{ fontWeight: '700', color: 'black' }}
         />
         <Pressable onPress={drawer.toggle}>
           <AntDesign name="menu" size={24} color="black" />
@@ -29,7 +29,8 @@ const Support = () => {
       </Appbar.Header>
       <View style={{ padding: 20 }}>
         <Text style={{ fontWeight: 600, fontSize: 16 }}>Call us!</Text>
-        <RipplePressable onPress={() => Linking.openURL('tel:+447597399738')}
+        <RipplePressable
+          onPress={() => Linking.openURL('tel:+447597399738')}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
@@ -40,7 +41,7 @@ const Support = () => {
             borderWidth: 1,
           }}
         >
-          <View  style={{ gap: 6 }}>
+          <View style={{ gap: 6 }}>
             <Text style={{ fontWeight: 600, fontSize: 16 }}>
               +44 (07) 597 399 738
             </Text>
@@ -64,6 +65,10 @@ const Support = () => {
           </View>
         </RipplePressable>
       </View>
+      {/* <AddressInput onSelect={(place) => {
+        console.log('Selected:', place.address);
+        console.log('Coordinates:', place.lat, place.lng);
+      }} /> */}
       <View style={{ padding: 20 }}>
         <Text style={{ fontWeight: 600, fontSize: 16 }}>
           Chat with us on social media!

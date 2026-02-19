@@ -61,6 +61,7 @@ export default function SignupForm() {
 
     const { confirmPassword, ...payload } = data;
     console.log('Signup payload:', payload);
+    router.push('/otp');
   };
 
   return (

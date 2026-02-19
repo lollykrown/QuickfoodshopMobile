@@ -2,6 +2,7 @@ import { Controller } from 'react-hook-form';
 import { View, Text, TextInput, StyleSheet, Pressable } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useState } from 'react';
+import { Colors } from '@/constants/colors';
 
 const FormInput = ({
   control,
@@ -13,6 +14,7 @@ const FormInput = ({
   contStyles,
   labelStyles,
   textInputStyles,
+  disabled,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,15 +34,16 @@ const FormInput = ({
             </Text>
           )}
 
-          <View style={[styles.inputWrapper, error && styles.inputError, contStyles]}>
+          <View style={[styles.inputWrapper, disabled&&styles.leftIconDisabled, error && styles.inputError, contStyles]}>
             
             {/* LEFT ICON */}
             {leftIcon && (
               <View style={styles.leftIcon}>
                 <MaterialIcons
+                style={[disabled&&styles.leftIconDisabled, ]}
                   name={leftIcon}
                   size={22}
-                  color={leftIconColor}
+                  color={[leftIconColor]}
                 />
               </View>
             )}
@@ -48,6 +51,7 @@ const FormInput = ({
             <TextInput
               style={[
                 styles.input,
+                disabled&&styles.inputDisabled,
                 leftIcon && styles.inputWithLeftIcon,textInputStyles
               ]}
               onBlur={onBlur}
@@ -57,6 +61,7 @@ const FormInput = ({
               placeholder={props.placeholder}
               autoCapitalize="none"
               autoCorrect={false}
+              editable={!disabled}
               {...props}
             />
 
@@ -100,10 +105,18 @@ const styles = StyleSheet.create({
   inputWithLeftIcon: {
     paddingLeft: 4, // prevents extra spacing
   },
+  inputDisabled: {
+    color:Colors.grey,
+    backgroundColor:'#f0f0f0',
+    borderRadius: 20
+  },
   leftIcon: {
     paddingHorizontal: 12,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  leftIconDisabled: {
+    backgroundColor:'#f0f0f0'
   },
   inputError: {
     borderColor: '#ef4444',

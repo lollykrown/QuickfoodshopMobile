@@ -1,4 +1,4 @@
-import { View, Text, Dimensions, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity, Pressable } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { useLocalSearchParams, useRouter , usePathname, Link} from "expo-router";
 import { fetchStoreByID, fetchFoodByID } from "@/services/api";
 import { useCallback, useEffect, useState } from 'react';
@@ -8,22 +8,25 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Colors } from '@/constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Fontisto from '@expo/vector-icons/Fontisto';
-import { Button, Snackbar } from 'react-native-paper';
+import { Button, FAB } from 'react-native-paper';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { StatusBar } from 'expo-status-bar';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-// import { useCart } from '@/contexts/cartContext'; // Context we created
+import RipplePressable from '@/components/RipplePressable';
+import { useCart } from '@/contexts/cartContext'; // Context we created
+import { useToast } from '@/hooks/useToast';
 
 const { height } = Dimensions.get('window')
 
 export default function StoreDetails() {
   const router = useRouter();
   const {category, id}= useLocalSearchParams();
+  const { show, Toast } = useToast();
 
   if(!id){
    router.back()
   }
-  // const { cartItems, updateQuantity, removeItem, clearCart, totalPrice } = useCart();
+  const { cartItems,cartCount, updateQuantity,addToCart, removeItem, clearCart, totalPrice } = useCart();
 
   const fnChoice = useCallback(() => {
       return (category === 'restaurants' ||category === 'grocery-stores')?fetchStoreByID:fetchFoodByID
@@ -33,33 +36,47 @@ export default function StoreDetails() {
     
   const {data: details = {},loading,refetch: loadDetails} = useFetch(() => fetchFn({id}), false);
   
+  const inCart = cartItems.length > 0 ? cartItems.some((item) => item.id === details._id):false
+
+  const handleAddToCart = (name) => {
+    // console.log('name',name)
+    if (inCart) {
+      show(`${name} is already in your cart 🛒`,'error')
+      return
+    };
+
+    addToCart(details,);
+    show(`${name} added to cart 🛒`,);
+  };
+
+
   useEffect(() => {
     loadDetails();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-    const handleX = () => {
+  const handleX = () => {
       router.dismiss()
     }
-    // const tt = category === resta
-// console.log('ll',details.)
+
+    // console.log(details?.items?.list[0])
   return (
     <>
     <StatusBar hidden />
     <ScrollView style={styles.container}>             
-    {loading&&<View style={{height:'100%'}}>
+      {loading&&<View style={{height:'100%'}}>
       <ActivityIndicator
           size="large"
           color={Colors.primary}
           style={{marginVertical:'auto'}}/>
-          </View>}
+      </View>}
       <View style={{ height: height * 0.3 }}>
-        <Pressable style={styles.backBtn} onPress={handleX}>
+        <TouchableOpacity style={styles.backBtn} onPress={handleX}>
           <Ionicons style={{textAlign:'center', fontWeight:700}} name="close" size={19} color="black" />
-        </Pressable>
-        <Pressable style={styles.backBtn2} onPress={()=>{}}>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.backBtn2} onPress={()=>{}}>
           <Ionicons style={{textAlign:'center', fontWeight:700}} name="heart-outline" size={19} color="black" />
-        </Pressable>
+        </TouchableOpacity>
         <ShimmerExpoImage
           uri={details?.store?.image||details?.image}
           width={'100%'}
@@ -77,12 +94,13 @@ export default function StoreDetails() {
           </Text>
         </View>
       { (category === 'food' ||category === 'groceries')&&
-      <TouchableOpacity onPress={()=> router.push(`stores/${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)} asChild>
-        <View style={{paddingHorizontal:18,gap:8, flexDirection:'row', marginBottom:32}}>
+      // <RipplePressable onPress={()=> router.push(`stores/${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)}>
+        <RipplePressable style={{paddingHorizontal:18,gap:8, paddingVertical:6, flexDirection:'row', marginBottom:32, }} onPress={()=> router.push(`stores/${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)}>
           <ShimmerExpoImage uri={details.vendorId?.image} width={40} height={40} accessibilityLabel={details?.itemName} styles={{borderRadius:20}} />
           <Text style={{alignSelf:'center', marginLeft:8, fontWeight:'600',fontSize:16}}>{details?.vendorId?.businessName}</Text>
           <MaterialIcons style={{alignSelf:'center'}} name="arrow-outward" size={24} color={Colors.green}/>
-        </View></TouchableOpacity>}
+        </RipplePressable>
+        }
         <View style={{ flexDirection:'row', marginBottom:18, justifyContent:'space-around',paddingHorizontal:18 }}>
           <View style={{ paddingRight:18, gap:8, justifyContent:'center',alignItems:'center',}}>
             <MaterialCommunityIcons style={{borderRadius:12}} name="clock" size={20} color={Colors.green} />
@@ -119,25 +137,40 @@ export default function StoreDetails() {
             <ScrollView>
             {(details?.items?.list.length>0)&&
             details?.items?.list.slice(0,9).map(item=>(
-              <View style={styles.item} key={item._id.toString()}>
+              <RipplePressable onPress={()=>router.push(`stores/${details?.categoryId?.name||details?.items?.list[0]?.categoryId?.name.toLowerCase()}/${item._id}`)} style={styles.item} key={item._id.toString()}>
                 <ShimmerExpoImage uri={item.image} width={40} height={40} accessibilityLabel={item.itemName} styles={{borderRadius:18}} />
                   <Text style={styles.title}>{item.itemName}</Text>
                   <Text style={{}}>X</Text>
                   <Text style={{fontSize:18}}>0</Text>
-                  <TouchableOpacity onPress={()=>console.log('-')}>
+                  {/* <TouchableOpacity onPress={()=>console.log('-')}> */}
                     <FontAwesome style={{alignSelf:'center'}} name="minus-square-o" size={24} color={Colors.green} />
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={(e)=>console.log('+')}>
+                  {/* </TouchableOpacity> */}
+                  {/* <TouchableOpacity onPress={(e)=>console.log('+')}> */}
                     <FontAwesome name="plus-square-o" size={24} color={Colors.green} />
-                  </TouchableOpacity>
-                </View>
+                  {/* </TouchableOpacity> */}
+                </RipplePressable>
             ))}
             </ScrollView>
           </View>
         </View>
-        <Button style={{ backgroundColor:Colors.primary, borderRadius:12, marginHorizontal:18}}  textColor={'white'} mode="contained" onPress={() => console.log('Pressed')}>Add To Cart</Button>
+          {details?.itemName&&<RipplePressable
+            style={styles.button}
+            onPress={()=>handleAddToCart(details.itemName)}
+            // disabled={isSubmitting}
+          rippleColor='rgba(255,255,255,0.6)'
+          >
+            <Text style={styles.buttonText}>
+              Add To Cart
+            </Text>
+          </RipplePressable>}
       </View>
     </ScrollView>
+    {cartCount>0&&<FAB
+        icon="cart" color='white' label='Goto Cart'
+        style={{position: 'absolute',margin: 16, fontWeight:600,right: 10,bottom: 40,backgroundColor:Colors.green}}
+        onPress={() => router.push('/myCart')}
+      /> }
+    <Toast />
     </>
   );
 }
@@ -216,5 +249,20 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 4,
   },
+  button:{
+    backgroundColor:Colors.primary,
+    justifyContent:'center',
+    alignItems:'center',
+    padding:14,
+    marginHorizontal:26,
+    borderRadius:14
+  },
+  buttonText:{
+    color:'white',
+    fontSize:16,
+    fontWeight:600
+  }
 });
+
+
 

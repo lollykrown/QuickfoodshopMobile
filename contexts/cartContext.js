@@ -1,10 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { createContext, useContext, useReducer, useEffect, useRef, useMemo } from "react";
+import { createContext, useContext, useReducer, useEffect, useRef, useMemo, use } from "react";
+import { useAuth } from './authContext';
+import { set } from 'zod';
+
 
 // ✅ Initial state
 const initialState = {
   cartItems: [],
   hasLoaded: false,
+  deliveryAddress:null
 };
 
 // ✅ Actions
@@ -16,6 +20,8 @@ const ACTIONS = {
   CLEAR_CART: "CLEAR_CART",
   SET_CART_ITEMS: "SET_CART_ITEMS",
   SET_LOADED: "SET_LOADED",
+  SET_ADDRESS: "SET_ADDRESS",
+  REMOVE_ADRESS: "REMOVE_ADDRESS",
 };
 
 // ✅ Reducer
@@ -52,6 +58,12 @@ const cartReducer = (state, action) => {
     case ACTIONS.SET_LOADED:
       return { ...state, hasLoaded: true };
 
+    case ACTIONS.SET_ADDRESS:
+      return { ...state, deliveryAddress: action.payload };
+
+    case ACTIONS.REMOVE_ADRESS:
+      return { ...state, deliveryAddress: null };
+
     default:
       return state;
   }
@@ -64,17 +76,22 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
   const prevCartRef = useRef([]);
+  const {user } = useAuth();
+  const storageKey = user?.id ? `cartItems_${user.id}` : `cartItems_guest`;
 
   // Load and merge cart from localStorage + server
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
     async function loadCart() {
       try {
-        const localCart = JSON.parse(AsyncStorage.getItem('cartItems') || '[]');
+        const stored = await AsyncStorage.getItem(storageKey);
+        const storedAddress = await AsyncStorage.getItem('address');
+        const localCart = stored ? JSON.parse(stored) : [];   
+        const localAddress = storedAddress ? JSON.parse(storedAddress) : null;
+        if (localAddress) {
+          dispatch({ type: ACTIONS.SET_ADDRESS, payload: localAddress });
+        }     
         // const res = await fetch('/api/cart');
-        const res = {ok:false}
-        const serverCart = res.ok ? await res.json() : [];
+        const serverCart = [];
 
         const mergedMap = new Map();
         serverCart.forEach(item => mergedMap.set(item.id, item));
@@ -86,6 +103,7 @@ export const CartProvider = ({ children }) => {
             mergedMap.set(item.id, item);
           }
         });
+
 
         dispatch({ type: ACTIONS.SET_CART_ITEMS, payload: Array.from(mergedMap.values()) });
       } catch (err) {
@@ -100,33 +118,45 @@ export const CartProvider = ({ children }) => {
 
   // Sync to localStorage and dispatch cart-updated event only when cart changes
   useEffect(() => {
-    if (typeof window !== 'undefined' && state.hasLoaded) {
+    if (!state.hasLoaded) return;
+    async function saveCart() {
       const prevCart = prevCartRef.current;
       const currentCart = state.cartItems;
 
       if (JSON.stringify(prevCart) !== JSON.stringify(currentCart)) {
         try {
-          AsyncStorage.setItem('cartItems', JSON.stringify(currentCart));
-          AsyncStorage.setItem('cartCount', currentCart.length);
-          window.dispatchEvent(new Event('cart-updated')); // for navbar update
+          await AsyncStorage.setItem(storageKey, JSON.stringify(currentCart));
         } catch (err) {
           console.error('Failed to save cart:', err);
         }
         prevCartRef.current = currentCart;
       }
+      if (state.deliveryAddress) {
+        try {
+          await AsyncStorage.setItem('address', JSON.stringify(state.deliveryAddress));
+        } catch (err) {
+          console.error('Failed to save address:', err);
+        }
+      }
     }
-  }, [state.cartItems, state.hasLoaded]);
+    saveCart()
+  }, [state.cartItems, state.hasLoaded,state.deliveryAddress]);
+
 
   // ✅ Action creators
   const addToCart = item => {
+    // console.log(item)
     const sanitized = {
-      id: item.id,
-      name: item.item_name,
-      price: item.price,
+      id: item?._id?.toString(),
+      name: item?.itemName,
+      price: item?.price,
       quantity: 1,
-      seller: `${item.user.first_name} ${item.user.last_name}`,
-      address: `${item.address.street}, ${item.address.city}, ${item.address.state}`,
-      image: item.gallery_images?.[0] || '/placeholder.png',
+      description:item?.description,
+      category: item?.categoryId?.name,
+      isAvailable: item?.isAvailable,
+      // seller: `${item?.vendorId?.firstName} ${item?.vendorId?.lastName}`,
+      location: item?.vendorId?.location,
+      image: item.image,
     };
     dispatch({ type: ACTIONS.ADD_ITEM, payload: sanitized });
   };
@@ -141,6 +171,13 @@ export const CartProvider = ({ children }) => {
   const setCartItems = items =>
     dispatch({ type: ACTIONS.SET_CART_ITEMS, payload: items });
 
+  const setAddress = address =>
+    dispatch({ type: ACTIONS.SET_ADDRESS, payload: address });
+
+  const removeAddress = () =>
+    dispatch({ type: ACTIONS.REMOVE_ADRESS });
+
+
   // ✅ Derived values
   const cartCount = useMemo(() => state.cartItems.length, [state.cartItems]);
   const totalPrice = useMemo(() => state.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0), [state.cartItems]);
@@ -149,6 +186,7 @@ export const CartProvider = ({ children }) => {
     <CartContext.Provider
       value={{
         cartItems: state.cartItems,
+        deliveryAddress: state.deliveryAddress,
         cartCount,    // total quantity
         totalPrice,   // total price
         addToCart,
@@ -156,6 +194,8 @@ export const CartProvider = ({ children }) => {
         removeItem,
         clearCart,
         setCartItems,
+        setAddress,
+        removeAddress,
         dispatch,
       }}
     >

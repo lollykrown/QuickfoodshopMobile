@@ -5,6 +5,7 @@ import { Colors } from '@/constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Link } from "expo-router";
 import { Card, } from 'react-native-paper';
+import { priceFormat } from '@/utils/misc';
 
 const { width } = Dimensions.get('window')
 
@@ -35,7 +36,7 @@ export const ItemCard = ({data, storeType}) => {
               </View>)}
             <View style={{flexDirection:'row', justifyContent:'space-between', marginBottom:8}}>
               {isStore?(<Text style={{ alignSelf:'flex-end', paddingBottom:4}}>⭐ 4.5 (97)</Text>):
-              <Text style={{ alignSelf:'flex-end', paddingBottom:4}}>From <Text style={{ fontWeight: "bold" }}>£{formatter.format(data?.price)}</Text></Text>}
+              <Text style={{ alignSelf:'flex-end', paddingBottom:4}}>From <Text style={{ fontWeight: "bold" }}>{priceFormat(data?.price)}</Text></Text>}
               <View style={{backgroundColor:Colors.primary, padding:2, borderRadius:8}}>
                 <MaterialCommunityIcons style={{borderRadius:12}} name="arrow-right" size={24} color="white" />
               </View>

@@ -9,20 +9,27 @@ import { useAuth } from "@/contexts/authContext";
 export default function Index() {  
   const [isFirstLaunch, setIsFirstLaunch] = useState(null)
   const router = useRouter()
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn,isExisting } = useAuth();
 
   useEffect(() => {
     //testing purposes
     // AsyncStorage.removeItem('alreadyLaunched')
-    
-    AsyncStorage.getItem('alreadyLaunched').then(value => {
-      if (value === null) {
-        AsyncStorage.setItem('alreadyLaunched', 'true')
-        setIsFirstLaunch(true)
-      } else {
-        setIsFirstLaunch(false)
+    const checkLaunch = async () => {
+      try {
+        const value = await AsyncStorage.getItem('alreadyLaunched');
+
+        if (value === null) {
+          await AsyncStorage.setItem('alreadyLaunched', 'true');
+          setIsFirstLaunch(true);
+        } else {
+          setIsFirstLaunch(false);
+        }
+      } catch (error) {
+        console.error('Error checking launch status:', error);
       }
-    })
+    };
+
+    checkLaunch()
   }, [])
   
   useEffect(() => {
@@ -30,8 +37,8 @@ export default function Index() {
      if(isLoggedIn){
        router.push('/home')
     }
-  }, [])
-
+  }, [isLoggedIn])
+ 
 
   if (isFirstLaunch === null) {
     return (
@@ -40,8 +47,17 @@ export default function Index() {
       </View>
     )
   }
+  // // First launch
+  // if (isFirstLaunch) {
+  //   return <Onboarding />;
+  // }
 
-  return isFirstLaunch ? <Onboarding /> :<OnbdOptions />
+  // // Not logged in
+  // if (!isLoggedIn) {
+  //   return <OnbdOptions auth={'/signup'} />;
+  // }
+  // return null;
+  return isFirstLaunch ? <Onboarding /> :<OnbdOptions auth={isExisting?'login':'signup'}/>
 }
 
 

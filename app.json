@@ -46,6 +46,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "04947147-f20a-463b-b91c-db8d6e90ac28"
+      }
+    },
+    "owner": "lollykrown"
   }
 }

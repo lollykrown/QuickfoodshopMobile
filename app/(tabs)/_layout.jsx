@@ -6,10 +6,12 @@ import { Tabs } from 'expo-router';
 
 import { Colors } from '@/constants/colors';
 import { useAuth } from '@/contexts/authContext';
+import { useCart } from '@/contexts/cartContext'; 
 
 
 export default function TabLayout() {
   const { isLoggedIn } = useAuth();
+  const { cartCount } = useCart();
 
   return (
       <Tabs
@@ -48,7 +50,7 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="myCart/index"
+          name="myCart"
           options={{
             title: 'My Cart',
             tabBarIcon: ({ color, focused }) =>
@@ -57,6 +59,7 @@ export default function TabLayout() {
               ) : (
                 <Ionicons name="cart-outline" size={24} color={color} />
               ),
+            tabBarBadge: cartCount > 0 ? cartCount : undefined,
           }}
         />
         <Tabs.Screen
@@ -72,7 +75,7 @@ export default function TabLayout() {
           }}
         />
         {/* Hide dashboard routes from tab bar */}
-        <Tabs.Protected guard={isLoggedIn}>
+        {/* <Tabs.Protected guard={isLoggedIn}>
           <Tabs.Screen
             name="dashboard"
             options={{ 
@@ -80,7 +83,7 @@ export default function TabLayout() {
               href: null 
             }}
           />
-        </Tabs.Protected>
+        </Tabs.Protected> */}
 
       </Tabs>
   );

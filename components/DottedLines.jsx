@@ -11,10 +11,12 @@ import Animated, {
 import { Colors } from '@/constants/colors';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Svg, { Line } from 'react-native-svg';
+import Octicons from '@expo/vector-icons/Octicons';
+
 
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 
-const DottedLines = ({styles}) => {
+const DottedLines = ({styles, status}) => {
   const dashOffset = useSharedValue(0);
   const pulse = useSharedValue(0);
 
@@ -37,6 +39,7 @@ const DottedLines = ({styles}) => {
     strokeOpacity: interpolate(pulse.value, [0, 1], [0.6, 1]),
   }));
 
+  const isTracking = !status||status === 'delivered'?{color:'black'}:{color:'#E1E3E8'}
   return (
     <View style={{ flexDirection: 'row', gap: 8, ...styles }}>
       {/* Left section */}
@@ -47,13 +50,13 @@ const DottedLines = ({styles}) => {
             width: 42,
             height: 42,
             borderWidth: 1,
-            borderColor: Colors.primary,
+            borderColor: status ?Colors.green:Colors.primary,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(26, 184, 84,0.15)',
+            backgroundColor: status ? 'white':'rgba(26, 184, 84,0.15)',
           }}
         >
-          <Ionicons name="cart-outline" size={24} color="#0f7a4a" />
+          <Ionicons name="cart-outline" size={24} color={status ?Colors.green:Colors.primary} />
         </View>
         {/* Dotted lines */}
         <Svg style={{ marginLeft: 20 }} width="2" height={48}>
@@ -63,7 +66,7 @@ const DottedLines = ({styles}) => {
             y1="0"
             x2="1"
             y2="100%"
-            stroke={Colors.primary}
+            stroke={status?Colors.green:Colors.primary}
             strokeWidth="4"
             strokeDasharray="4 4"
           />
@@ -74,13 +77,13 @@ const DottedLines = ({styles}) => {
             width: 42,
             height: 42,
             borderWidth: 1,
-            borderColor: Colors.primary,
+            borderColor:!status?Colors.primary:(status&&status!=='delivered')?'#E1E3E8':Colors.green,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(26, 184, 84,0.15)',
+            backgroundColor: status ? 'white':'rgba(26, 184, 84,0.15)',
           }}
         >
-          <Ionicons name="location" size={24} color="#0f7a4a" />
+          <Ionicons name="location" size={24} color={!status?Colors.primary:(status&&status!=='delivered')?'#E1E3E8':Colors.green}/>
         </View>
       </View>
       {/* Middle section */}
@@ -91,19 +94,15 @@ const DottedLines = ({styles}) => {
           paddingVertical: 4,
         }}
       >
-        <View
-          style={{ flexDirection: 'column', gap: 2, justifyContent: 'center' }}
-        >
-          <Text style={{ fontSize: 16, fontWeight: 600 }}>Gillian Store</Text>
-          <Text style={{ color: Colors.grey }}>Pickup point </Text>
+        <View style={{ flexDirection: 'column', gap: 2, justifyContent: 'center' }} >
+          <Text style={{ fontSize: 16, fontWeight: 600, maxWidth:230}} numberOfLines={1} ellipsizeMode="tail">{status?'Order has left the store':'Gillian Store'}</Text>
+          <Text style={{ color: Colors.grey, maxWidth:230 }} numberOfLines={1} ellipsizeMode="tail">{status?'Gillian Store':'Pickup point'} </Text>
         </View>
-        <View
-          style={{ flexDirection: 'column', gap: 2, justifyContent: 'center' }}
-        >
-          <Text style={{ fontSize: 16, fontWeight: 600 }}>
+        <View style={{ flexDirection: 'column', gap: 2, justifyContent: 'center' }} >
+          <Text style={[{ fontSize: 16, fontWeight: 600, maxWidth:230}, isTracking]} numberOfLines={1} ellipsizeMode="tail">
             465 Peckham, London
           </Text>
-          <Text style={{ color: Colors.grey }}>Destination</Text>
+          <Text style={isTracking}>Destination</Text>
         </View>
       </View>
       {/* Right section */}
@@ -115,7 +114,8 @@ const DottedLines = ({styles}) => {
           paddingVertical: 4,
         }}
       >
-        <View style={{ flexDirection: 'column', gap: 2 }}>
+        {status ?<Octicons name="check-circle-fill" style={{textAlign:'right', marginEnd:10, marginTop:6}} size={20} color={Colors.green}/>:
+          <View style={{ flexDirection: 'column', gap: 2 }}>
           <Text style={{ fontSize: 16, color: Colors.grey }}>Payment </Text>
           <Text
             style={{
@@ -130,13 +130,17 @@ const DottedLines = ({styles}) => {
               borderColor: Colors.border,
             }}
           >
-            $310{' '}
+            £310{' '}
           </Text>
-        </View>
-        <View style={{ flexDirection: 'column', gap: 2 }}>
+        </View>}
+
+        {status==='delivered'&&<View style={{ flexDirection: 'column', gap: 2 }}>
+          <Octicons name="check-circle-fill" style={{textAlign:'right', marginEnd:10, marginBottom:6}} size={20} color={Colors.green}/>          
+        </View>}
+        {!status&&<View style={{ flexDirection: 'column', gap: 2 }}>
           <Text style={{ fontSize: 16, color: Colors.grey }}>Distance</Text>
           <Text style={{ fontWeight: 600, textAlign: 'center' }}>12km</Text>
-        </View>
+        </View>}
       </View>
     </View>
   );

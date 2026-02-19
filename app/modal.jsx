@@ -16,7 +16,6 @@ import {
   Pressable,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
 
@@ -25,6 +24,8 @@ export default function ModalScreen() {
   const router = useRouter();
   const { login, loading } = useAuth();
   const [loginError, setLoginError] = useState('');
+
+// console.log('Selected option:',role, prev)
 
   const {
     control,
@@ -52,7 +53,7 @@ export default function ModalScreen() {
     const { email, password } = data;
     // const res = await login('joe_kayu@yahoo.com', 'Kvothe01!')
 
-    const res = await login(email, password);
+    const res = await login(email, password, role);
     if (res.error) {
       setLoginError(res.error);
       return;
@@ -86,9 +87,10 @@ export default function ModalScreen() {
           color: Colors.primary,
           textAlign: 'center',
           fontWeight: 700,
+          marginVertical: 6,
         }}
       >
-        Login{' '}
+        Login{' '}{role&&`as a ${role}`}
       </Text>
           <Text style={{ textAlign: 'center', marginBottom: 12 }}>
             Don&apos;t have an account?{' '}

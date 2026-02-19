@@ -1,43 +1,62 @@
-import { View, Text, Pressable, StyleSheet, FlatList, ActivityIndicator, Keyboard, ScrollView } from 'react-native'
-import { useRouter } from "expo-router";
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { Appbar, Button } from 'react-native-paper';
-import { Colors } from '@/constants/colors';
-import { useEffect, useState } from 'react';
-import Fontisto from '@expo/vector-icons/Fontisto';
-import useFetch from "@/hooks/usefetch";
-import SearchBar from '@/components/SearchBar';
-import { fetchAllData } from "@/services/api";
+import featured from '@/assets/images/featured.webp';
+import featured2 from '@/assets/images/featured2.webp';
+import featured3 from '@/assets/images/featured3.webp';
 import { ItemCard } from '@/components/ItemCard';
+import RipplePressable from '@/components/RipplePressable';
+import SearchBar from '@/components/SearchBar';
+import { Colors } from '@/constants/colors';
 import { useDrawer } from '@/contexts/DrawerProvider';
-import { Image } from 'expo-image';
-import featured from '@/assets/images/featured.webp'
-import featured2 from '@/assets/images/featured2.webp'
-import featured3 from '@/assets/images/featured3.webp'
+import useFetch from '@/hooks/usefetch';
+import { fetchAllData } from '@/services/api';
+import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import { Image } from 'expo-image';
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  Keyboard,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { Appbar } from 'react-native-paper';
 
-const feat = [featured3,featured2,featured]
-const feat2 = [featured2,featured,featured3]
+const feat = [featured3, featured2, featured];
+const feat2 = [featured2, featured, featured3];
 
 const renderFeaturedItems = ({ item }) => (
-    <Image source={item} style={{width:260, height:160, borderRadius:12, marginBottom:8}} />
-  );
-const categories = ['amala','milo', 'ofada','jollof rice', 'puff puff', 'fried rice', 'moi moi']
-
-
+  <Image
+    source={item}
+    style={{ width: 260, height: 160, borderRadius: 12, marginBottom: 8 }}
+  />
+);
+const categories = [
+  'amala',
+  'milo',
+  'ofada',
+  'jollof rice',
+  'small chops',
+  'fried rice',
+  'moi moi',
+];
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
-  const drawer = useDrawer(); 
+  const drawer = useDrawer();
 
   const {
-    data:items= [],
+    data: items = [],
     loading,
     error,
     refetch: loadData,
-    reset
-  } = useFetch(() => fetchAllData({ query: searchQuery}), false);
+    reset,
+  } = useFetch(() => fetchAllData({ query: searchQuery }), false);
   useEffect(() => {
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
@@ -48,17 +67,17 @@ const Search = () => {
     }, 500);
 
     return () => clearTimeout(timeoutId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
-  
+
   return (
     <View style={styles.container}>
       <Appbar.Header style={{ backgroundColor: '#F8F8F8', paddingEnd: 16 }}>
-        <Appbar.BackAction onPress={() => router.back()} />
+        <Appbar.BackAction color="black" onPress={() => router.back()} />
         <Appbar.Content
           title="Search"
           variant="titleMedium"
-          titleStyle={{ fontWeight: '700' }}
+          titleStyle={{ fontWeight: '700', color: 'black' }}
         />
         <Pressable onPress={drawer.toggle}>
           <AntDesign name="menu" size={24} color="black" />
@@ -88,7 +107,12 @@ const Search = () => {
               borderRadius: 12,
             }}
           >
-            <Fontisto style={{ transform: 'rotate(90deg)' }} name="equalizer" size={18} color="white" />
+            <Fontisto
+              style={{ transform: 'rotate(90deg)' }}
+              name="equalizer"
+              size={18}
+              color="white"
+            />
           </View>
         </Pressable>
       </View>
@@ -130,32 +154,68 @@ const Search = () => {
                 Error: {error.message}
               </Text>
             )}
-              {/* Popular searches section */}
-              {searchQuery&&<View style={styles.featuredCont}>
-                <Text style={{fontWeight:700, fontSize:16}}>Popular Searches</Text>
+            {/* Popular searches section */}
+            {searchQuery && (
+              <View style={styles.featuredCont}>
+                <Text style={{ fontWeight: 700, fontSize: 16 }}>
+                  Popular Searches
+                </Text>
                 <ScrollView
-                    horizontal={true} 
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{marginTop:10, flexDirection:'row', alignItems:'center'}}
-                  >
-                    {categories.map((cat, index) => (
-                      <Button 
-                        key={index}
-                        style={{borderColor: Colors.primary, marginRight: 10, textAlign:'center'}}
-                        mode={"outlined"}
-                        textColor={Colors.primary}
-                        background={Colors.primary}
-                        labelStyle={{fontWeight:'600', textTransform:'capitalize'}}
-                        rippleColor="rgba(255, 255, 255, 0.32)"
-                        onPress={() => setSearchQuery(cat)}>
-                          {cat} <FontAwesome style={{alignSelf:'baseline'}} name="search" size={16} color={Colors.primary} />
-                        </Button>
-                      ))}
+                  horizontal={true}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{
+                    marginTop: 10,
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}
+                >
+                  {categories.map((cat, index) => (
+                    <RipplePressable
+                      key={index}
+                      style={[
+                        styles.catStyle,
+                        cat === searchQuery && styles.categoryActive,
+                      ]}
+                      rippleColor={
+                        cat === searchQuery
+                          ? 'rgba(255, 255, 255, 0.32)'
+                          : 'rgba(0, 102, 52,0.15)'
+                      }
+                      onPress={() => setSearchQuery(cat)}
+                    >
+                      <Text
+                        style={[
+                          {
+                            color:
+                              cat === searchQuery ? 'white' : Colors.primary,
+                            fontSize: 16,
+                            fontWeight: '600',
+                            textTransform: 'capitalize',
+                          },
+                        ]}
+                      >
+                        {cat}
+                      </Text>
+                      <FontAwesome
+                        style={[
+                          {
+                            color:
+                              cat === searchQuery ? 'white' : Colors.primary,
+                            marginStart: 4,
+                          },
+                        ]}
+                        name="search"
+                        size={16}
+                        color={Colors.primary}
+                      />
+                    </RipplePressable>
+                  ))}
                 </ScrollView>
-              </View>}
-            
+              </View>
+            )}
+
             {!loading && !error && searchQuery.trim() && items?.length > 0 && (
-              <Text style={{ fontSize: 20, fontWeight: 600, marginTop:12 }}>
+              <Text style={{ fontSize: 20, fontWeight: 600, marginTop: 12 }}>
                 Showing search Results for{' '}
                 <Text
                   style={{ color: Colors.primary, textTransform: 'capitalize' }}
@@ -168,13 +228,13 @@ const Search = () => {
         }
         ListEmptyComponent={
           !loading && !error ? (
-            <View style={{ marginTop: 10, gap:20,}}>
+            <View style={{ marginTop: 10, gap: 20 }}>
               <Text
                 style={{
                   textAlign: 'center',
                   fontSize: 16,
                   color: 'gray',
-                  paddingHorizontal: 10,    
+                  paddingHorizontal: 10,
                   paddingBottom: 14,
                 }}
                 numberOfLines={2}
@@ -184,28 +244,64 @@ const Search = () => {
                   : 'Start typing in the search box above to search for groceries or food items'}
               </Text>
               {/* Popular searches section */}
-              <View style={styles.featuredCont}>
-                <Text style={{fontWeight:700, fontSize:16}}>Popular Searches</Text>
-                <ScrollView
-                    horizontal={true} 
+              {!searchQuery.trim() && (
+                <View style={styles.featuredCont}>
+                  <Text style={{ fontWeight: 700, fontSize: 16 }}>
+                    Popular Searches
+                  </Text>
+                  <ScrollView
+                    horizontal={true}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{marginTop:10, flexDirection:'row', alignItems:'center'}}
+                    contentContainerStyle={{
+                      marginTop: 10,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}
                   >
                     {categories.map((cat, index) => (
-                      <Button 
+                      <RipplePressable
                         key={index}
-                        style={{borderColor: Colors.primary, marginRight: 10, textAlign:'center'}}
-                        mode={"outlined"}
-                        textColor={Colors.primary}
-                        background={Colors.primary}
-                        labelStyle={{fontWeight:'600', textTransform:'capitalize'}}
-                        rippleColor="rgba(255, 255, 255, 0.32)"
-                        onPress={() => setSearchQuery(cat)}>
-                          {cat} <FontAwesome style={{alignSelf:'baseline'}} name="search" size={16} color={Colors.primary} />
-                        </Button>
-                      ))}
-                </ScrollView>
-              </View> 
+                        style={[
+                          styles.catStyle,
+                          cat === searchQuery && styles.categoryActive,
+                        ]}
+                        rippleColor={
+                          cat === searchQuery
+                            ? 'rgba(255, 255, 255, 0.32)'
+                            : 'rgba(0,0,0,0.15)'
+                        }
+                        onPress={() => setSearchQuery(cat)}
+                      >
+                        <Text
+                          style={[
+                            {
+                              color:
+                                cat === searchQuery ? 'white' : Colors.primary,
+                              fontSize: 16,
+                              fontWeight: '600',
+                              textTransform: 'capitalize',
+                            },
+                          ]}
+                        >
+                          {cat}
+                        </Text>
+                        <FontAwesome
+                          style={[
+                            {
+                              color:
+                                cat === searchQuery ? 'white' : Colors.primary,
+                              marginStart: 4,
+                            },
+                          ]}
+                          name="search"
+                          size={16}
+                          color={Colors.primary}
+                        />
+                      </RipplePressable>
+                    ))}
+                  </ScrollView>
+                </View>
+              )}
               {/* Featured section */}
               <View style={styles.featuredCont}>
                 <View
@@ -275,9 +371,9 @@ const Search = () => {
       />
     </View>
   );
-}
+};
 
-export default Search
+export default Search;
 
 const styles = StyleSheet.create({
   container: {
@@ -285,12 +381,27 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#F8F8F8',
   },
-  featuredCont:{
+  featuredCont: {
     marginTop: 20,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1, 
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
     paddingBottom: 18,
     borderBottomColor: '#E2E2E2',
   },
-
-})
+  catStyle: {
+    borderColor: Colors.primary,
+    marginRight: 10,
+    textAlign: 'center',
+    backgroundColor: 'white',
+    borderRadius: 22,
+    borderWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+  },
+  categoryActive: {
+    backgroundColor: Colors.primary,
+  },
+});

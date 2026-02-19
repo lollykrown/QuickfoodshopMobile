@@ -15,7 +15,6 @@ export default function LoginForm() {
     useEffect(() => {
       router.replace(`/modal?role=${role}&prev=${prev}`);
     }, []);
-  
 
   return (
     <StackedBackground style={styles.container} >

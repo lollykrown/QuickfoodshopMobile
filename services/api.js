@@ -1,15 +1,14 @@
-import { deleteItem, getItem } from '@/lib/secureStore';
-import fetchWithCred from '../utils/axios';
+import { getItem } from '@/lib/secureStore';
 
 const API_BASE = 'https://app.quickfoodshop.co.uk/v1';
 const ACCESS_TOKEN_KEY = 'accessToken';
-// const REFRESH_TOKEN_KEY = 'refreshToken';
+const REFRESH_TOKEN_KEY = 'refreshToken';
 const USER_DATA_KEY = 'userData';
 
 async function apiFetch(url, options = {}) {
   const token = await getItem(ACCESS_TOKEN_KEY);
   //add token refresh
-  return fetch(url, {
+  return fetch(`${API_BASE}${url}`, {
     ...options,
     headers: {
       ...options.headers,
@@ -17,8 +16,6 @@ async function apiFetch(url, options = {}) {
     },
   });
 }
-
-
 
 //unprotected
 export const CONFIG = {
@@ -141,23 +138,17 @@ export const fetchFood = async ({ query, limit }) => {
 };
 
 export const fetchFoodByID = async ({ id }) => {
-  try {
-    const response = await fetchWithCred(`/items/customers/${id}`);
-    const { data, rating } = response.data;
-    return data;
-  } catch (error) {
-    if (error.response) {
-      // Server responded with non-2xx
-      throw new Error(error.response.data?.message ?? 'Server error');
-    }
-
-    if (error.request) {
-      // No response
-      throw new Error('Network error');
-    }
-
-    throw new Error('Unexpected error');
+  const response = await fetch(`${CONFIG.BASE_URL}/items/customers/${id}`,{
+    method: 'GET',
+    headers: CONFIG.headers,
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch data: ${response.statusText}`);
   }
+
+  const res = await response.json();
+  // console.log('DATA', res.data)
+  return res.data;
 };
 
 export const fetchFoodExtras = async ({ query }) => {
@@ -208,71 +199,4 @@ export const fetchGroceries = async ({ query }) => {
   return res.data;
 };
 
-export const getProfile = async () => {
-  try {
-    const response = await fetchWithCred('/auth/profile',);
-    // console.log('dfyguioytfdrtfiu',response.data.data)
-    return response.data.data;
-  } catch (error) {
-    if (error.response) {
-      // Server responded with non-2xx
-      throw new Error(error.response.data?.message ?? 'Server error');
-    }
 
-    if (error.request) {
-      // No response
-      throw new Error('Network error');
-    }
-
-    console.log(error);
-    throw new Error('Unexpected error');
-  }
-};
-export const updateProfile = async ({payload}) => {
-  try {
-    const response = await fetchWithCred.patch('/auth/update-profile',{data:payload});
-    // console.log('dfyguioytfdrtfiu',response.data.data)
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      // Server responded with non-2xx
-      throw new Error(error.response?.message ?? 'Server error');
-    }
-
-    if (error.request) {
-      // No response
-      throw new Error('Network error');
-    }
-
-    console.log(error);
-    throw new Error('Unexpected error');
-  }
-};
-
-const logoutAction = async () => {
-  try {
-    const response = await fetchWithCred.get(
-      'https://app.quickfoodshop.co.uk/v1/auth/logout',
-    );
-    return response;
-  } catch (error) {
-    if (error.response) {
-      // Server responded with non-2xx
-      throw new Error(error.response.data?.message ?? 'Server error');
-    }
-
-    if (error.request) {
-      // No response
-      throw new Error('Network error');
-    }
-
-    console.log(error);
-    throw new Error('Unexpected error');
-  }
-};
-export async function logout() {
-  await logoutAction();
-  await deleteItem(ACCESS_TOKEN_KEY);
-  // await deleteItem(REFRESH_TOKEN_KEY);
-  await deleteItem(USER_DATA_KEY);
-}
