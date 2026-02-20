@@ -89,7 +89,7 @@ const Account = () => {
           <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
         </RipplePressable>
         <RipplePressable
-          onPress={() => router.push('/dashboard/account/change-password')}
+          onPress={() => router.push('/dashboard/account/changePassword')}
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',

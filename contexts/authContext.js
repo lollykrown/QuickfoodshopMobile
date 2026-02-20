@@ -73,7 +73,7 @@ const isLoggingOutRef = useRef(false);
     }
     return { error: data };
   };
-  // Standard login
+  // update Profile
   const update = async (payload) => {
     const data = await updateProfile(payload);
     // console.log('Context',data)

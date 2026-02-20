@@ -1,6 +1,7 @@
 import RipplePressable from '@/components/RipplePressable';
 import { Colors } from '@/constants/colors';
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';import { useRouter } from 'expo-router';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Appbar } from 'react-native-paper';
 import { useRef, useState, useEffect } from 'react';
 import {
@@ -12,19 +13,51 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { resetPwd } from '@/services/api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { set, z } from 'zod';
+import { pwdResetSchema } from '@/lib/zod';
+import FormInput from '@/components/FormInput';
 
 const OTP_LENGTH = 6;
+const dat = [
+  { name: 'password', label: 'New Password', placeholder: 'New Password',icon: 'lock-outline', },
+  {
+    name: 'confirmPassword',
+    label: 'Confirm Password',
+    placeholder: 'Confirm Password',
+    icon: 'lock-outline',
+  },
+];
 
 export default function OTPScreen() {
   const [otp, setOtp] = useState(Array(OTP_LENGTH).fill(''));
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(0);
   const isOtpComplete = otp.every(digit => digit !== '');
   const [created, setCreated] = useState(false);
+  const { role, email } = useLocalSearchParams();
+  const [error, setError] = useState('');
+  const [payload, setPayload] = useState(null);
+  const [showPwdScreen, setShowPwdScreen] = useState(false);
 
   const inputs = useRef([]);
   const router = useRouter();
+
+    const {
+      control,
+      handleSubmit,
+      formState: { errors, isSubmitting },
+    } = useForm({
+      resolver: zodResolver(pwdResetSchema),
+      defaultValues: {
+        password: '',
+        confirmPassword: '',
+      },
+    });
 
   // Countdown timer
   useEffect(() => {
@@ -72,13 +105,11 @@ export default function OTPScreen() {
     }
   };
 
-  const verifyOtp = (code) => {
-    console.log('OTP entered:', code);
+  const verifyOtp = async(code) => {
+    console.log('OTP entered:', code, email, role);
+    setPayload(prev => ({ ...prev, otp_token: code, email }));
+    setShowPwdScreen(true);
 
-    // Call backend verify endpoint
-    // await api.post('/verify-otp', { code })
-    //set Created to true if success
-    setCreated(true);
   };
 
   const resendOtp = () => {
@@ -90,10 +121,61 @@ export default function OTPScreen() {
     // Call backend resend endpoint
     // await api.post('/resend-otp')
   };
+  const onSubmit = async (data) => {
+    Keyboard.dismiss();
 
+    const { password } = data;
+    setPayload(prev => ({ ...prev, password}));
+
+    const updatedPayload = {
+      ...payload,
+      password,
+    }
+    try {
+    const res = await resetPwd({ payload: updatedPayload, role });
+      if(res?.success) {
+        setShowPwdScreen(false);
+        setCreated(true); 
+}
+    } catch (error) {
+      setError(error.message);
+    }
+  };
   return (
     <View style={styles.container}>
-    {created ?
+    {showPwdScreen &&
+    <SafeAreaView style={{flex:1,paddingHorizontal:24, marginTop:60}} edges={['top', 'bottom']}>
+        <KeyboardAvoidingView
+            style={styles.textArea}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+          >
+        <Text style={{fontSize:24, fontWeight:'700', marginVertical:12}} >Change New Password</Text>
+        <Text style={{ color:'#666666', marginBottom:39,}} >Enter your registered email below</Text>   
+        {dat.map((d) => (
+              <FormInput
+                control={control}
+                name={d.name}
+                label={d.label}
+                placeholder={d.placeholder}
+                error={errors?.[d.name]?.message}
+                autoCapitalize="none"
+                key={d.name}
+              />
+            ))}  
+        <RipplePressable
+          style={styles.button}
+          onPress={handleSubmit(onSubmit)}
+          disabled={isSubmitting}
+          rippleColor="rgba(255,255,255,0.6)"
+        >
+          <Text style={styles.buttonText}>{isSubmitting ? 'Submitting...' : 'Reset Password'}</Text>
+          {isSubmitting && (<ActivityIndicator size={18} color="white" /> )}
+        </RipplePressable>
+        </KeyboardAvoidingView>
+    </SafeAreaView>}
+
+    {created &&
     <SafeAreaView style={{flex:1,paddingHorizontal:24, alignItems:'center',marginTop:60}} edges={['top', 'bottom']}>
       <MaterialCommunityIcons name="check-circle" style={{marginTop:40}} size={90} color={Colors.primary} />
       <Text style={{fontSize:24, fontWeight:'700', marginVertical:12}} >Account Created.</Text>
@@ -105,7 +187,9 @@ export default function OTPScreen() {
       >
         <Text style={styles.buttonText}>Go to Login</Text>
       </RipplePressable>
-    </SafeAreaView> :     
+    </SafeAreaView>}
+
+    {(!created &&  !showPwdScreen)&&
     <KeyboardAvoidingView 
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
@@ -122,7 +206,7 @@ export default function OTPScreen() {
             <TextInput
               key={index}
               ref={ref => (inputs.current[index] = ref)}
-              style={styles.input}
+              style={[styles.input, error && styles.inputErr]}
               keyboardType="number-pad"
               maxLength={1}
               value={digit}
@@ -134,6 +218,7 @@ export default function OTPScreen() {
             />
           ))}
         </View>
+          <Text style={{ color: '#ef4444', fontWeight:600, fontSize: 12, marginTop: 4 }}>{error}</Text>
 
       {/* Resend */}
         <TouchableOpacity
@@ -148,7 +233,7 @@ export default function OTPScreen() {
         </TouchableOpacity>
         <RipplePressable
               style={styles.button}
-              onPress={() => router.push('/myCart/delivery')}
+              onPress={verifyOtp.bind(null, otp.join(''))}
               disabled={!isOtpComplete|| timer>0}
               rippleColor="rgba(255,255,255,0.6)"
             >
@@ -190,6 +275,15 @@ const styles = StyleSheet.create({
     height: 55,
     borderWidth: 1,
     borderRadius: 10,
+    textAlign: 'center',
+    fontSize: 20,
+  },
+  inputErr: {
+    width: 50,
+    height: 55,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: '#ef4444',
     textAlign: 'center',
     fontSize: 20,
   },

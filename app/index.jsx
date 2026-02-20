@@ -35,7 +35,7 @@ export default function Index() {
   useEffect(() => {
     //testing purposes
      if(isLoggedIn){
-       router.push('/home')
+       router.replace('/home')
     }
   }, [isLoggedIn])
  

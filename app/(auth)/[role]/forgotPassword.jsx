@@ -1,6 +1,6 @@
 import RipplePressable from '@/components/RipplePressable';
 import { Colors } from '@/constants/colors';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Appbar } from 'react-native-paper';
 import { useRef, useState, useEffect } from 'react';
 import { View, Text,  StyleSheet, Keyboard, } from 'react-native';
@@ -10,11 +10,14 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { forgetPwd } from '@/services/api';
 
 
 export default function ForgotPassword() {
   const [created, setCreated] = useState(false);
-
+  const [error, setError] = useState('');
+  const [payload, setPayload] = useState(null);
+  const { role } = useLocalSearchParams();
   const router = useRouter();
 
  const {
@@ -23,25 +26,29 @@ export default function ForgotPassword() {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(
-        z.object({ email: z.email('Invalid email address') }),
+        z.object({ email: z.string().trim().email('Invalid email address') }),
     ),
     defaultValues: {
-      firstName: '',
-      lastName: '',
       email: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
     },
   });
 
-  const onSubmit = async (data) => {    
-    Keyboard.dismiss();
+const onSubmit = async (data) => {
+  Keyboard.dismiss();
 
-    const { email} = data;
-    console.log('Forgot payload:', email);
-    setCreated(true);
-  };
+  const { email } = data;
+  if(!email)return
+  setPayload({ email, role }); 
+
+  try {
+    const res = await forgetPwd({ email, role });
+    // console.log('Forgot response:', res);
+     res?.success &&setCreated(true); // success if no error thrown
+  } catch (error) {
+    setError(error.message);
+  }
+};
+
   return (
     <View style={styles.container}>
         {created?
@@ -51,7 +58,7 @@ export default function ForgotPassword() {
             <Text style={{fontSize:16, color:'#666666', marginBottom:24}} >A verification code has been sent to your email.</Text>   
       <RipplePressable
         style={styles.button}
-        onPress={() => router.push('/forgotPassword')}
+        onPress={() => router.replace(`/otp?email=${payload?.email}&role=${payload?.role}`)}
         rippleColor="rgba(255,255,255,0.6)"
       >
         <Text style={styles.buttonText}>Continue</Text>
@@ -69,7 +76,7 @@ export default function ForgotPassword() {
                 name={'email'}
                 label={'Email Address'}
                 placeholder={'e.g.email@example.com'}
-                error={errors?.email?.message}
+                error={errors?.email?.message||error}
                 autoCapitalize="none"
                 key={'email'}
                 labelStyles={{
@@ -79,7 +86,7 @@ export default function ForgotPassword() {
                 }}
                 />
                 <Text style={{ color:'#666666', marginBottom:12}} >
-                    Remember the password? <Text style={{ color: Colors.green, fontWeight: 600 }} onPress={() => router.push('/login')}>Sign in</Text></Text>
+                    Remember the password? <Text style={{ color: Colors.green, fontWeight: 600 }} onPress={() => router.push(`/${role}/login`)}>Sign in</Text></Text>
 
                 <RipplePressable
                     style={styles.button}

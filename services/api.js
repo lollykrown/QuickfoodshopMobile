@@ -1,4 +1,5 @@
 import { getItem } from '@/lib/secureStore';
+import { success } from 'zod';
 
 const API_BASE = 'https://app.quickfoodshop.co.uk/v1';
 const ACCESS_TOKEN_KEY = 'accessToken';
@@ -22,6 +23,7 @@ export const CONFIG = {
   BASE_URL: 'https://app.quickfoodshop.co.uk/v1',
   headers: {
     accept: 'application/json',
+    'Content-Type': 'application/json'
     // cache: 'no-store',
   },
 };
@@ -198,5 +200,56 @@ export const fetchGroceries = async ({ query }) => {
   // console.log('DATA', res.data)
   return res.data;
 };
+export const forgetPwd = async ({ email,role }) => {
+  const url = role === 'customer' ? '/auth/forget-password' : role === 'vendor' ? '/vendor/auth/forget-password' : '/auth/rider/forget-password';
+
+  try {
+    const response = await fetch(`${CONFIG.BASE_URL}${url}`, {
+      method: 'POST',
+      headers: {
+        ...CONFIG.headers,
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      // 👇 return backend message if available
+      throw new Error(data?.message || 'Failed to reset password');
+    }
+
+    return { success:true };
+  } catch (error) {
+    // console.log('Forget password error:', error.message);
+    throw error;
+  }
+};
+export const resetPwd = async ({ payload, role }) => {
+  const url = role === 'customer' ? '/auth/reset-password' : role === 'vendor' ? '/vendor/auth/reset-password' : '/auth/rider/reset-password';
+
+  try {
+    const response = await fetch(`${CONFIG.BASE_URL}${url}`, {
+      method: 'PATCH',
+      headers: {
+        ...CONFIG.headers,
+      },
+      body: JSON.stringify({ ...payload, "password": "Kvothe1!" }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      // 👇 return backend message if available
+      throw new Error(data?.message || 'Failed to reset password');
+    }
+    // console.log('yhhb',payload, role);
+
+    return { success:true };
+  } catch (error) {
+    // console.log('Forget password error:', error.message);
+    throw error;
+  }
+};
+
 
 

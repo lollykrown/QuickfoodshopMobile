@@ -124,11 +124,15 @@ export default function ModalScreen() {
         <Text style={{ color: '#ef4444', fontSize: 12, marginTop: 4 }}>
           {loginError}
         </Text>
-        <Text
-          style={{ textAlign: 'right', color: Colors.primary, fontWeight: 600 }}
+        <RipplePressable
+          // style={styles.button}
+          onPress={()=>router.replace(`${role}/forgotPassword`)}
+          rippleColor='rgba(255,255,255,0.6)'
         >
+        <Text style={{ textAlign: 'right', color: Colors.primary, fontWeight: 600 }}>
           Forgot Password?
         </Text>
+        </RipplePressable>
         <RipplePressable
           style={styles.button}
           onPress={handleSubmit(onSubmit)}
