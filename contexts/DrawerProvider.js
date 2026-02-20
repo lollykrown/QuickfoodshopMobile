@@ -179,22 +179,19 @@ export default function DrawerProvider({
               {drawerItems.map((item, i) => (
                 <Drawer.Item
                   key={i}
-                  label={item.label}
+                  // label={item.label}
+                  label={<Text style={[styles.drawerLabel, item.active && styles.drawerLabelActive,]}>{item.label}</Text>}
                   active={item.active}
                   icon={({ color, size }) => (
                     <MaterialCommunityIcons
                       name={item.icon}
                       size={size}
-                      color={item.active ? '#22c55e' : '#64748b'} // active/inactive color
+                      color={item.active ? Colors.primary : '#64748b'} // active/inactive color
                     />
                   )}
                   style={[
                     styles.drawerItem,
                     item.active && styles.drawerItemActive,
-                  ]}
-                  labelStyle={[
-                    styles.drawerLabel,
-                    item.active && styles.drawerLabelActive,
                   ]}
                   right={
                     item.badge
@@ -214,6 +211,7 @@ export default function DrawerProvider({
                 />
               ))}
               <Divider bold={true}/>
+
               {isLoggedIn&&
               <>
               <RipplePressable
@@ -283,7 +281,7 @@ const styles = StyleSheet.create({
 
   drawerLabelActive: {
     fontWeight: '600',
-    color: '#22c55e', // active color
+    color: Colors.primary, // active color
   },
   overlay: {
     backgroundColor: 'rgba(0,0,0,0.35)',

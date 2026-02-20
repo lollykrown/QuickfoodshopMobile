@@ -61,8 +61,6 @@ export const changePwd = async ({ payload, role }) => {
       // No response
       throw new Error('Network error');
     }
-
-    console.log('r',error);
     throw new Error('Unexpected error');
   }
 };
