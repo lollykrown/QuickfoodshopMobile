@@ -52,7 +52,7 @@ const Settings = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 18, color: Colors.grey }}>
+          <Text style={{ fontWeight: 600, fontSize: 16, color: Colors.grey }}>
             Email Notification
           </Text>
           <Switch
@@ -76,7 +76,7 @@ const Settings = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 18, color: Colors.grey }}>
+          <Text style={{ fontWeight: 600, fontSize: 16, color: Colors.grey }}>
             SMS Notification
           </Text>
           <Switch
@@ -100,7 +100,7 @@ const Settings = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 18, color: Colors.grey }}>
+          <Text style={{ fontWeight: 600, fontSize: 16, color: Colors.grey }}>
             Push Notification
           </Text>
           <Switch

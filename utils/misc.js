@@ -94,7 +94,7 @@ export const menuOptions = (pathname, router, role, isLoggedIn) => {
         },
         {
           label: 'Assigned Riders',
-          icon: 'map-marker',
+          icon: 'truck-delivery',
           active: pathname.includes('/assigned-riders'),
           href:'/dashboard/assigned-riders',
           onPress: () => router.push('/dashboard/assigned-riders'),
