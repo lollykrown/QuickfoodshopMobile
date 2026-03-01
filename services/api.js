@@ -250,6 +250,30 @@ export const resetPwd = async ({ payload, role }) => {
     throw error;
   }
 };
+export const getOTP = async ({ email,role }) => {
+  const url = role === 'customer' ? '/auth/forget-password' : role === 'vendor' ? '/vendor/auth/forget-password' : '/auth/rider/forget-password';
+
+  try {
+    const response = await fetch(`${CONFIG.BASE_URL}${url}`, {
+      method: 'POST',
+      headers: {
+        ...CONFIG.headers,
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      // 👇 return backend message if available
+      throw new Error(data?.message || 'Failed to reset password');
+    }
+
+    return { success:true };
+  } catch (error) {
+    // console.log('Forget password error:', error.message);
+    throw error;
+  }
+};
 
 
 

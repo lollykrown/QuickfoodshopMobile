@@ -16,7 +16,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 
 const AnimatedLine = Animated.createAnimatedComponent(Line);
 
-const DottedLines = ({styles, status}) => {
+const DottedLines = ({styles, status,right=true}) => {
   const dashOffset = useSharedValue(0);
   const pulse = useSharedValue(0);
 
@@ -106,7 +106,7 @@ const DottedLines = ({styles, status}) => {
         </View>
       </View>
       {/* Right section */}
-      <View
+      {right&&<View
         style={{
           flexDirection: 'column',
           marginLeft: 'auto',
@@ -141,7 +141,7 @@ const DottedLines = ({styles, status}) => {
           <Text style={{ fontSize: 16, color: Colors.grey }}>Distance</Text>
           <Text style={{ fontWeight: 600, textAlign: 'center' }}>12km</Text>
         </View>}
-      </View>
+      </View>}
     </View>
   );
 };

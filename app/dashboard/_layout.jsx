@@ -12,10 +12,11 @@ export default function DashboardLayout() {
     >
       {/* <Stack.Screen name="index" options={{title:'dashboard'}}/> */}
       <Stack.Screen name="account/index" options={{ title: 'account' }} />
+      <Stack.Screen name="activeRiders/index" options={{ title: 'active riders' }} />
       <Stack.Screen name="favorites/index" options={{ title: 'favorites' }} />
       <Stack.Screen name="invoice/index" options={{ title: 'invoice' }} />
       <Stack.Screen name="notifications/index"  options={{ title: 'notifications' }} />
-      <Stack.Screen name="orders/index" options={{ title: 'orders' }} />
+      <Stack.Screen name="orders" options={{ title: 'orders' }} />
       <Stack.Screen name="settings/index" options={{ title: 'settings' }} />
       <Stack.Screen name="tracking" options={{ title: 'tracking' }} />
       <Stack.Screen name="transactions/index" options={{ title: 'transactions' }}

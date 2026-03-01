@@ -3,15 +3,39 @@ import ShimmerExpoImage from '@/components/ShimmerImg';
 import { Colors } from '@/constants/colors';
 import { useAuth } from '@/contexts/authContext';
 import { useDrawer } from '@/contexts/DrawerProvider';
-import useFetch from '@/hooks/usefetch';
+import { BarChart, Grid, XAxis } from "react-native-svg-charts";
 import { getProfile } from '@/services/dashboardApi';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Link, useRouter } from 'expo-router';
 import { useEffect, useRef } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Appbar } from 'react-native-paper';
+
+
+// const data = [
+//   { value: 50, svg: { fill: "#4F46E5" } }, // Indigo
+//   { value: 20, svg: { fill: "#EF4444" } }, // Red
+//   { value: 40, svg: { fill: "#10B981" } }, // Green
+//   { value: 95, svg: { fill: "#F59E0B" } }, // Amber
+//   { value: 85, svg: { fill: "#3B82F6" } }, // Blue
+//   { value: 85, svg: { fill: "#f61bf6" } }, // Blue
+// ];
+const rawData = [50, 10, 40, 95, 85, 70, 35];
+
+const data = rawData.map(value => ({
+  value,
+  svg: {
+    fill:
+      value > 80
+        ? "#EF4444"
+        : value > 40
+        ? "#F59E0B"
+        : "#10B981"
+  }
+}));
 
 const Dashboard = () => {
   const router = useRouter();
@@ -24,7 +48,7 @@ const Dashboard = () => {
   //     refetch();
   // }, []);
 
-  // console.log(data)
+  // console.log(user)
 
   return (
     <View style={styles.container}>
@@ -94,6 +118,128 @@ const Dashboard = () => {
             </View>
           </Link>
         </View>
+        {user.role==='vendor'&&<View style={{marginTop:25}}>
+          <RipplePressable
+            onPress={() => {
+              router.push(`/dashboard/orders`);
+            }}
+            style={{
+              flexDirection: 'row',
+              borderColor: Colors.border,
+              borderRadius: 12,
+              borderWidth: 1,
+              padding: 20,
+              justifyContent: 'space-between',
+            }}
+          >
+            <View style={{ flexDirection: 'column', gap: 8 }}>
+              <Text style={{ color: Colors.grey, fontSize: 12 }}>
+                Total Income
+              </Text>
+              <Text style={{ fontSize: 20, fontWeight: 600 }}>£389</Text>
+            </View>
+            <View
+              style={{
+                borderWidth: 1,
+                padding: 8,
+                alignSelf: 'center',
+                backgroundColor: 'rgba(26, 184, 84,0.15)',
+                borderColor: Colors.border,
+                borderRadius: 8,
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <FontAwesome6
+                name="money-bills"
+                size={18}
+                color={Colors.green}
+              />
+            </View>
+          </RipplePressable>
+          <View style={{ flexDirection: 'row', gap: 14, marginTop: 10 }}>
+            <RipplePressable
+              onPress={() => {
+                router.push(`/dashboard/orders`);
+              }}
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                borderColor: Colors.border,
+                borderRadius: 12,
+                borderWidth: 1,
+                padding: 20,
+                justifyContent: 'space-between',
+              }}
+            >
+              <View style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ color: Colors.grey, fontSize: 12 }}>
+                  All Orders
+                </Text>
+                <Text style={{ fontSize: 20, fontWeight: 600 }}>12,000</Text>
+              </View>
+              <View
+                style={{
+                  borderWidth: 1,
+                  padding: 8,
+                  alignSelf: 'center',
+                  backgroundColor: 'rgba(26, 184, 84,0.15)',
+                  borderColor: Colors.border,
+                  borderRadius: 8,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="human-queue"
+                  size={18}
+                  color={Colors.green}
+                />
+              </View>
+            </RipplePressable>
+            <RipplePressable
+              onPress={() => {
+                router.push(`/dashboard/transactions`);
+              }}
+              style={{
+                flexDirection: 'row',
+                flex: 1,
+                borderColor: Colors.border,
+                borderRadius: 12,
+                borderWidth: 1,
+                padding: 20,
+                justifyContent: 'space-between',
+              }}
+            >
+              <View style={{ flexDirection: 'column', gap: 8 }}>
+                <Text style={{ color: Colors.grey, fontSize: 12 }}>
+                  Vendors
+                </Text>
+                <Text style={{ fontSize: 20, fontWeight: 600 }}>850</Text>
+              </View>
+              <View
+                style={{
+                  borderWidth: 1,
+                  padding: 8,
+                  alignSelf: 'center',
+                  backgroundColor: 'rgba(26, 184, 84,0.15)',
+                  borderColor: Colors.border,
+                  borderRadius: 8,
+                  alignContent: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <MaterialCommunityIcons
+                  name="food-turkey"
+                  size={18}
+                  color={Colors.green}
+                />
+              </View>
+            </RipplePressable>
+          </View>
+        </View>}
+
+        {user.role==='customer' &&
         <View style={{ flexDirection: 'row', gap: 14, marginTop: 20 }}>
           <RipplePressable
             onPress={() => {
@@ -173,7 +319,35 @@ const Dashboard = () => {
               />
             </View>
           </RipplePressable>
-        </View>
+        </View>}
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          {user.role==='vendor'&&
+          <View style={{ height: 250, padding: 20 }}>
+            <BarChart
+              style={{ flex: 1 }}
+              data={data}
+              yAccessor={({ item }) => item.value}
+              svg={{ fill: "#10B981", }}
+              contentInset={{ top: 20, bottom: 20 }}
+              spacingInner={0.8}
+            >
+              <Grid 
+                  svg={{
+                    stroke: "#a2a2a2",
+                    strokeDasharray: [6, 3]
+                  }}
+              />
+            </BarChart>
+            <XAxis
+              style={{ marginTop: 10 }}
+              data={data}
+              formatLabel={(value, index) =>
+                ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun"][index]
+              }
+              contentInset={{ left: 20, right: 20 }}
+              svg={{ fontSize: 12, fill: "black",}}
+            />
+          </View>}
         <Text
           style={{
             fontWeight: 600,
@@ -184,7 +358,6 @@ const Dashboard = () => {
         >
           Recent Orders
         </Text>
-        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((a) => (
             <RipplePressable
               key={a}

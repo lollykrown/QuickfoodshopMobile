@@ -14,12 +14,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { resetPwd } from '@/services/api';
+import { getOTP, resetPwd } from '@/services/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { set, z } from 'zod';
 import { pwdResetSchema } from '@/lib/zod';
 import FormInput from '@/components/FormInput';
 
@@ -112,15 +112,22 @@ export default function OTPScreen() {
 
   };
 
-  const resendOtp = () => {
+  const resendOtp = async() => {
     if (timer > 0) return;
 
     console.log('Resend OTP');
     setTimer(30);
 
     // Call backend resend endpoint
-    // await api.post('/resend-otp')
+    try {
+      const res = await getOTP({ email, role });
+      // console.log('Forgot response:', res);
+      res?.success && Alert.alert('OTP has been sent to your email')
+    } catch (error) {
+      setError(error.message);
+    }
   };
+
   const onSubmit = async (data) => {
     Keyboard.dismiss();
 

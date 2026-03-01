@@ -1,5 +1,6 @@
 import DottedLines from '@/components/DottedLines';
 import FormInput from '@/components/FormInput';
+import RipplePressable from '@/components/RipplePressable';
 import { Colors } from '@/constants/colors';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import { useAuth } from '@/contexts/authContext';
@@ -44,7 +45,7 @@ const order = {
 const OrderDetails = () => {
   const router = useRouter();
   const drawer = useDrawer();
-  const { logout, loading } = useAuth();
+  const { logout, loading, user } = useAuth();
 
   const {
     control,
@@ -73,8 +74,16 @@ const OrderDetails = () => {
           <AntDesign name="menu" size={24} color="black" />
         </Pressable>
       </Appbar.Header>
+      <View style={{marginHorizontal:20, flexDirection:'row',alignItems:'center', justifyContent:'space-between', marginVertical:8}}>
+          <Text style={{ fontWeight: 600, fontSize:16 }}>
+            Order #5678
+          </Text>
+          <RipplePressable onPress={()=>router.push('/dashboard/orders/findRider')} style={styles.button}>
+            <Text style={{color:'white', fontWeight:600}}>Find Rider</Text>
+          </RipplePressable>
+      </View>
       <View style={styles.card}>
-        <View style={styles.cardHeader}>
+        {user.role==='customer'&&<><View style={styles.cardHeader}>
           <Text style={{ fontWeight: 600 }}>
             Order: <Text style={{ fontWeight: 300 }}>5678</Text>{' '}
           </Text>
@@ -82,13 +91,12 @@ const OrderDetails = () => {
             Delivery Code:{' '}
             <Text style={{ fontWeight: 600, color: 'black' }}>98776</Text>
           </Text>
-        </View>
-        <Divider bold style={{ marginVertical: 12 }} />
+        </View>        
+        <Divider bold style={{ marginVertical: 12 }} /></>
+        }
         <DottedLines styles={{ paddingHorizontal: 12 }} />
       </View>
-      <View
-        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}
-      >
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <View
             style={{ flex: 1, height: 1, backgroundColor: Colors.border }}
@@ -101,6 +109,18 @@ const OrderDetails = () => {
           />
         </View>
       </View>
+      {user.role==='vendor'&&<View style={styles.card}>
+        <Text style={{ fontWeight: 600, paddingHorizontal:12 }}>Customer Details</Text>
+        <View style={styles.row}>
+          <Text style={{ fontWeight: 400, color: Colors.grey }}>
+            {`${user.firstName} ${user.lastName}`}
+          </Text>
+          <RipplePressable style={{borderColor:Colors.border, borderRadius:8, paddingVertical:4, borderWidth:1, paddingHorizontal:8}}>
+            <Text style={{color: Colors.grey, fontSize:12}}>View Profile</Text>
+          </RipplePressable>
+        </View>
+        <Text style={{ fontWeight: 400, color: Colors.grey, marginHorizontal:12 }}>{user.email}</Text>
+      </View>}
       <View style={styles.card}>
         <View style={styles.row}>
           <Text style={{ fontWeight: 600 }}>Date:</Text>
@@ -280,11 +300,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 8,
     paddingHorizontal: 12,
+    alignItems:'center'
   },
   column: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 4,
     paddingHorizontal: 12,
+  },
+  button: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 18,
+    paddingVertical:8,
+    borderRadius: 8,
+    alignItems: 'center',
   },
 });
