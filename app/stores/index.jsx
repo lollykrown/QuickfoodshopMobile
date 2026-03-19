@@ -125,7 +125,7 @@ const Stores = () => {
               <Text
                 style={{
                   textAlign: 'center',
-                  fontWeight: 500,
+                  fontWeight: '500',
                   color: 'red',
                   paddingHorizontal: 10,
                 }}

@@ -12,7 +12,7 @@ const EmptyState = ({text,buttonText='order now', url='/search', icon}) => {
       <View style={{ flex: 1 , paddingHorizontal:24, paddingVertical:28}}>
         <View style={{ flex: 1, justifyContent:'center', alignItems:'center'}}>
           {icon||<Entypo name="shopping-bag" size={120} color="#C4C4C4" />}
-          <Text style={{fontSize:26, color:'#C4C4C4', marginTop:24, fontWeight:700}}>{text}</Text>
+          <Text style={{fontSize:26, color:'#C4C4C4', marginTop:24, fontWeight:'700'}}>{text}</Text>
         </View>
         <Pressable
           style={styles.button}

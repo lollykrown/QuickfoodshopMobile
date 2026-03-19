@@ -21,10 +21,11 @@ export const ItemCard = ({data, storeType}) => {
   return (
     <Link href={url} asChild>
       <TouchableOpacity>
-        <View style={{ flexDirection:'column', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', borderRadius:12, backgroundColor:'#F5F5F5', overflow:'hidden', width:width*0.44}}>
+        <View style={{ flexDirection:'column', borderRadius:12, backgroundColor:'#F5F5F5', overflow:'hidden', width:width*0.44,   shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 4, elevation: 3,}}>
           <ShimmerExpoImage uri={data.image} width={220} height={140} accessibilityLabel={data.itemName} styles={{borderTopLeftRadius:12, borderTopRightRadius:12}} />
           <View style={{borderWidth:1, borderColor:'#E0E0E0', paddingHorizontal:12, paddingVertical:18, paddingBottom:8, gap:4,}}>
-            <Text numberOfLines={2} style={{fontSize:14, fontWeight:700}}>{data.itemName||data.businessName||data.vendorId.businessName}</Text>
+            <Text numberOfLines={2} style={{fontSize:14, fontWeight:'700'}}>{data.itemName||data.businessName||data.vendorId.businessName}</Text>
             {data?.vendorId?.businessName&&<Text numberOfLines={2} style={{fontSize:14, color:'#687076'}}>{data?.vendor?.businessName||data?.vendorId?.businessName}</Text>}
             {data?.businessAddress&&<View style={{flexDirection:'row', alignItems:'center', gap:4,  }}>
               <Ionicons name="location-sharp" size={16} color={Colors.green} />
@@ -32,7 +33,7 @@ export const ItemCard = ({data, storeType}) => {
             </View>}
             {((data?.estimatedDeliveryTime||data?.vendor?.estimatedDeliveryTime)&&!isStore)&&(<View style={{flexDirection:'row', marginRight:18, marginVertical:8}}>
                 <MaterialCommunityIcons style={{borderRadius:12}} name="clock" size={20} color={Colors.green} />
-                  <Text style={{fontSize:14,alignSelf:'center',color:Colors.green, fontWeight:500}}>{data?.vendor?.estimatedDeliveryTime||data?.estimatedDeliveryTime} minutes</Text>
+                  <Text style={{fontSize:14,alignSelf:'center',color:Colors.green, fontWeight:'500'}}>{data?.vendor?.estimatedDeliveryTime||data?.estimatedDeliveryTime} minutes</Text>
               </View>)}
             <View style={{flexDirection:'row', justifyContent:'space-between', marginBottom:8}}>
               {isStore?(<Text style={{ alignSelf:'flex-end', paddingBottom:4}}>⭐ 4.5 (97)</Text>):
@@ -56,7 +57,7 @@ export const StoreCard = ({data, storeType}) => {
           <View style={styles.row}>
             <ShimmerExpoImage uri={data.image}  width={width*0.44} height={140} accessibilityLabel={data.itemName} styles={{borderTopLeftRadius:12, borderBottomLeftRadius:12}} />
             <View style={styles.textCont}>
-              <Text numberOfLines={2} style={{fontSize:14, fontWeight:700}}>{data.businessName}</Text>
+              <Text numberOfLines={2} style={{fontSize:14, fontWeight:'700'}}>{data.businessName}</Text>
               <View style={{flexDirection:'row',  alignItems:'center', gap:4, marginTop:4 }}>
                 <Ionicons name="location-sharp" size={16} color={Colors.green} />
                 <Text style={{fontSize:12,color:'#687076', marginRight:18,}}>{data?.businessAddress}</Text>

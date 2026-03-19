@@ -55,7 +55,7 @@ const Tracking = () => {
         </Pressable>
       </Appbar.Header>
       <Text
-        style={{ marginLeft: 12, padding: 12, fontSize: 18, fontWeight: 600 }}
+        style={{ marginLeft: 12, padding: 12, fontSize: 18, fontWeight: '600' }}
       >
         Current Tracking
       </Text>
@@ -67,8 +67,8 @@ const Tracking = () => {
           }}
         >
           <View style={styles.cardHeader}>
-            <Text style={{ fontWeight: 600 }}>
-              Order: <Text style={{ fontWeight: 300 }}>#5678</Text>{' '}
+            <Text style={{ fontWeight: '600' }}>
+              Order: <Text style={{ fontWeight: '300' }}>#5678</Text>{' '}
             </Text>
             <Text style={{ color: Colors.grey }}>Oct 2, 2025</Text>
             <Text style={[styles.text, c, b, bc]}>{status}</Text>
@@ -82,8 +82,8 @@ const Tracking = () => {
           }}
         >
           <View style={styles.cardHeader}>
-            <Text style={{ fontWeight: 600 }}>
-              Order: <Text style={{ fontWeight: 300 }}>#5678</Text>{' '}
+            <Text style={{ fontWeight: '600' }}>
+              Order: <Text style={{ fontWeight: '300' }}>#5678</Text>{' '}
             </Text>
             <Text style={{ color: Colors.grey }}>Oct 2, 2025</Text>
             <Text style={[styles.text, c, b, bc]}>{status}</Text>
@@ -92,7 +92,7 @@ const Tracking = () => {
         </RipplePressable>
       </ScrollView>
       <Text
-        style={{ marginLeft: 12, padding: 12, fontSize: 18, fontWeight: 600 }}
+        style={{ marginLeft: 12, padding: 12, fontSize: 18, fontWeight: '600' }}
       >
         Delivered
       </Text>
@@ -104,8 +104,8 @@ const Tracking = () => {
           }}
         >
           <View style={styles.cardHeader}>
-            <Text style={{ fontWeight: 600 }}>
-              Order: <Text style={{ fontWeight: 300 }}>#5678</Text>{' '}
+            <Text style={{ fontWeight: '600' }}>
+              Order: <Text style={{ fontWeight: '300' }}>#5678</Text>{' '}
             </Text>
             <Text style={{ color: Colors.grey }}>Oct 2, 2025</Text>
             <Text style={[styles.text, c, b, bc]}>{status}</Text>
@@ -119,8 +119,8 @@ const Tracking = () => {
           }}
         >
           <View style={styles.cardHeader}>
-            <Text style={{ fontWeight: 600 }}>
-              Order: <Text style={{ fontWeight: 300 }}>#5678</Text>{' '}
+            <Text style={{ fontWeight: '600' }}>
+              Order: <Text style={{ fontWeight: '300' }}>#5678</Text>{' '}
             </Text>
             <Text style={{ color: Colors.grey }}>Oct 2, 2025</Text>
             <Text style={[styles.text, c, b, bc]}>{status}</Text>
@@ -134,8 +134,8 @@ const Tracking = () => {
           }}
         >
           <View style={styles.cardHeader}>
-            <Text style={{ fontWeight: 600 }}>
-              Order: <Text style={{ fontWeight: 300 }}>#5678</Text>{' '}
+            <Text style={{ fontWeight: '600' }}>
+              Order: <Text style={{ fontWeight: '300' }}>#5678</Text>{' '}
             </Text>
             <Text style={{ color: Colors.grey }}>Oct 2, 2025</Text>
             <Text style={[styles.text, c, b, bc]}>{status}</Text>

@@ -121,7 +121,7 @@ const Delivery = () => {
         <CurrentLocationButton onSelect={handleSelect} />
 
         <View style={{ height: 1, backgroundColor: Colors.border, marginBottom: 22 }}  />
-        <Text style={{ fontWeight: 700, fontSize: 16 }}>Selected location</Text>
+        <Text style={{ fontWeight: '700', fontSize: 16 }}>Selected location</Text>
         <View
           style={{
             flexDirection: 'row',

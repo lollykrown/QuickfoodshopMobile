@@ -74,7 +74,7 @@ export default function ModalScreen() {
     >
       <Pressable style={styles.backBtn} onPress={handleX}>
         <Ionicons
-          style={{ textAlign: 'center', fontWeight: 700 }}
+          style={{ textAlign: 'center', fontWeight: '700' }}
           name="close"
           size={19}
           color="black"
@@ -86,7 +86,7 @@ export default function ModalScreen() {
           fontSize: 20,
           color: Colors.primary,
           textAlign: 'center',
-          fontWeight: 700,
+          fontWeight: '700',
           marginVertical: 6,
         }}
       >
@@ -98,7 +98,7 @@ export default function ModalScreen() {
               <Text
                 style={{
                   color: Colors.orange,
-                  fontWeight: 500,
+                  fontWeight: '500',
                   textDecorationColor: Colors.orange,
                   textDecorationStyle: 'solid',
                   textDecorationLine: 'underline',
@@ -129,7 +129,7 @@ export default function ModalScreen() {
           onPress={()=>router.replace(`${role}/forgotPassword`)}
           rippleColor='rgba(255,255,255,0.6)'
         >
-        <Text style={{ textAlign: 'right', color: Colors.primary, fontWeight: 600 }}>
+        <Text style={{ textAlign: 'right', color: Colors.primary, fontWeight: '600' }}>
           Forgot Password?
         </Text>
         </RipplePressable>

@@ -133,7 +133,7 @@ const Transactions = () => {
             />
             <View style={{ flex: 1, gap: 6 }}>
               <Text
-                style={{ fontSize: 16, fontWeight: 600 }}
+                style={{ fontSize: 16, fontWeight: '600' }}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
@@ -148,7 +148,7 @@ const Transactions = () => {
               </Text>
             </View>
             <View style={{ alignItems: 'flex-end', gap: 6 }}>
-              <Text style={{ fontWeight: 600, fontSize: 16 }}>
+              <Text style={{ fontWeight: '600', fontSize: 16 }}>
                 £{item.price}
               </Text>
               <Text

@@ -59,7 +59,7 @@ const MyCart = () => {
                 fontSize: 26,
                 color: '#C4C4C4',
                 marginTop: 24,
-                fontWeight: 700,
+                fontWeight: '700',
               }}
             >
               Cart is Empty
@@ -101,7 +101,7 @@ const MyCart = () => {
               />
               <View style={{ gap: 6 }}>
                 <Text
-                  style={{ fontSize: 18, fontWeight: 600, maxWidth: 215 }}
+                  style={{ fontSize: 18, fontWeight: '600', maxWidth: 215 }}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
@@ -125,7 +125,7 @@ const MyCart = () => {
                   <Text
                     style={{
                       fontSize: 18,
-                      fontWeight: 600,
+                      fontWeight: '600',
                       color: Colors.green,
                     }}
                   >
@@ -141,7 +141,7 @@ const MyCart = () => {
                       color={Colors.green}
                     />
                   </TouchableOpacity>
-                  <Text style={{ fontSize: 18, fontWeight: 600 }}>
+                  <Text style={{ fontSize: 18, fontWeight: '600' }}>
                     {item.quantity}
                   </Text>
                   <TouchableOpacity
@@ -177,7 +177,7 @@ const MyCart = () => {
               <Text
                 style={{
                   fontSize: 14,
-                  fontWeight: 600,
+                  fontWeight: '600',
                   paddingHorizontal: 8,
                   paddingVertical: 4,
                   textDecorationLine: 'underline',
@@ -199,7 +199,7 @@ const MyCart = () => {
               <Text
                 style={{
                   fontSize: 14,
-                  fontWeight: 600,
+                  fontWeight: '600',
                   color: '#fff',
                 }}
               >
@@ -223,7 +223,7 @@ const MyCart = () => {
               style={{
                 color: Colors.grey,
                 fontSize: 16,
-                fontWeight: 600,
+                fontWeight: '600',
                 marginBottom: 12,
               }}
             >
@@ -232,32 +232,32 @@ const MyCart = () => {
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 400 }}>Subtotal</Text>
-              <Text style={{ fontSize: 16, fontWeight: 400 }}>
+              <Text style={{ fontSize: 16, fontWeight: '400' }}>Subtotal</Text>
+              <Text style={{ fontSize: 16, fontWeight: '400' }}>
                 {priceFormat(totalPrice)}
               </Text>
             </View>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 400 }}>Est. Tax</Text>
-              <Text style={{ fontSize: 16, fontWeight: 400 }}>
+              <Text style={{ fontSize: 16, fontWeight: '400' }}>Est. Tax</Text>
+              <Text style={{ fontSize: 16, fontWeight: '400' }}>
                 {priceFormat(totalPrice * 0.04)}
               </Text>
             </View>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 400 }}>Service Fee</Text>
-              <Text style={{ fontSize: 16, fontWeight: 400 }}>
+              <Text style={{ fontSize: 16, fontWeight: '400' }}>Service Fee</Text>
+              <Text style={{ fontSize: 16, fontWeight: '400' }}>
                 {priceFormat(totalPrice * 0.05)}
               </Text>
             </View>
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 500 }}>Delivery</Text>
-              <Text style={{ fontSize: 16, fontWeight: 500 }}>
+              <Text style={{ fontSize: 16, fontWeight: '500' }}>Delivery</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500' }}>
                 {priceFormat(deliveryFee)}
               </Text>
             </View>
@@ -276,8 +276,8 @@ const MyCart = () => {
             <View
               style={{ flexDirection: 'row', justifyContent: 'space-between' }}
             >
-              <Text style={{ fontSize: 16, fontWeight: 700 }}>Total</Text>
-              <Text style={{ fontSize: 16, fontWeight: 700 }}>
+              <Text style={{ fontSize: 16, fontWeight: '700' }}>Total</Text>
+              <Text style={{ fontSize: 16, fontWeight: '700' }}>
                 {priceFormat(totalPrice+ (totalPrice * 0.04) + (totalPrice * 0.05) + deliveryFee)}
               </Text>
             </View>

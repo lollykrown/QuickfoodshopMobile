@@ -109,7 +109,7 @@ const Dashboard = () => {
                   }}
                 >
                   <Text
-                    style={{ color: 'white', fontSize: 12, fontWeight: 600 }}
+                    style={{ color: 'white', fontSize: 12, fontWeight: '600' }}
                   >
                     3
                   </Text>
@@ -136,7 +136,7 @@ const Dashboard = () => {
               <Text style={{ color: Colors.grey, fontSize: 12 }}>
                 Total Income
               </Text>
-              <Text style={{ fontSize: 20, fontWeight: 600 }}>£389</Text>
+              <Text style={{ fontSize: 20, fontWeight: '600' }}>£389</Text>
             </View>
             <View
               style={{
@@ -176,7 +176,7 @@ const Dashboard = () => {
                 <Text style={{ color: Colors.grey, fontSize: 12 }}>
                   All Orders
                 </Text>
-                <Text style={{ fontSize: 20, fontWeight: 600 }}>12,000</Text>
+                <Text style={{ fontSize: 20, fontWeight: '600' }}>12,000</Text>
               </View>
               <View
                 style={{
@@ -215,7 +215,7 @@ const Dashboard = () => {
                 <Text style={{ color: Colors.grey, fontSize: 12 }}>
                   Vendors
                 </Text>
-                <Text style={{ fontSize: 20, fontWeight: 600 }}>850</Text>
+                <Text style={{ fontSize: 20, fontWeight: '600' }}>850</Text>
               </View>
               <View
                 style={{
@@ -259,7 +259,7 @@ const Dashboard = () => {
               <Text style={{ color: Colors.grey, fontSize: 12 }}>
                 My Orders
               </Text>
-              <Text style={{ fontSize: 20, fontWeight: 600 }}>12,000</Text>
+              <Text style={{ fontSize: 20, fontWeight: '600' }}>12,000</Text>
             </View>
             <View
               style={{
@@ -298,7 +298,7 @@ const Dashboard = () => {
               <Text style={{ color: Colors.grey, fontSize: 12 }}>
                 Transactions
               </Text>
-              <Text style={{ fontSize: 20, fontWeight: 600 }}>850</Text>
+              <Text style={{ fontSize: 20, fontWeight: '600' }}>850</Text>
             </View>
             <View
               style={{
@@ -350,7 +350,7 @@ const Dashboard = () => {
           </View>}
         <Text
           style={{
-            fontWeight: 600,
+            fontWeight: '600',
             fontSize: 16,
             marginTop: 38,
             marginBottom: 8,
@@ -381,7 +381,7 @@ const Dashboard = () => {
               />
               <View style={{ flex: 1, gap: 6 }}>
                 <Text
-                  style={{ fontSize: 16, fontWeight: 600 }}
+                  style={{ fontSize: 16, fontWeight: '600' }}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
@@ -396,8 +396,8 @@ const Dashboard = () => {
                 </Text>
               </View>
               <View style={{ alignItems: 'flex-end', gap: 6 }}>
-                <Text style={{ fontWeight: 600, fontSize: 16 }}>£302</Text>
-                <Text style={{ color: Colors.green, fontWeight: 600 }}>
+                <Text style={{ fontWeight: '600', fontSize: 16 }}>£302</Text>
+                <Text style={{ color: Colors.green, fontWeight: '600' }}>
                   Successful
                 </Text>
               </View>

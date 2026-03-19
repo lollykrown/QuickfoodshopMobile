@@ -127,7 +127,7 @@ const Invoices = () => {
           >
             <View style={{ flex: 1, gap: 6 }}>
               <Text
-                style={{ fontSize: 16, fontWeight: 600 }}
+                style={{ fontSize: 16, fontWeight: '600' }}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
@@ -156,7 +156,7 @@ const Invoices = () => {
         renderSectionHeader={({ section: { date } }) => (
           <Text
             style={{
-              fontWeight: 600,
+              fontWeight: '600',
               fontSize: 20,
               paddingHorizontal: 12,
               paddingVertical: 6,

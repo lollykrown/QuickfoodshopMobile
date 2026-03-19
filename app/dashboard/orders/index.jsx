@@ -129,7 +129,7 @@ const Orders = () => {
       {(orders.length > 0 || orders2.length > 0) && (
         <>
           <ScrollView style={{ padding: 20 }}>
-            <Text style={{ fontWeight: 600, fontSize: 18 }}>Active Orders</Text>
+            <Text style={{ fontWeight: '600', fontSize: 18 }}>Active Orders</Text>
             <View style={{ paddingVertical: 20 }}>
               {orders.map((order) => (
                 // <TouchableOpacity onPress={()=>{router.push(`/dashboard/orders/${order.id}`)}} key={order.id}>
@@ -145,7 +145,7 @@ const Orders = () => {
                 // </TouchableOpacity>
               ))}
             </View>
-            <Text style={{ fontWeight: 600, fontSize: 18 }}>Past Orders</Text>
+            <Text style={{ fontWeight: '600', fontSize: 18 }}>Past Orders</Text>
             <View style={{ paddingVertical: 20 }}>
               {orders2.map((order) => (
                 <Accordion
@@ -167,7 +167,7 @@ const Orders = () => {
             style={{
               position: 'absolute',
               margin: 16,
-              fontWeight: 600,
+              fontWeight: '600',
               right: 10,
               bottom: 10,
               backgroundColor: Colors.green,

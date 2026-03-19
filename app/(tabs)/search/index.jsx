@@ -146,7 +146,7 @@ const Search = () => {
               <Text
                 style={{
                   textAlign: 'center',
-                  fontWeight: 500,
+                  fontWeight: '500',
                   color: 'red',
                   paddingHorizontal: 10,
                 }}
@@ -157,7 +157,7 @@ const Search = () => {
             {/* Popular searches section */}
             {searchQuery && (
               <View style={styles.featuredCont}>
-                <Text style={{ fontWeight: 700, fontSize: 16 }}>
+                <Text style={{ fontWeight: '700', fontSize: 16 }}>
                   Popular Searches
                 </Text>
                 <ScrollView
@@ -215,7 +215,7 @@ const Search = () => {
             )}
 
             {!loading && !error && searchQuery.trim() && items?.length > 0 && (
-              <Text style={{ fontSize: 20, fontWeight: 600, marginTop: 12 }}>
+              <Text style={{ fontSize: 20, fontWeight: '600', marginTop: 12 }}>
                 Showing search Results for{' '}
                 <Text
                   style={{ color: Colors.primary, textTransform: 'capitalize' }}
@@ -246,7 +246,7 @@ const Search = () => {
               {/* Popular searches section */}
               {!searchQuery.trim() && (
                 <View style={styles.featuredCont}>
-                  <Text style={{ fontWeight: 700, fontSize: 16 }}>
+                  <Text style={{ fontWeight: '700', fontSize: 16 }}>
                     Popular Searches
                   </Text>
                   <ScrollView
@@ -312,7 +312,7 @@ const Search = () => {
                     marginBottom: 10,
                   }}
                 >
-                  <Text style={{ fontWeight: 700, fontSize: 16 }}>
+                  <Text style={{ fontWeight: '700', fontSize: 16 }}>
                     Featured
                   </Text>
                   <Text
@@ -343,14 +343,14 @@ const Search = () => {
                     marginBottom: 10,
                   }}
                 >
-                  <Text style={{ fontWeight: 700, fontSize: 16 }}>
+                  <Text style={{ fontWeight: '700', fontSize: 16 }}>
                     Featured
                   </Text>
                   <Text
                     style={{
                       fontSize: 14,
                       color: Colors.green,
-                      fontWeight: 600,
+                      fontWeight: '600',
                     }}
                   >
                     See All

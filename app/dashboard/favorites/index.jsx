@@ -51,7 +51,7 @@ const Favorites = () => {
             <View style={{ flex: 1, gap: 6 }}>
               <View style={{ marginBottom: 12, gap: 4 }}>
                 <Text
-                  style={{ fontSize: 16, fontWeight: 600 }}
+                  style={{ fontSize: 16, fontWeight: '600' }}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
@@ -65,7 +65,7 @@ const Favorites = () => {
                   Open Sea Restaurant
                 </Text>
               </View>
-              <Text style={{ color: Colors.green, fontWeight: 500 }}>
+              <Text style={{ color: Colors.green, fontWeight: '500' }}>
                 £150.00
               </Text>
             </View>

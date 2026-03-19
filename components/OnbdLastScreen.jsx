@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     color:'#fff', 
     textAlign:'center', 
     marginVertical:30, 
-    fontWeight:500
+    fontWeight:'500'
   },
   button: { 
     backgroundColor:Colors.primary, 

@@ -143,7 +143,7 @@ const Home = () => {
               <ShimmerExpoImage width={48} height={48} styles={{borderRadius:24}} uri={user?.image||avatar}/>
               <View>
                 <Text style={{fontSize:12}}>Good {timeOfDay} 👋</Text>
-                <Text style={{fontWeight:700, fontSize:18, textTransform:'capitalize'}}>{user?`${user?.firstName} ${user?.lastName}`:'Victor Bayem'}</Text>
+                <Text style={{fontWeight:'700', fontSize:18, textTransform:'capitalize'}}>{user?`${user?.firstName} ${user?.lastName}`:'Victor Bayem'}</Text>
               </View>
             </View>
              </TouchableOpacity>:
@@ -161,7 +161,7 @@ const Home = () => {
                     <Ionicons name="notifications" size={24} color={Colors.primary} />
                     <View style={{position:'absolute', top:0, right:0, padding:1.5, backgroundColor:'white', borderRadius:12}}>
                       <View name="circle" style={{width:12,overflow:'hidden',flexDirection:'col',justifyContent:'center',alignItems:'center', borderRadius:12,height:12,backgroundColor:Colors.red}}>
-                        <Text style={{color:'white', fontSize:8,fontWeight:600 }}>3</Text>
+                        <Text style={{color:'white', fontSize:8,fontWeight:'600' }}>3</Text>
                       </View>
                     </View>
                   </View>
@@ -194,8 +194,8 @@ const Home = () => {
           {/* Featured section */}
           <View style={styles.featuredCont}>
             <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:10}}>
-              <Text style={{fontWeight:700, fontSize:16}}>Featured</Text>
-              <Text style={{ fontSize:14,color:Colors.green, fontWeight:600}}>See All</Text>
+              <Text style={{fontWeight:'700', fontSize:16}}>Featured</Text>
+              <Text style={{ fontSize:14,color:Colors.green, fontWeight:'600'}}>See All</Text>
             </View>
             <FlatList
                 horizontal={true}
@@ -208,7 +208,7 @@ const Home = () => {
           </View>
           {/* Category Section */}
           <View style={styles.categoryCont}>
-            <Text style={{fontWeight:700, fontSize:16}}>Categories</Text>
+            <Text style={{fontWeight:'700', fontSize:16}}>Categories</Text>
             <ScrollView
                 horizontal={true} 
                 showsHorizontalScrollIndicator={false}
@@ -228,10 +228,10 @@ const Home = () => {
           {/* Popular Dishes section */}
           <View style={styles.popularCont}>
             <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:10}}>
-              <Text style={{fontWeight:700, fontSize:16}}>Popular Dishes</Text>
+              <Text style={{fontWeight:'700', fontSize:16}}>Popular Dishes</Text>
               <Link href='/stores/food' asChild>
                 <TouchableOpacity>
-                  <Text style={{ fontSize:14,color:Colors.green, fontWeight:600}}>See All</Text>
+                  <Text style={{ fontSize:14,color:Colors.green, fontWeight:'600'}}>See All</Text>
               </TouchableOpacity>
               </Link>
             </View>
@@ -256,7 +256,7 @@ const Home = () => {
                       />
                     )}
                     {popDError && (
-                      <Text style={{textAlign:'center',fontWeight:500,color:'red',paddingHorizontal:10}}>
+                      <Text style={{textAlign:'center',fontWeight:'500',color:'red',paddingHorizontal:10}}>
                         Error: {popDError.message}
                       </Text>
                     )}
@@ -267,10 +267,10 @@ const Home = () => {
           {/* Popular Restaurants section */}
           <View style={styles.popularCont}>
             <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', marginBottom:10}}>
-              <Text style={{fontWeight:700, fontSize:16}}>Popular Stores</Text>
+              <Text style={{fontWeight:'700', fontSize:16}}>Popular Stores</Text>
                   <Link href='/stores' asChild>
                     <TouchableOpacity >
-              <Text style={{ fontSize:14,color:Colors.green, fontWeight:600}}>See All</Text>
+              <Text style={{ fontSize:14,color:Colors.green, fontWeight:'600'}}>See All</Text>
               </TouchableOpacity>
               </Link>
             </View>
@@ -295,7 +295,7 @@ const Home = () => {
                       />
                     )}
                     {popError && (
-                      <Text style={{textAlign:'center',fontWeight:500,color:'red',paddingHorizontal:10}}>
+                      <Text style={{textAlign:'center',fontWeight:'500',color:'red',paddingHorizontal:10}}>
                         Error: {popError.message}
                       </Text>
                     )}

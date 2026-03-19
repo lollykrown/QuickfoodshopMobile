@@ -85,7 +85,7 @@ const Account = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 14 }}>Edit Profile</Text>
+          <Text style={{ fontWeight: '600', fontSize: 14 }}>Edit Profile</Text>
           <MaterialIcons name="keyboard-arrow-right" size={24} color="black" />
         </RipplePressable>
         <RipplePressable
@@ -102,7 +102,7 @@ const Account = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 14 }}>Change Pasword </Text>
+          <Text style={{ fontWeight: '600', fontSize: 14 }}>Change Pasword </Text>
           <MaterialCommunityIcons name="lock-reset" size={24} color="black" />
         </RipplePressable>
       </View>
@@ -120,7 +120,7 @@ const Account = () => {
         }}
       >
         <MaterialCommunityIcons name="logout" size={24} color="red" />
-        <Text style={{ color: 'red', fontSize: 16, fontWeight: 600 }}>
+        <Text style={{ color: 'red', fontSize: 16, fontWeight: '600' }}>
           {loading ? 'Logging out...' : 'Log out'}
         </Text>
         {loading && (<ActivityIndicator size={18} color="red" /> )}

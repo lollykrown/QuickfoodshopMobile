@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 
   button: {
     fontSize: 20,
-    fontWeight:600,
+    fontWeight:'600',
     marginTop:20,
     color:'white',
     backgroundColor:Colors.primary,

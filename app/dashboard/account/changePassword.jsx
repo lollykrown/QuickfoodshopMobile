@@ -135,7 +135,7 @@ const ChangePassword = () => {
               key={d.name}
             />
           ))}
-          <Text style={{ color: '#ef4444', fontWeight:600, fontSize: 12, marginTop: -10, marginHorizontal:10 }}>{error}</Text>
+          <Text style={{ color: '#ef4444', fontWeight:'600', fontSize: 12, marginTop: -10, marginHorizontal:10 }}>{error}</Text>
         <RipplePressable
           style={styles.button}
           onPress={handleSubmit(onSubmit)}

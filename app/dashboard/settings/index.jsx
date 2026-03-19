@@ -36,7 +36,7 @@ const Settings = () => {
         </Pressable>
       </Appbar.Header>
       <View style={{ padding: 20 }}>
-        <Text style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>
+        <Text style={{ fontWeight: '600', fontSize: 16, marginBottom: 12 }}>
           Notifications
         </Text>
         <View
@@ -52,7 +52,7 @@ const Settings = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 16, color: Colors.grey }}>
+          <Text style={{ fontWeight: '600', fontSize: 16, color: Colors.grey }}>
             Email Notification
           </Text>
           <Switch
@@ -76,7 +76,7 @@ const Settings = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 16, color: Colors.grey }}>
+          <Text style={{ fontWeight: '600', fontSize: 16, color: Colors.grey }}>
             SMS Notification
           </Text>
           <Switch
@@ -100,7 +100,7 @@ const Settings = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: 600, fontSize: 16, color: Colors.grey }}>
+          <Text style={{ fontWeight: '600', fontSize: 16, color: Colors.grey }}>
             Push Notification
           </Text>
           <Switch
@@ -122,7 +122,7 @@ const Settings = () => {
             color: 'red',
             marginTop: 20,
             fontSize: 18,
-            fontWeight: 600,
+            fontWeight: '600',
             padding: 24,
           }}
         >

@@ -195,7 +195,7 @@ const Category = () => {
                 !error &&
                 searchQuery.trim() &&
                 items?.length > 0 && (
-                  <Text style={{ fontSize: 24, fontWeight: 600 }}>
+                  <Text style={{ fontSize: 24, fontWeight: '600' }}>
                     Search Results for{' '}
                     <Text
                       style={{

@@ -16,7 +16,7 @@ import RipplePressable from '@/components/RipplePressable';
 import { useCart } from '@/contexts/cartContext'; // Context we created
 import { useToast } from '@/hooks/useToast';
 
-const { height } = Dimensions.get('window')
+const { height, width } = Dimensions.get('window')
 
 export default function StoreDetails() {
   const router = useRouter();
@@ -72,14 +72,14 @@ export default function StoreDetails() {
       </View>}
       <View style={{ height: height * 0.3 }}>
         <TouchableOpacity style={styles.backBtn} onPress={handleX}>
-          <Ionicons style={{textAlign:'center', fontWeight:700}} name="close" size={19} color="black" />
+          <Ionicons style={{textAlign:'center', fontWeight:'700'}} name="close" size={19} color="black" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.backBtn2} onPress={()=>{}}>
-          <Ionicons style={{textAlign:'center', fontWeight:700}} name="heart-outline" size={19} color="black" />
+          <Ionicons style={{textAlign:'center', fontWeight:'700'}} name="heart-outline" size={19} color="black" />
         </TouchableOpacity>
         <ShimmerExpoImage
           uri={details?.store?.image||details?.image}
-          width={'100%'}
+          width={width}
           height={height * 0.3}
           accessibilityLabel={details.itemName}
         />
@@ -104,19 +104,19 @@ export default function StoreDetails() {
         <View style={{ flexDirection:'row', marginBottom:18, justifyContent:'space-around',paddingHorizontal:18 }}>
           <View style={{ paddingRight:18, gap:8, justifyContent:'center',alignItems:'center',}}>
             <MaterialCommunityIcons style={{borderRadius:12}} name="clock" size={20} color={Colors.green} />
-            <Text style={{fontSize:14, fontWeight:500}}>25min</Text>
+            <Text style={{fontSize:14, fontWeight:'500'}}>25min</Text>
             <Text style={{fontSize:14, color:'#687076', fontWeight:'600'}}>Delivery</Text>
           </View>
           <View style={{borderRightWidth:1, borderColor:'#EEE4E4'}}></View>
           <View style={{ paddingRight:18, gap:8, justifyContent:'center',alignItems:'center',}}>
             <Ionicons name="location-sharp" size={22} style={{borderRadius:12}} color={Colors.green}/>
-            <Text numberOfLines={1} style={{fontSize:14, fontWeight:500, maxWidth:150, }}>{details?.store?.businessAddress||details?.vendorId?.businessAddress}</Text>
+            <Text numberOfLines={1} style={{fontSize:14, fontWeight:'500', maxWidth:150, }}>{details?.store?.businessAddress||details?.vendorId?.businessAddress}</Text>
             <Text style={{fontSize:14, color:'#687076', fontWeight:'600'}}>Location</Text>
           </View>
           <View style={{borderRightWidth:1, borderColor:'#EEE4E4'}}></View>
           <View style={{ paddingRight:18, gap:8, justifyContent:'center',alignItems:'center',}}>
             <Fontisto name="star" size={20}style={{borderRadius:12}} color='#ffc859'/>
-            <Text style={{fontSize:14, fontWeight:500}}>4.5</Text>
+            <Text style={{fontSize:14, fontWeight:'500'}}>4.5</Text>
             <Text style={{fontSize:14, color:'#687076', fontWeight:'600'}}>Rating</Text>
           </View>
         </View>
@@ -124,19 +124,19 @@ export default function StoreDetails() {
         {/* auth?add extras:store items */}
         <View style={{padding:12, marginBottom:10, marginTop:20}}>
           <View style={{flexDirection:'row',justifyContent:'space-between',marginRight:12}}>
-            <Text style={{fontSize:20, fontWeight:500,}}>Items</Text>
+            <Text style={{fontSize:20, fontWeight:'500',}}>Items</Text>
             <Link href='/search' asChild>
               <TouchableOpacity style={{flexDirection:'row',gap:4, alignItems:'center'}}>
                 <FontAwesome name="search" size={16} color="black" />
-                <Text style={{ fontSize:16, fontWeight:600}}>Search {details?.items?.list[0]?.categoryId?.name||'Foods'}</Text>
+                <Text style={{ fontSize:16, fontWeight:'600'}}>Search {details?.items?.list[0]?.categoryId?.name||'Foods'}</Text>
             </TouchableOpacity>
             </Link>            
           </View>
 
           <View style={{padding:12}}>
             <ScrollView>
-            {(details?.items?.list.length>0)&&
-            details?.items?.list.slice(0,9).map(item=>(
+            {(details?.items?.list?.length>0)&&
+            details?.items?.list?.slice(0,9).map(item=>(
               <RipplePressable onPress={()=>router.push(`stores/${details?.categoryId?.name||details?.items?.list[0]?.categoryId?.name.toLowerCase()}/${item._id}`)} style={styles.item} key={item._id.toString()}>
                 <ShimmerExpoImage uri={item.image} width={40} height={40} accessibilityLabel={item.itemName} styles={{borderRadius:18}} />
                   <Text style={styles.title}>{item.itemName}</Text>
@@ -167,7 +167,7 @@ export default function StoreDetails() {
     </ScrollView>
     {cartCount>0&&<FAB
         icon="cart" color='white' label='Goto Cart'
-        style={{position: 'absolute',margin: 16, fontWeight:600,right: 10,bottom: 40,backgroundColor:Colors.green}}
+        style={{position: 'absolute',margin: 16,right: 10,bottom: 40,backgroundColor:Colors.green}}
         onPress={() => router.push('/myCart')}
       /> }
     <Toast />
@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
   buttonText:{
     color:'white',
     fontSize:16,
-    fontWeight:600
+    fontWeight:'600'
   }
 });
 

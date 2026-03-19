@@ -75,21 +75,21 @@ const OrderDetails = () => {
         </Pressable>
       </Appbar.Header>
       <View style={{marginHorizontal:20, flexDirection:'row',alignItems:'center', justifyContent:'space-between', marginVertical:8}}>
-          <Text style={{ fontWeight: 600, fontSize:16 }}>
+          <Text style={{ fontWeight: '600', fontSize:16 }}>
             Order #5678
           </Text>
           <RipplePressable onPress={()=>router.push('/dashboard/orders/findRider')} style={styles.button}>
-            <Text style={{color:'white', fontWeight:600}}>Find Rider</Text>
+            <Text style={{color:'white', fontWeight:'600'}}>Find Rider</Text>
           </RipplePressable>
       </View>
       <View style={styles.card}>
         {user.role==='customer'&&<><View style={styles.cardHeader}>
-          <Text style={{ fontWeight: 600 }}>
-            Order: <Text style={{ fontWeight: 300 }}>5678</Text>{' '}
+          <Text style={{ fontWeight: '600' }}>
+            Order: <Text style={{ fontWeight: '300' }}>5678</Text>{' '}
           </Text>
           <Text style={{ color: Colors.grey }}>
             Delivery Code:{' '}
-            <Text style={{ fontWeight: 600, color: 'black' }}>98776</Text>
+            <Text style={{ fontWeight: '600', color: 'black' }}>98776</Text>
           </Text>
         </View>        
         <Divider bold style={{ marginVertical: 12 }} /></>
@@ -110,42 +110,42 @@ const OrderDetails = () => {
         </View>
       </View>
       {user.role==='vendor'&&<View style={styles.card}>
-        <Text style={{ fontWeight: 600, paddingHorizontal:12 }}>Customer Details</Text>
+        <Text style={{ fontWeight: '600', paddingHorizontal:12 }}>Customer Details</Text>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 400, color: Colors.grey }}>
+          <Text style={{ fontWeight: '400', color: Colors.grey }}>
             {`${user.firstName} ${user.lastName}`}
           </Text>
           <RipplePressable style={{borderColor:Colors.border, borderRadius:8, paddingVertical:4, borderWidth:1, paddingHorizontal:8}}>
             <Text style={{color: Colors.grey, fontSize:12}}>View Profile</Text>
           </RipplePressable>
         </View>
-        <Text style={{ fontWeight: 400, color: Colors.grey, marginHorizontal:12 }}>{user.email}</Text>
+        <Text style={{ fontWeight: '400', color: Colors.grey, marginHorizontal:12 }}>{user.email}</Text>
       </View>}
       <View style={styles.card}>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600 }}>Date:</Text>
-          <Text style={{ fontWeight: 400, color: Colors.grey }}>
+          <Text style={{ fontWeight: '600' }}>Date:</Text>
+          <Text style={{ fontWeight: '400', color: Colors.grey }}>
             {order.date}
           </Text>
         </View>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600 }}>Vendor:</Text>
-          <Text style={{ fontWeight: 400, color: Colors.grey }}>
+          <Text style={{ fontWeight: '600' }}>Vendor:</Text>
+          <Text style={{ fontWeight: '400', color: Colors.grey }}>
             {order.vendor}
           </Text>
         </View>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600 }}>Item</Text>
-          <Text style={{ fontWeight: 600 }}>Qty</Text>
+          <Text style={{ fontWeight: '600' }}>Item</Text>
+          <Text style={{ fontWeight: '600' }}>Qty</Text>
         </View>
         <View>
           {order.items.map((i, index) => (
             <View style={styles.column} key={`${i.name}+${index}`}>
               <Text
-                style={{ fontWeight: 600, marginStart: 6, color: Colors.grey }}
+                style={{ fontWeight: '600', marginStart: 6, color: Colors.grey }}
               >{`\u29BF ${i.name}`}</Text>
               <Text
-                style={{ fontWeight: 400, color: Colors.grey, marginEnd: 8 }}
+                style={{ fontWeight: '400', color: Colors.grey, marginEnd: 8 }}
               >
                 {i.quantity}
               </Text>
@@ -153,17 +153,17 @@ const OrderDetails = () => {
           ))}
         </View>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600 }}>Extras</Text>
-          <Text style={{ fontWeight: 600 }}>Qty</Text>
+          <Text style={{ fontWeight: '600' }}>Extras</Text>
+          <Text style={{ fontWeight: '600' }}>Qty</Text>
         </View>
         <View>
           {order.extras.map((i, index) => (
             <View style={styles.column} key={`${i.name}+${index}`}>
               <Text
-                style={{ fontWeight: 600, marginStart: 6, color: Colors.grey }}
+                style={{ fontWeight: '600', marginStart: 6, color: Colors.grey }}
               >{`\u29BF ${i.name}`}</Text>
               <Text
-                style={{ fontWeight: 400, color: Colors.grey, marginEnd: 8 }}
+                style={{ fontWeight: '400', color: Colors.grey, marginEnd: 8 }}
               >
                 {i.quantity}
               </Text>
@@ -174,7 +174,7 @@ const OrderDetails = () => {
       <View style={styles.card}>
         <Text
           style={{
-            fontWeight: 600,
+            fontWeight: '600',
             paddingHorizontal: 12,
             fontSize: 18,
             marginBottom: 12,
@@ -183,16 +183,16 @@ const OrderDetails = () => {
           Payment Summary
         </Text>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600 }}>Subtotal</Text>
-          <Text style={{ fontWeight: 500 }}>£300</Text>
+          <Text style={{ fontWeight: '600' }}>Subtotal</Text>
+          <Text style={{ fontWeight: '500' }}>£300</Text>
         </View>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600 }}>Est. Tax</Text>
-          <Text style={{ fontWeight: 500 }}>£2.00</Text>
+          <Text style={{ fontWeight: '600' }}>Est. Tax</Text>
+          <Text style={{ fontWeight: '500' }}>£2.00</Text>
         </View>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600 }}>Delivery</Text>
-          <Text style={{ fontWeight: 500 }}>Free</Text>
+          <Text style={{ fontWeight: '600' }}>Delivery</Text>
+          <Text style={{ fontWeight: '500' }}>Free</Text>
         </View>
         <View style={{ margin: 12 }}>
           <Svg width="100%" height={2}>
@@ -208,14 +208,14 @@ const OrderDetails = () => {
           </Svg>
         </View>
         <View style={styles.row}>
-          <Text style={{ fontWeight: 600, fontSize: 20 }}>Total</Text>
-          <Text style={{ fontWeight: 600, fontSize: 20 }}>£302.00</Text>
+          <Text style={{ fontWeight: '600', fontSize: 20 }}>Total</Text>
+          <Text style={{ fontWeight: '600', fontSize: 20 }}>£302.00</Text>
         </View>
       </View>
       <View style={styles.card}>
         <Text
           style={{
-            fontWeight: 600,
+            fontWeight: '600',
             paddingHorizontal: 12,
             fontSize: 18,
             marginBottom: 12,
@@ -230,7 +230,7 @@ const OrderDetails = () => {
             paddingHorizontal: 12,
           }}
         >
-          <Text style={{ fontWeight: 600, color: Colors.grey, fontSize: 16 }}>
+          <Text style={{ fontWeight: '600', color: Colors.grey, fontSize: 16 }}>
             Card **** **** **** 2346
           </Text>
           <FontAwesome5 name="cc-mastercard" size={24} color="black" />
@@ -258,7 +258,7 @@ const OrderDetails = () => {
           labelStyles={{
             marginHorizontal: 20,
             fontSize: 16,
-            fontWeight: 600,
+            fontWeight: '600',
             marginTop: 12,
           }}
           placeholder="I love the service, and the items were fairly priced"

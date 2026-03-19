@@ -36,7 +36,7 @@ const FindRider = () => {
             <AntDesign name="menu" size={24} color="black" />
             </Pressable>
         </Appbar.Header>
-        <Text style={{ fontWeight: 600, fontSize:16, paddingHorizontal:18, marginTop:12 }}> Order #5678</Text>
+        <Text style={{ fontWeight: '600', fontSize:16, paddingHorizontal:18, marginTop:12 }}> Order #5678</Text>
         <DottedLines styles={{ padding: 16 }} right={false}/>
         <View style={{ flex: 1, maxHeight: 260, minHeight:230 }}>
             <RouteMap
@@ -47,7 +47,7 @@ const FindRider = () => {
             strokeWidth={4}
             />
         </View>
-        <Text style={{ fontWeight: 600, fontSize:16, paddingHorizontal:18, marginVertical:18 }}>Riders in London</Text>
+        <Text style={{ fontWeight: '600', fontSize:16, paddingHorizontal:18, marginVertical:18 }}>Riders in London</Text>
         <ScrollView style={{paddingHorizontal:18}}>
             {[1,2,3,4,5].map(a => (
             <RipplePressable key={a} style={{borderColor:Colors.border,borderWidth:1,gap:8,flexDirection:'row', padding:16, marginVertical:8, borderRadius:18}}>
@@ -58,11 +58,11 @@ const FindRider = () => {
                     uri={user?.image || avatar}
                     />
                 <View style={{paddingVertical:8,justifyContent:'space-between'}}>
-                    <Text style={{ fontWeight: 600, fontSize:14, }}>Riders Name</Text>
+                    <Text style={{ fontWeight: '600', fontSize:14, }}>Riders Name</Text>
                     <Text style={{color:Colors.grey,fontSize:12 }}>5 mins away{" "} &bull; Yellow Taxi</Text>
                 </View>
                 <TouchableOpacity onPress={()=>router.push('/dashboard/orders/riderModal')}  style={{marginLeft:'auto',alignSelf:'center',}}>
-                    <Text style={{color:Colors.primary, fontWeight:600, }}>Assign</Text>
+                    <Text style={{color:Colors.primary, fontWeight: '600', }}>Assign</Text>
                 </TouchableOpacity>
             </RipplePressable>))}
         </ScrollView>

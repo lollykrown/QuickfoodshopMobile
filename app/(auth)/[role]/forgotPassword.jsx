@@ -81,12 +81,12 @@ const onSubmit = async (data) => {
                 key={'email'}
                 labelStyles={{
                     marginLeft: 2,
-                    fontWeight: 600,
+                    fontWeight: '600',
                     marginTop: 12,
                 }}
                 />
                 <Text style={{ color:'#666666', marginBottom:12}} >
-                    Remember the password? <Text style={{ color: Colors.green, fontWeight: 600 }} onPress={() => router.push(`/${role}/login`)}>Sign in</Text></Text>
+                    Remember the password? <Text style={{ color: Colors.green, fontWeight: '600' }} onPress={() => router.push(`/${role}/login`)}>Sign in</Text></Text>
 
                 <RipplePressable
                     style={styles.button}

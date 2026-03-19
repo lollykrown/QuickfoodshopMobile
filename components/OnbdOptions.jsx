@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     width: '100%',
     textAlign: 'center',
-    fontWeight: 600,
+    fontWeight: '600',
     color: Colors.grey,
     textTransform: 'capitalize',
   },

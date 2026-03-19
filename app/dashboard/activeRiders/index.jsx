@@ -33,10 +33,10 @@ const ActiveRiders = () => {
             {[1,2,3,4,5].map(a => (
                 <RipplePressable style={{marginBottom:12, borderRadius:20, borderColor:Colors.border, borderWidth:1}} key={a} >
                 <View style={{flexDirection:'row', justifyContent:'space-between',marginTop:12, paddingHorizontal:12}}>
-                <Text style={{ fontWeight: 600 }}>
-                    Order: <Text style={{ fontWeight: 300 }}>5678</Text>{' '}
+                <Text style={{ fontWeight: '600' }}>
+                    Order: <Text style={{ fontWeight: '300' }}>5678</Text>{' '}
                 </Text>
-                <Text style={{ fontWeight: 600, }}>
+                <Text style={{ fontWeight: '600', }}>
                     Dispatched:{' '}
                     <Text style={{  color: Colors.grey }}>9 mins ago</Text>
                 </Text>

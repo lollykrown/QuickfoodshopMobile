@@ -57,7 +57,7 @@ const TrackingId = () => {
       </Appbar.Header>
       <View style={{ flex: 1, minHeight: 260 }}>
         <Text
-          style={{ marginLeft: 12, padding: 10, fontSize: 18, fontWeight: 600 }}
+          style={{ marginLeft: 12, padding: 10, fontSize: 18, fontWeight: '600' }}
         >
           Tracking ID: QFTN1234567
         </Text>
@@ -82,7 +82,7 @@ const TrackingId = () => {
             borderColor: Colors.border,
           }}
         >
-          <Text style={{ marginStart: 'auto', fontWeight: 600, fontSize: 16 }}>
+          <Text style={{ marginStart: 'auto', fontWeight: '600', fontSize: 16 }}>
             Your Delivery Code is <Text style={{ fontSize: 20 }}>1339</Text>
           </Text>
           <RipplePressable
@@ -119,7 +119,7 @@ const TrackingId = () => {
                 alignContent: 'center',
               }}
             >
-              <Text style={{ fontWeight: 600, alignSelf: 'center' }}>
+              <Text style={{ fontWeight: '600', alignSelf: 'center' }}>
                 Order: #5678
               </Text>
               <Text style={[styles.text, c, b, bc]}>{status}</Text>
@@ -132,7 +132,7 @@ const TrackingId = () => {
                 alignContent: 'center',
               }}
             >
-              <Text style={{ fontWeight: 600, alignSelf: 'center' }}>
+              <Text style={{ fontWeight: '600', alignSelf: 'center' }}>
                 Your Rider:
               </Text>
               <Text>James Walter</Text>
@@ -145,7 +145,7 @@ const TrackingId = () => {
                 alignContent: 'center',
               }}
             >
-              <Text style={{ fontWeight: 600, alignSelf: 'center' }}>
+              <Text style={{ fontWeight: '600', alignSelf: 'center' }}>
                 Distance:
               </Text>
               <Text>12km &#8226;</Text>
@@ -243,7 +243,7 @@ const TrackingId = () => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 16, fontWeight: 600, maxWidth: 230 }}
+                  style={{ fontSize: 16, fontWeight: '600', maxWidth: 230 }}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
@@ -259,7 +259,7 @@ const TrackingId = () => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 16, fontWeight: 600, maxWidth: 230 }}
+                  style={{ fontSize: 16, fontWeight: '600', maxWidth: 230 }}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >
@@ -277,7 +277,7 @@ const TrackingId = () => {
                 }}
               >
                 <Text
-                  style={{ fontSize: 16, fontWeight: 600, maxWidth: 230 }}
+                  style={{ fontSize: 16, fontWeight: '600', maxWidth: 230 }}
                   numberOfLines={1}
                   ellipsizeMode="tail"
                 >

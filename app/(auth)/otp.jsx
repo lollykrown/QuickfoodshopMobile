@@ -225,7 +225,7 @@ export default function OTPScreen() {
             />
           ))}
         </View>
-          <Text style={{ color: '#ef4444', fontWeight:600, fontSize: 12, marginTop: 4 }}>{error}</Text>
+          <Text style={{ color: '#ef4444', fontWeight:'600', fontSize: 12, marginTop: 4 }}>{error}</Text>
 
       {/* Resend */}
         <TouchableOpacity

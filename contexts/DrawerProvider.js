@@ -222,7 +222,7 @@ export default function DrawerProvider({
                 style={{ paddingLeft: 28,paddingVertical:12, alignItems:'center', flexDirection:'row'}}
               >
                 <MaterialCommunityIcons name="logout" size={24} color='red'/>
-                <Text style={{ color: 'red',marginLeft:13, fontWeight:600}}>Log Out</Text>
+                <Text style={{ color: 'red',marginLeft:13, fontWeight:'600'}}>Log Out</Text>
               </RipplePressable>              
               <Divider bold={true}/>
 
@@ -244,7 +244,7 @@ export default function DrawerProvider({
                     setOpen(false);
                   }}  
                   right={() => (
-                    <MaterialCommunityIcons name='arrow-right-circle'size='24' color={Colors.primary}/>
+                    <MaterialCommunityIcons name='arrow-right-circle'size={24} color={Colors.primary}/>
                   )}
               /></>}
             </Drawer.Section>

@@ -28,7 +28,7 @@ const Support = () => {
         </Pressable>
       </Appbar.Header>
       <View style={{ padding: 20 }}>
-        <Text style={{ fontWeight: 600, fontSize: 16 }}>Call us!</Text>
+        <Text style={{ fontWeight: '600', fontSize: 16 }}>Call us!</Text>
         <RipplePressable
           onPress={() => Linking.openURL('tel:+447597399738')}
           style={{
@@ -42,7 +42,7 @@ const Support = () => {
           }}
         >
           <View style={{ gap: 6 }}>
-            <Text style={{ fontWeight: 600, fontSize: 16 }}>
+            <Text style={{ fontWeight: '600', fontSize: 16 }}>
               +44 (07) 597 399 738
             </Text>
             <Text style={{ color: Colors.grey, fontSize: 16 }}>
@@ -70,7 +70,7 @@ const Support = () => {
         console.log('Coordinates:', place.lat, place.lng);
       }} /> */}
       <View style={{ padding: 20 }}>
-        <Text style={{ fontWeight: 600, fontSize: 16 }}>
+        <Text style={{ fontWeight: '600', fontSize: 16 }}>
           Chat with us on social media!
         </Text>
         <View

@@ -88,8 +88,7 @@ export const menuOptions = (pathname, router, role, isLoggedIn) => {
           label: 'Tracking',
           icon: 'map-marker',
           active: pathname.includes('/tracking'),
-                    href:'/dashboard/tracking',
-
+          href:'/dashboard/tracking',
           onPress: () => router.push('/dashboard/tracking'),
         },
         {

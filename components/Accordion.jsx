@@ -83,11 +83,11 @@ const Accordion = ({ item, isExpanded, onToggle, onPress }) => {
   return (
     <RipplePressable style={styles.card} onPress={onPress}>
         <View style={styles.cardHeader}>
-            <Text style={{ fontWeight: 600 }}>
-            Order: <Text style={{ fontWeight: 300 }}>{item.orderNumber}</Text>
+            <Text style={{ fontWeight: '600' }}>
+            Order: <Text style={{ fontWeight: '300' }}>{item.orderNumber}</Text>
             </Text>
             <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center',gap:12}}>            
-                <Text style={{ color:Colors.grey}}>Delivery Code: <Text style={{fontWeight:600,color:'black'}}>{item.deliveryCode}</Text></Text>
+                <Text style={{ color:Colors.grey}}>Delivery Code: <Text style={{fontWeight:'600',color:'black'}}>{item.deliveryCode}</Text></Text>
                 <TouchableOpacity onPress={onToggle}>
                     <Animated.View style={arrowStyle}>
                         <MaterialIcons  name="keyboard-arrow-down" size={26} color="black" />
@@ -100,36 +100,36 @@ const Accordion = ({ item, isExpanded, onToggle, onPress }) => {
         <Animated.View style={[styles.hiddenContent, contentStyle]}>
           <Divider bold style={{ marginBottom: 12 }} />
           <View style={styles.row}>
-            <Text style={{ fontWeight: 600 }}>Date:</Text>
-            <Text style={{ fontWeight: 400, color:Colors.grey }}>{item.date}</Text>
+            <Text style={{ fontWeight: '600' }}>Date:</Text>
+            <Text style={{ fontWeight: '400', color:Colors.grey }}>{item.date}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={{ fontWeight: 600 }}>Vendor:</Text>
-            <Text style={{ fontWeight: 400, color:Colors.grey }}>{item.vendor}</Text>
+            <Text style={{ fontWeight: '600' }}>Vendor:</Text>
+            <Text style={{ fontWeight: '400', color:Colors.grey }}>{item.vendor}</Text>
           </View>
           <View style={styles.row}>
-            <Text style={{ fontWeight: 600 }}>Status:</Text>
-            <Text style={{ fontWeight: 400, color:Colors.grey}}>{item.status}</Text>
+            <Text style={{ fontWeight: '600' }}>Status:</Text>
+            <Text style={{ fontWeight: '400', color:Colors.grey}}>{item.status}</Text>
           </View>
         <View style={styles.row}>
-            <Text style={{ fontWeight: 600 }}>Item</Text>
-            <Text style={{ fontWeight: 600,}}>Qty</Text>
+            <Text style={{ fontWeight: '600' }}>Item</Text>
+            <Text style={{ fontWeight: '600',}}>Qty</Text>
         </View>
         {item.items.map((i,index) => (
             <View style={styles.column} key={`${item.name}+${index}`}>
-                <Text style={{fontWeight: 600, marginStart:6, color:Colors.grey }}>{`\u29BF ${i.name}`}</Text>
-                <Text style={{fontWeight: 400, color:Colors.grey,marginEnd:8,}}>{i.quantity}</Text>
+                <Text style={{fontWeight: '600', marginStart:6, color:Colors.grey }}>{`\u29BF ${i.name}`}</Text>
+                <Text style={{fontWeight: '400', color:Colors.grey,marginEnd:8,}}>{i.quantity}</Text>
             </View>
           ))}
         <View style={styles.row}>
-            <Text style={{ fontWeight: 600 }}>Extras</Text>
-            <Text style={{ fontWeight: 600,}}>Qty</Text>
+            <Text style={{ fontWeight: '600' }}>Extras</Text>
+            <Text style={{ fontWeight: '600',}}>Qty</Text>
         </View>
         <View>
           {item.extras.map((i,index) => (
               <View style={styles.column} key={`${item.name}+${index}`}>
-                  <Text style={{fontWeight: 600, marginStart:6, color:Colors.grey }}>{`\u29BF ${i.name}`}</Text>
-                  <Text style={{fontWeight: 400, color:Colors.grey,marginEnd:8,}}>{i.quantity}</Text>
+                  <Text style={{fontWeight: '600', marginStart:6, color:Colors.grey }}>{`\u29BF ${i.name}`}</Text>
+                  <Text style={{fontWeight: '400', color:Colors.grey,marginEnd:8,}}>{i.quantity}</Text>
               </View>
             ))}
         </View>

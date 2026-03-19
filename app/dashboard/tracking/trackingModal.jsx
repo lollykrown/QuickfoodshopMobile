@@ -15,7 +15,7 @@ export default function ModalScreen() {
     <View style={styles.container}>
       <Pressable style={styles.backBtn} onPress={()=>router.back()}>
         <Ionicons
-          style={{ textAlign: 'center', fontWeight: 700 }}
+          style={{ textAlign: 'center', fontWeight: '700' }}
           name="close"
           size={19}
           color="black"
@@ -28,12 +28,12 @@ export default function ModalScreen() {
             contentFit='contain'
             />
         <View>
-          <Text style={{fontSize:16, fontWeight:600}}>Meet your rider and say</Text>
-          <Text style={{fontSize:40, fontWeight:600, marginTop:12, color:Colors.grey}}>&quot;1339&quot;</Text>
+          <Text style={{fontSize:16, fontWeight:'600'}}>Meet your rider and say</Text>
+          <Text style={{fontSize:40, fontWeight:'600', marginTop:12, color:Colors.grey}}>&quot;1339&quot;</Text>
         </View>
       </RipplePressable>
       <View style={{ marginTop:18, paddingBottom:30}}>
-          <Text style={{fontSize:16, fontWeight:600, }}>How it works:</Text>
+          <Text style={{fontSize:16, fontWeight:'600', }}>How it works:</Text>
           <View>
             <View style={{borderWidth:1,flexDirection:'row',marginVertical:8,gap:12,alignItems:'center', borderColor:Colors.border,borderRadius:24, paddingHorizontal:16, paddingVertical:22}}>
               <MaterialCommunityIcons name="numeric-1-circle" size={28} color={Colors.primary} />

@@ -95,11 +95,11 @@ const DottedLines = ({styles, status,right=true}) => {
         }}
       >
         <View style={{ flexDirection: 'column', gap: 2, justifyContent: 'center' }} >
-          <Text style={{ fontSize: 16, fontWeight: 600, maxWidth:230}} numberOfLines={1} ellipsizeMode="tail">{status?'Order has left the store':'Gillian Store'}</Text>
+          <Text style={{ fontSize: 16, fontWeight: '600', maxWidth:230}} numberOfLines={1} ellipsizeMode="tail">{status?'Order has left the store':'Gillian Store'}</Text>
           <Text style={{ color: Colors.grey, maxWidth:230 }} numberOfLines={1} ellipsizeMode="tail">{status?'Gillian Store':'Pickup point'} </Text>
         </View>
         <View style={{ flexDirection: 'column', gap: 2, justifyContent: 'center' }} >
-          <Text style={[{ fontSize: 16, fontWeight: 600, maxWidth:230}, isTracking]} numberOfLines={1} ellipsizeMode="tail">
+          <Text style={[{ fontSize: 16, fontWeight: '600', maxWidth:230}, isTracking]} numberOfLines={1} ellipsizeMode="tail">
             465 Peckham, London
           </Text>
           <Text style={isTracking}>Destination</Text>
@@ -122,7 +122,7 @@ const DottedLines = ({styles, status,right=true}) => {
               color: Colors.green,
               fontSize: 16,
               backgroundColor: 'rgba(26, 184, 84,0.075)',
-              fontWeight: 500,
+              fontWeight: '500',
               textAlign: 'center',
               borderRadius: 8,
               padding: 2,
@@ -139,7 +139,7 @@ const DottedLines = ({styles, status,right=true}) => {
         </View>}
         {!status&&<View style={{ flexDirection: 'column', gap: 2 }}>
           <Text style={{ fontSize: 16, color: Colors.grey }}>Distance</Text>
-          <Text style={{ fontWeight: 600, textAlign: 'center' }}>12km</Text>
+          <Text style={{ fontWeight: '600', textAlign: 'center' }}>12km</Text>
         </View>}
       </View>}
     </View>

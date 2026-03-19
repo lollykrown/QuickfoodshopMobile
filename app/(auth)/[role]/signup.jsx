@@ -103,7 +103,7 @@ export default function SignupForm() {
               fontSize: 20,
               color: Colors.primary,
               textAlign: 'center',
-              fontWeight: 700,
+              fontWeight: '700',
             }}
           >
             Create Account
@@ -114,7 +114,7 @@ export default function SignupForm() {
               <Text
                 style={{
                   color: Colors.orange,
-                  fontWeight: 500,
+                  fontWeight: '500',
                   textDecorationColor: Colors.orange,
                   textDecorationStyle: 'solid',
                   textDecorationLine: 'underline',
