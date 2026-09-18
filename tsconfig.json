@@ -19,7 +19,6 @@
     "lib/**/*.js",
     "services/**/*.js",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "lib/axios.js"
+    "expo-env.d.ts"
   ]
 }

@@ -55,7 +55,6 @@ function AppLayout() {
   }
 
   console.log(pathname)
-      
 
   return (
     <View style={{ flex: 1 }}>
@@ -67,9 +66,9 @@ function AppLayout() {
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                 <Stack.Screen name="stores" options={{ headerShown: false }} />
-                <Stack.Screen name="index" 
-                  options={{ 
-                    headerShown: false,  
+                <Stack.Screen name="index"
+                  options={{
+                    headerShown: false,
                     // animation:'slide_from_right',
                     //  animationDuration:'27000'
                     }} />

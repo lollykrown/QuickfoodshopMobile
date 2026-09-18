@@ -1,10 +1,9 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Colors } from '@/constants/colors';
+import { GOOGLE_API_KEY } from '@/constants/config';
 import { View, StyleSheet } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { useRef, useEffect } from 'react';
-
-const GOOGLE_API_KEY = 'AIzaSyBT6a6iiaA_MJf65TzhkcHIm3ttCf0N-Hs';
 
 export default function MapAddressPicker({ onSelect, contStyle, inputStyle, address }) {
   const ref = useRef();

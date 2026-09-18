@@ -7,8 +7,9 @@ import {
   refreshToken as authRefreshToken,
   getAccessToken,
   getUserData,
-  logout as authLogout, updateProfile
+  logout as authLogout,
 } from '../lib/auth';
+import { updateProfile } from '../services/dashboardApi';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -75,14 +76,20 @@ const isLoggingOutRef = useRef(false);
   };
   // update Profile
   const update = async (payload) => {
-    const data = await updateProfile(payload);
-    // console.log('Context',data)
-    if (data.email) {
-      const { id, firstName, lastName, phoneNumber, email, photo } = data;
-      setUser({ id, firstName, lastName, phoneNumber, email, photo });
-      return true;
+    try {
+      const res = await updateProfile({ payload });
+      // Backend may wrap the profile as { data: { user } }, { data }, or return it bare.
+      const profile = res?.data?.user ?? res?.data ?? res;
+      if (profile?.email) {
+        const { id, firstName, lastName, phoneNumber, email, photo } = profile;
+        // Merge so role/location/image already on the user are preserved.
+        setUser((prev) => ({ ...prev, id, firstName, lastName, phoneNumber, email, photo }));
+        return true;
+      }
+      return { error: res };
+    } catch (err) {
+      return { error: err.message };
     }
-    return { error: data };
   };
 
   // Standard logout

@@ -4,7 +4,7 @@
     "slug": "quickfood-shop",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/logo_transparent.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "quickfoodshopmobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -41,7 +41,8 @@
           }
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true,

@@ -11,6 +11,7 @@ import { useRouter } from 'expo-router';
 import { useForm } from 'react-hook-form';
 import {
   Alert,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -41,12 +42,12 @@ const EditProfile = () => {
   const onSubmit = async (data) => {
     Keyboard.dismiss();
 
-    const { email, password } = data;
-    // const res = await login('joe_kayu@yahoo.com', 'Kvothe01!')
-
-    const res = await update(email, password);
-    if (res) Alert.alert('Profile updated successfully');
-    return;
+    const res = await update(data);
+    if (res === true) {
+      Alert.alert('Profile updated successfully');
+    } else {
+      Alert.alert('Update failed', res?.error?.message ?? res?.error ?? 'Please try again.');
+    }
   };
   const dat = [
     { name: 'firstName', icon: 'person-outline' },

@@ -64,7 +64,7 @@ const Category = () => {
   }, [params.category]);
 
   const fetchFn = useCallback(
-    () => fnChoice()({ searchQuery }),
+    () => fnChoice()({ query: searchQuery }),
     [fnChoice, searchQuery],
   );
   const text =

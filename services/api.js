@@ -1,23 +1,3 @@
-import { getItem } from '@/lib/secureStore';
-import { success } from 'zod';
-
-const API_BASE = 'https://app.quickfoodshop.co.uk/v1';
-const ACCESS_TOKEN_KEY = 'accessToken';
-const REFRESH_TOKEN_KEY = 'refreshToken';
-const USER_DATA_KEY = 'userData';
-
-async function apiFetch(url, options = {}) {
-  const token = await getItem(ACCESS_TOKEN_KEY);
-  //add token refresh
-  return fetch(`${API_BASE}${url}`, {
-    ...options,
-    headers: {
-      ...options.headers,
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
 //unprotected
 export const CONFIG = {
   BASE_URL: 'https://app.quickfoodshop.co.uk/v1',
@@ -233,7 +213,7 @@ export const resetPwd = async ({ payload, role }) => {
       headers: {
         ...CONFIG.headers,
       },
-      body: JSON.stringify({ ...payload, "password": "Kvothe1!" }),
+      body: JSON.stringify(payload),
     });
 
     const data = await response.json();
@@ -250,30 +230,5 @@ export const resetPwd = async ({ payload, role }) => {
     throw error;
   }
 };
-export const getOTP = async ({ email,role }) => {
-  const url = role === 'customer' ? '/auth/forget-password' : role === 'vendor' ? '/vendor/auth/forget-password' : '/auth/rider/forget-password';
-
-  try {
-    const response = await fetch(`${CONFIG.BASE_URL}${url}`, {
-      method: 'POST',
-      headers: {
-        ...CONFIG.headers,
-      },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      // 👇 return backend message if available
-      throw new Error(data?.message || 'Failed to reset password');
-    }
-
-    return { success:true };
-  } catch (error) {
-    // console.log('Forget password error:', error.message);
-    throw error;
-  }
-};
-
-
-
+// Resending the OTP hits the same endpoint as starting a password reset.
+export const getOTP = forgetPwd;

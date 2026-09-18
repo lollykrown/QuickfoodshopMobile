@@ -4,7 +4,6 @@ import {fetchWithCred} from '../lib/auth';
 export const getProfile = async () => {
   try {
     const response = await fetchWithCred('/auth/profile');
-    console.log('dfyguioytfdrtfiu', response.data.data);
     return response.data.data;
   } catch (error) {
     if (error.response) {
@@ -29,7 +28,7 @@ export const updateProfile = async ({ payload }) => {
   } catch (error) {
     if (error.response) {
       // Server responded with non-2xx
-      throw new Error(error.response?.message ?? 'Server error');
+      throw new Error(error.response.data?.message ?? 'Server error');
     }
 
     if (error.request) {

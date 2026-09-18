@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { createContext, useContext, useReducer, useEffect, useRef, useMemo, use } from "react";
+import { createContext, useContext, useReducer, useEffect, useRef, useMemo } from "react";
 import { useAuth } from './authContext';
-import { set } from 'zod';
 
 
 // ✅ Initial state
@@ -21,7 +20,7 @@ const ACTIONS = {
   SET_CART_ITEMS: "SET_CART_ITEMS",
   SET_LOADED: "SET_LOADED",
   SET_ADDRESS: "SET_ADDRESS",
-  REMOVE_ADRESS: "REMOVE_ADDRESS",
+  REMOVE_ADDRESS: "REMOVE_ADDRESS",
 };
 
 // ✅ Reducer
@@ -61,7 +60,7 @@ const cartReducer = (state, action) => {
     case ACTIONS.SET_ADDRESS:
       return { ...state, deliveryAddress: action.payload };
 
-    case ACTIONS.REMOVE_ADRESS:
+    case ACTIONS.REMOVE_ADDRESS:
       return { ...state, deliveryAddress: null };
 
     default:
@@ -131,12 +130,14 @@ export const CartProvider = ({ children }) => {
         }
         prevCartRef.current = currentCart;
       }
-      if (state.deliveryAddress) {
-        try {
+      try {
+        if (state.deliveryAddress) {
           await AsyncStorage.setItem('address', JSON.stringify(state.deliveryAddress));
-        } catch (err) {
-          console.error('Failed to save address:', err);
+        } else {
+          await AsyncStorage.removeItem('address');
         }
+      } catch (err) {
+        console.error('Failed to save address:', err);
       }
     }
     saveCart()
@@ -175,7 +176,7 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: ACTIONS.SET_ADDRESS, payload: address });
 
   const removeAddress = () =>
-    dispatch({ type: ACTIONS.REMOVE_ADRESS });
+    dispatch({ type: ACTIONS.REMOVE_ADDRESS });
 
 
   // ✅ Derived values
@@ -187,8 +188,8 @@ export const CartProvider = ({ children }) => {
       value={{
         cartItems: state.cartItems,
         deliveryAddress: state.deliveryAddress,
-        cartCount,    // total quantity
-        totalPrice,   // total price
+        cartCount,    // number of distinct line items (not total quantity)
+        totalPrice,   // sum of price * quantity
         addToCart,
         updateQuantity,
         removeItem,

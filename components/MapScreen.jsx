@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, Animated, Easing, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, Animated, Easing, TouchableOpacity } from 'react-native';
 import MapView, { Marker, Polyline } from 'react-native-maps';
 import { FontAwesome6 } from '@expo/vector-icons';
 import polyline from '@mapbox/polyline'; // decode Google polyline
 import { useCart } from '@/contexts/cartContext';
+import { GOOGLE_API_KEY } from '@/constants/config';
 
 const DEFAULT_START = { latitude: 54.9010769, longitude: -1.3947494};
 const DEFAULT_END = { latitude: 54.9032838, longitude: -1.3779205 };
-const GOOGLE_API_KEY = 'AIzaSyBT6a6iiaA_MJf65TzhkcHIm3ttCf0N-Hs'; 
 
 const RouteMap = ({
   start = DEFAULT_START,
