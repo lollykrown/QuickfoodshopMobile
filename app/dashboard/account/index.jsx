@@ -102,7 +102,7 @@ const Account = () => {
             borderWidth: 1,
           }}
         >
-          <Text style={{ fontWeight: '600', fontSize: 14 }}>Change Pasword </Text>
+          <Text style={{ fontWeight: '600', fontSize: 14 }}>Change Password</Text>
           <MaterialCommunityIcons name="lock-reset" size={24} color="black" />
         </RipplePressable>
       </View>

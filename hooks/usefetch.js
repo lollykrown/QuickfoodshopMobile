@@ -22,7 +22,7 @@ const useFetch = (fetchFunction, autoFetch = true) => {
   const fetchData = useCallback(async () => {
     const state = await NetInfo.fetch();
 
-    if (state.isConnected === false&& state.isInternetReachable !== false) {
+    if (state.isConnected === false) {
       setError(new Error("No internet connection"));
       return;
     }

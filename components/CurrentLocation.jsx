@@ -51,11 +51,7 @@ export default function CurrentLocationButton({ onSelect }) {
 
   return (
         <RipplePressable 
-            style={({ pressed }) => [
-                styles.button,
-                pressed && { opacity: 0.7 },
-                loading && styles.disabled,
-            ]}
+            style={[styles.button, loading && styles.disabled]}
             onPress={getCurrentLocation}
             disabled={loading}
           >

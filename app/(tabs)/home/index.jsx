@@ -201,7 +201,7 @@ const Home = () => {
                 horizontal={true}
                 data={feat}
                 renderItem={renderFeaturedItems}
-                keyExtractor={(item)=>item}
+                keyExtractor={(_, index) => String(index)}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{gap:12}}
               />

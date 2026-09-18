@@ -95,7 +95,7 @@ export default function StoreDetails() {
         </View>
       { (category === 'food' ||category === 'groceries')&&
       // <RipplePressable onPress={()=> router.push(`stores/${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)}>
-        <RipplePressable style={{paddingHorizontal:18,gap:8, paddingVertical:6, flexDirection:'row', marginBottom:32, }} onPress={()=> router.push(`stores/${details?.categoryId?.name==='groceries'?'grocery-store':'restaurants'}/${details?.vendorId._id}`)}>
+        <RipplePressable style={{paddingHorizontal:18,gap:8, paddingVertical:6, flexDirection:'row', marginBottom:32, }} onPress={()=> router.push(`stores/${details?.categoryId?.name==='groceries'?'grocery-stores':'restaurants'}/${details?.vendorId?._id}`)}>
           <ShimmerExpoImage uri={details.vendorId?.image} width={40} height={40} accessibilityLabel={details?.itemName} styles={{borderRadius:20}} />
           <Text style={{alignSelf:'center', marginLeft:8, fontWeight:'600',fontSize:16}}>{details?.vendorId?.businessName}</Text>
           <MaterialIcons style={{alignSelf:'center'}} name="arrow-outward" size={24} color={Colors.green}/>

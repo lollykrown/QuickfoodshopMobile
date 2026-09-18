@@ -75,7 +75,7 @@ export default function OnbdOptions({auth}) {
         />
 
         <Text style={{ fontSize: 18, marginBottom: 40 }}>
-          How do you want to {auth||'sign up'}?
+          How do you want to {auth === 'login' ? 'login' : 'sign up'}?
         </Text>
         <View style={styles.buttonGroup}>
           {o.map((option, i) => {

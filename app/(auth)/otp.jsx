@@ -130,6 +130,7 @@ export default function OTPScreen() {
 
   const onSubmit = async (data) => {
     Keyboard.dismiss();
+    setError('');
 
     const { password } = data;
     setPayload(prev => ({ ...prev, password}));
@@ -170,6 +171,9 @@ export default function OTPScreen() {
                 key={d.name}
               />
             ))}  
+        {!!error && (
+          <Text style={{ color: '#ef4444', fontWeight: '600', fontSize: 12, marginBottom: 8 }}>{error}</Text>
+        )}
         <RipplePressable
           style={styles.button}
           onPress={handleSubmit(onSubmit)}

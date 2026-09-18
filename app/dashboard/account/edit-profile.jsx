@@ -50,10 +50,10 @@ const EditProfile = () => {
     }
   };
   const dat = [
-    { name: 'firstName', icon: 'person-outline' },
-    { name: 'lastName', icon: 'person-outline' },
-    { name: 'email', icon: 'mail-outline' },
-    { name: 'phoneNumber', icon: 'phone' },
+    { name: 'firstName', placeholder: 'First name', icon: 'person-outline' },
+    { name: 'lastName', placeholder: 'Last name', icon: 'person-outline' },
+    { name: 'email', placeholder: 'Email', icon: 'mail-outline' },
+    { name: 'phoneNumber', placeholder: 'Phone number', icon: 'phone' },
   ];
 
   return (
@@ -104,7 +104,7 @@ const EditProfile = () => {
               }
               disabled={d.name === 'email' ? true : false}
               error={errors?.[d.name]?.message}
-              keyboardType={d.name === 'phone' ? 'phone-pad' : 'email-address'}
+              keyboardType={d.name === 'phoneNumber' ? 'phone-pad' : 'email-address'}
               secureTextEntry={d.name.includes('assword') ? true : false}
               key={d.name}
             />

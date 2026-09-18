@@ -329,7 +329,7 @@ const Search = () => {
                   horizontal={true}
                   data={feat}
                   renderItem={renderFeaturedItems}
-                  keyExtractor={(item) => item.toString()}
+                  keyExtractor={(_, index) => String(index)}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{ gap: 12 }}
                 />
@@ -360,7 +360,7 @@ const Search = () => {
                   horizontal={true}
                   data={feat2}
                   renderItem={renderFeaturedItems}
-                  keyExtractor={(item) => item.toString()}
+                  keyExtractor={(_, index) => String(index)}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{ gap: 12 }}
                 />

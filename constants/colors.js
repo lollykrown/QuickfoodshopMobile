@@ -10,6 +10,7 @@ export const Colors = {
     orange:'#FF6600',
     green: '#1ab854',
     grey:'#748189',
+    lightGrey:'#F0F0F0',
     border:'#C6E3E5',
     light: {
         text: '#11181C',

@@ -25,9 +25,12 @@ npm run ios             # expo run:ios  (native build, not Expo Go)
 npm run android         # expo run:android
 npm run web             # expo start --web
 npm run lint            # expo lint (eslint-config-expo, flat config)
+npm test                # jest (jest-expo + React Native Testing Library)
+npm run test:watch
+npm run test:coverage
 ```
 
-`npm run ios/android` are `expo run:*`, so they compile a native dev-client build. `/ios` and `/android` are gitignored (generated). There is no test suite. Secrets/config come from a gitignored `.env.local` (copy `.env.example`); currently only `EXPO_PUBLIC_GOOGLE_API_KEY`, read via `constants/config.js`. `npm run web` works, but maps are replaced by a placeholder (`components/MapScreen.web.jsx`) because `react-native-maps` is native-only.
+`npm run ios/android` are `expo run:*`, so they compile a native dev-client build. `/ios` and `/android` are gitignored (generated). Tests are described under "Testing". Secrets/config come from a gitignored `.env.local` (copy `.env.example`); currently only `EXPO_PUBLIC_GOOGLE_API_KEY`, read via `constants/config.js`. `npm run web` works, but maps are replaced by a placeholder (`components/MapScreen.web.jsx`) because `react-native-maps` is native-only.
 
 `npm run reset-project` points at `scripts/reset-project.js`, which does not exist (Expo template leftover). `README.md` is the stock template too.
 
@@ -35,8 +38,10 @@ npm run lint            # expo lint (eslint-config-expo, flat config)
 
 - `app.json`: name `Quickfoodshop`, scheme `quickfoodshopmobile`, bundle/package id `com.lollykrown.quickfoodshop`, portrait, EAS project configured, web output `static`.
 - `package.json` `main` is `expo-router/entry`.
+- `metro.config.js`: default Expo config with `resolver.useWatchman = false`. The repo sits in `~/Documents`, where macOS blocks the Watchman daemon (`Operation not permitted`) and `npx expo start` crashes in watch mode. Don't remove it unless Watchman has been granted Full Disk Access or the repo has moved. (`CI=1` hides the crash because it disables watch mode.)
 - `tsconfig.json`: alias `@/*` maps to the project root (e.g. `@/contexts/authContext`).
-- `eslint.config.js`: `eslint-config-expo/flat`, ignores `dist/*`. Current state: 0 errors, 63 warnings (mostly unused imports/vars and `exhaustive-deps` in files not listed under "Known issues"). `npx expo-doctor` passes 18/18.
+- `jest.config.js` + `jest/`: test runner config, global native-module mocks and the `expo-router` stand-in (see "Testing").
+- `eslint.config.js`: `eslint-config-expo/flat`, ignores `dist/*`, and declares Jest globals for `__tests__/` and `jest/`. Current state: 0 errors, 63 warnings (mostly unused imports/vars and `exhaustive-deps` in files not listed under "Known issues"). `npx expo-doctor` passes 18/18.
 - `.vscode/settings.json` runs fixAll / organizeImports / sortMembers on save.
 
 ## Repository structure
@@ -82,6 +87,9 @@ utils/
 constants/colors.js        # Colors (primary #006634, etc.), light/dark tokens, Fonts
 constants/config.js        # GOOGLE_API_KEY from EXPO_PUBLIC_GOOGLE_API_KEY (.env.local)
 assets/images/             # logos, onboarding art, splash (assets/fonts/ is empty)
+
+__tests__/                 # all tests; mirrors the source tree (app/, components/, contexts/, hooks/, lib/, services/, utils/, constants/)
+jest/                      # setup.js (native mocks), setupAfterEnv.js (per-test reset), mocks/ (expo-router, vector-icons)
 ```
 
 ## Runtime architecture
@@ -135,7 +143,9 @@ Backend base URL: `https://app.quickfoodshop.co.uk/v1`. It is defined separately
 
 ## Known issues and caveats (verified against the code)
 
-Fixed on 2026-09-18 (don't reintroduce): the non-square `app.json` icon; `npm run web` failing on `react-native-maps` (now `MapScreen.web.jsx`); the deleted broken `lib/axios.js` stub and dead `signup()` in `lib/auth.js`; `authContext.update()` importing `updateProfile` from the wrong module (it now lives in `services/dashboardApi.js`, is called as `updateProfile({ payload })`, and merges into the existing user so `role` isn't lost); `edit-profile.jsx` missing the `Keyboard` import and calling `update` with the wrong args; `editProfileSchema` requiring `phone` while the form field is `phoneNumber`; `resetPwd` overwriting the password with a hardcoded string; `stores/[category]` passing `{ searchQuery }` instead of `{ query }` (sent `search=undefined`); `removeAddress` not persisting; the `login()` user fallback that could never run; the hardcoded Google API key (now env-based); Expo SDK 54 patch versions.
+Fixed on 2026-09-18 (don't reintroduce): `expo start` crashing on Watchman permissions (see `metro.config.js`); the non-square `app.json` icon; `npm run web` failing on `react-native-maps` (now `MapScreen.web.jsx`); the deleted broken `lib/axios.js` stub and dead `signup()` in `lib/auth.js`; `authContext.update()` importing `updateProfile` from the wrong module (it now lives in `services/dashboardApi.js`, is called as `updateProfile({ payload })`, and merges into the existing user so `role` isn't lost); `edit-profile.jsx` missing the `Keyboard` import and calling `update` with the wrong args; `editProfileSchema` requiring `phone` while the form field is `phoneNumber`; `resetPwd` overwriting the password with a hardcoded string; `stores/[category]` passing `{ searchQuery }` instead of `{ query }` (sent `search=undefined`); `removeAddress` not persisting; the `login()` user fallback that could never run; the hardcoded Google API key (now env-based); Expo SDK 54 patch versions.
+
+Fixed on 2026-09-19 while writing the test suite (each is covered by a test): `lib/auth.js` `logout()` never called the server (`logoutAction` returned early because `logout()` had already set the guard flag); the offline request queue returned the *replayed response* as the request config, so queued requests errored even though the replay succeeded (now deferred through a custom adapter); `useFetch` only reported "No internet connection" for the contradictory `isConnected: false, isInternetReachable: true` state (now `isConnected === false`); the password-reset step never displayed `resetPwd` failures such as an expired OTP; `stores/[category]` search never refetched (effect ran once); grocery vendor links used `grocery-store` instead of the `grocery-stores` route and dereferenced `vendorId._id` unguarded; `Colors.lightGrey` was undefined; `CurrentLocation` passed a function as `style` through `RipplePressable` (ignored); `MapScreen` requested directions to `undefined,undefined` before a destination was chosen; `edit-profile` used the email keyboard for the phone field and had no placeholders; "Change Pasword" typo; `OnbdOptions` printed the raw route name ("signup") in its heading; featured-image lists used the asset itself as the React key.
 
 Still open. Fix when touching the relevant module; don't build on them.
 
@@ -151,6 +161,33 @@ Still open. Fix when touching the relevant module; don't build on them.
 10. `secureStore.js` intentionally does nothing on web (auth relies on cookies there), so token-based flows don't work in the web build.
 11. `expo run:ios` needs Xcode; on a machine where the license hasn't been accepted it fails until `sudo xcodebuild -license accept` is run.
 
+## Testing
+
+Stack: `jest` 29 + `jest-expo` + `@testing-library/react-native` 13 (with `react-test-renderer` 19.1). Current state: 50 suites, 638 tests, ~98.6% statement coverage (`npm run test:coverage`; output goes to the gitignored `/coverage`).
+
+Layout: tests live in `__tests__/`, mirroring the source tree, as `<name>.test.js`. **Never put tests under `app/`**: Expo Router turns every file there into a route. Jest runs with `watchman: false` (same macOS `~/Documents` permission problem as Metro).
+
+Global setup (`jest/setup.js`, `jest/setupAfterEnv.js`):
+- `expo-secure-store` is an in-memory keychain; seed/inspect via `require('expo-secure-store').__store` (a `Map`, cleared before every test). AsyncStorage and NetInfo use their official Jest mocks; AsyncStorage is cleared before every test.
+- `expo-router` is replaced by `jest/mocks/expo-router.js`. Import helpers from it directly: `__router` (jest.fn `push/replace/back/dismiss/...`), `__setParams({...})` for `useLocalSearchParams`, `__setPathname('/x')`. `Link asChild` becomes a press that calls `router.push(href)`; `Redirect` renders `testID="redirect"`; `Slot` renders `testID="slot"`; `Stack`/`Tabs` render `testID="stack"`/`"tabs"` and each `Screen` renders `testID="screen:<name>"` with its options as JSON in `accessibilityValue.text`, tab icons as `tabicon:<name>:focused|idle`, and the badge as `badge:<name>`.
+- `@expo/vector-icons` (all entry points) renders `<Text testID="icon-<name>" accessibilityLabel="<name>">`, so tests can press/find icons (`getByTestId('icon-menu')`).
+- `expo-image` renders a `View` with `testID="expo-image"` (source/accessibilityLabel preserved; fire `loadEnd` to finish loading). Reanimated, safe-area-context, haptics, splash screen and status bar are mocked. `console.log` is silenced (the app logs a lot); `console.warn`/`console.error` stay visible, so a new warning usually means a real problem.
+
+Conventions used by the existing tests:
+- Mock the layer *below* what you are testing: screens mock `@/contexts/authContext`, `@/contexts/cartContext`, `@/services/api`, and the drawer (`const mockDrawer = {...}; jest.mock('@/contexts/DrawerProvider', () => ({ useDrawer: () => mockDrawer }))`). Context and service tests mock `lib/auth`, `dashboardApi`, storage, or `fetch`.
+- `lib/auth.js` holds module state (`isLoggingOut`) and registers interceptors on import: its tests `jest.resetModules()` and re-require per test (`load()` helper), and give the axios instance a fake adapter.
+- Screens using React Native Paper's `Snackbar`/`Appbar` are rendered inside `<PaperProvider>`.
+- After `render`, flush async loads inside `act` (`await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`). Use fake timers for debounces and countdowns (search 500ms, OTP resend 30s).
+- Tests that pin a known gap are commented as such. When you fix the gap, update the test: `utils/misc` (`KNOWN_MISSING` menu routes), `myCart` (`Pay` -> `/payment`), `services/api` (`fetchPopularStores` endpoint), `DottedLines`/orders/dashboard mock data.
+- `constants/colors.test.js` scans the source and fails if any `Colors.<token>` is undefined.
+
+Pitfalls found the hard way:
+- `jest.clearAllMocks()` does **not** reset implementations; a leftover never-resolving `mockImplementation` hangs later tests. Use `mockReset()` on the mocks you own.
+- Never `mockRestore()` an already-`jest.fn` module mock such as `AsyncStorage.setItem`: it wipes the implementation for the rest of the file. Inspect `.mock.calls` instead.
+- `import * as mod from '...'` includes a non-function `__esModule` key: filter with `typeof fn?.mockReset === 'function'` before iterating.
+- Snapshot config objects by value: axios mutates and reuses the request config on retry, so recording the live reference gives misleading results.
+- A test-runner `cd` persists in the shell between commands; use absolute paths.
+
 ## Expected development workflow
 
 When adding or changing a feature:
@@ -158,11 +195,12 @@ When adding or changing a feature:
 2. Check whether a provider, hook, or API helper already exists (`useAuth`, `useCart`, `useDrawer`, `useFetch`, `useToast`, `services/*`).
 3. Put network/data logic in `services/` (public -> `services/api.js`; authenticated -> `services/dashboardApi.js` via `fetchWithCred`) and keep route files thin.
 4. Reuse the role -> endpoint pattern (customer/vendor/rider) for new auth-related calls rather than inventing a new one.
-5. Run `npm run lint`; don't add new errors or warnings to the touched files.
+5. Add or update tests in `__tests__/` alongside the change (see "Testing").
+6. Run `npm test` and `npm run lint`; don't add new errors or warnings to the touched files.
 
 ## Verification checklist before shipping
 
-- `npm run lint` (0 errors expected).
+- `npm test` (all suites pass) and `npm run lint` (0 errors expected).
 - Login/logout for at least one role on iOS or Android; confirm the drawer, `user.role` UI and `/dashboard` guard behave.
 - Signed-out users cannot reach `/dashboard`; signed-in users are redirected away from `(auth)` routes.
 - Cart and delivery address persist across app reloads, for guest and logged-in users.

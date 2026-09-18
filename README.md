@@ -51,4 +51,3 @@ Join our community of developers creating universal apps.
 
 
 https://www.figma.com/design/Ktbid34ODkW1w5bXzEt4H7/Quick-Food-Shop?node-id=3523-13054&t=nC585JWcKAQT1SZF-0
-write tests for the entire project

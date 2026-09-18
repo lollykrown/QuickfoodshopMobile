@@ -47,6 +47,7 @@ const RouteMap = ({
 
   // Fetch route
   useEffect(() => {
+    if (start?.latitude == null || end?.latitude == null) return;
     const fetchRoute = async () => {
       try {
         const resp = await fetch(
@@ -114,7 +115,12 @@ const RouteMap = ({
       )}
 
       {/* Snap to start button */}
-      <TouchableOpacity style={styles.button} onPress={snapToStart}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={snapToStart}
+        accessibilityRole="button"
+        accessibilityLabel="Center map on destination"
+      >
           <View style={styles.startDot} />
       </TouchableOpacity>
     </MapView>
