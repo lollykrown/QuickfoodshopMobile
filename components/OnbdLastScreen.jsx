@@ -1,5 +1,5 @@
 import { Text, Image, View, TouchableOpacity, Dimensions, StyleSheet, Animated } from 'react-native'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import * as Haptics from 'expo-haptics'
 import StackedBackground from '@/components/StackedBG'
 import OnbdOptions from './OnbdOptions'
@@ -9,7 +9,7 @@ const { width } = Dimensions.get('window')
 
 export default function GetStartedScreen() {
 const [showOptions, setShowOptions] = useState(false)
-  const buttonScale = useRef(new Animated.Value(1)).current
+  const [buttonScale] = useState(() => new Animated.Value(1))
 
   const animateButton = () => {
     Animated.sequence([

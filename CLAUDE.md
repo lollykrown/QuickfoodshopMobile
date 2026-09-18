@@ -5,7 +5,7 @@
 React Native mobile app built with Expo and Expo Router for the Quickfoodshop ordering experience: customer browsing (food, groceries, restaurants, grocery stores), cart, delivery address, account management, and role-based auth for `customer` / `vendor` / `rider`.
 
 Core stack:
-- Expo SDK 54, React Native 0.81, React 19.1 (New Architecture and React Compiler enabled, `typedRoutes` on)
+- Expo SDK 57, React Native 0.86, React 19.2 (the New Architecture is always on since SDK 55; React Compiler enabled, `typedRoutes` on)
 - Expo Router (file-based routing), `expo-dev-client`
 - React Context + `useReducer` for app state (no Redux/Zustand/React Query)
 - AsyncStorage + Expo SecureStore for persistence
@@ -41,7 +41,7 @@ npm run test:coverage
 - `metro.config.js`: default Expo config with `resolver.useWatchman = false`. The repo sits in `~/Documents`, where macOS blocks the Watchman daemon (`Operation not permitted`) and `npx expo start` crashes in watch mode. Don't remove it unless Watchman has been granted Full Disk Access or the repo has moved. (`CI=1` hides the crash because it disables watch mode.)
 - `tsconfig.json`: alias `@/*` maps to the project root (e.g. `@/contexts/authContext`).
 - `jest.config.js` + `jest/`: test runner config, global native-module mocks and the `expo-router` stand-in (see "Testing").
-- `eslint.config.js`: `eslint-config-expo/flat`, ignores `dist/*`, and declares Jest globals for `__tests__/` and `jest/`. Current state: 0 errors, 63 warnings (mostly unused imports/vars and `exhaustive-deps` in files not listed under "Known issues"). `npx expo-doctor` passes 18/18.
+- `eslint.config.js`: `eslint-config-expo/flat`, ignores `dist/*`, and declares Jest globals for `__tests__/` and `jest/`. Current state: 0 errors, 62 warnings (mostly unused imports/vars and `exhaustive-deps` in files not listed under "Known issues"). `npx expo-doctor` passes 21/21.
 - `.vscode/settings.json` runs fixAll / organizeImports / sortMembers on save.
 
 ## Repository structure
@@ -156,14 +156,14 @@ Still open. Fix when touching the relevant module; don't build on them.
 5. **Cart quirks:** `cartCount` is the number of distinct line items, not total quantity. `ADD_ITEM` silently ignores an item already in the cart. The load effect runs once (`[]`), so the cart is not reloaded (or guest cart merged) when the user logs in or out and `storageKey` changes. The server-cart merge is stubbed (`serverCart = []`).
 6. **Role menus** in `utils/misc.js` link to routes that don't exist (`/dashboard/store`, `/dashboard/withdrawal`, `/dashboard/requests`).
 7. **Unused/unwired code:** `components/Guard.jsx`, `lib/getLatLng.js`, `lib/pushNotifications.js`, `lib/notificationHandlers.js` (no push setup is called anywhere), and the `Fonts` export in `constants/colors.js`.
-8. **Lint warnings** (63): unused imports/vars and `react-hooks/exhaustive-deps` (e.g. `cartContext.js` effects missing `storageKey`, `MapScreen.jsx`).
+8. **Lint warnings** (62): unused imports/vars and `react-hooks/exhaustive-deps` (e.g. `cartContext.js` effects missing `storageKey`, `MapScreen.jsx`).
 9. Base URL is still duplicated in `lib/auth.js` (twice) and `services/api.js` (`CONFIG.BASE_URL`); `REMOVE_ADDRESS` naming is now consistent, but `hooks/usefetch.js` is lowercase while `useToast.js` is not.
 10. `secureStore.js` intentionally does nothing on web (auth relies on cookies there), so token-based flows don't work in the web build.
-11. `expo run:ios` needs Xcode; on a machine where the license hasn't been accepted it fails until `sudo xcodebuild -license accept` is run.
+11. `expo run:ios` needs Xcode; on a machine where the license hasn't been accepted it fails until `sudo xcodebuild -license accept` is run. SDK 56+ also needs **Xcode 26.4+** and targets **iOS 16.4+**; this Mac has Xcode 27.0. There is no Android SDK on this Mac, so Android native builds have never been compiled here (only prebuilt/bundled).
 
 ## Testing
 
-Stack: `jest` 29 + `jest-expo` + `@testing-library/react-native` 13 (with `react-test-renderer` 19.1). Current state: 50 suites, 638 tests, ~98.6% statement coverage (`npm run test:coverage`; output goes to the gitignored `/coverage`).
+Stack: `jest` 29 + `jest-expo` 57 (needs `@react-native/jest-preset`, kept at the same version as react-native) + `@testing-library/react-native` 13 (with `react-test-renderer` matching React, 19.2). `jest/resolver.js` chains React Native's resolver with `react-native-worklets`' (Reanimated 4's mock won't load without it); jest-expo already sets a `resolver`, and Jest allows only one. Current state: 50 suites, 638 tests, ~98.6% statement coverage (`npm run test:coverage`; output goes to the gitignored `/coverage`).
 
 Layout: tests live in `__tests__/`, mirroring the source tree, as `<name>.test.js`. **Never put tests under `app/`**: Expo Router turns every file there into a route. Jest runs with `watchman: false` (same macOS `~/Documents` permission problem as Metro).
 
@@ -187,6 +187,18 @@ Pitfalls found the hard way:
 - `import * as mod from '...'` includes a non-function `__esModule` key: filter with `typeof fn?.mockReset === 'function'` before iterating.
 - Snapshot config objects by value: axios mutates and reuses the request config on retry, so recording the live reference gives misleading results.
 - A test-runner `cd` persists in the shell between commands; use absolute paths.
+
+## SDK 57 upgrade notes (2026-09-19, from SDK 54)
+
+What changed and what to keep in mind:
+- **Config:** `newArchEnabled` and `android.edgeToEdgeEnabled` were removed from `app.json` (both are always on now). `expo install` added the `expo-font`, `expo-image` and `expo-status-bar` config plugins.
+- **expo-router no longer depends on react-navigation (SDK 56).** Import `useFocusEffect`, `useNavigation`, `useIsFocused` etc. from `expo-router`, never from `@react-navigation/*` (that would fail at runtime; Jest can't catch it because tests mock the router). The three `@react-navigation/*` dependencies were removed.
+- **Global `fetch` is now `expo/fetch` (SDK 56).** `services/api.js` and `lib/auth.js` (login/refresh) use plain `fetch`; axios (`fetchWithCred`) uses XHR and is unaffected. To fall back to React Native's fetch, set `EXPO_PUBLIC_USE_RN_FETCH=1` in `.env.local`. Verify login (`credentials: 'include'`) and the catalogue calls on a device.
+- **Lint:** the newer React rules reject `useRef(new Animated.Value(..)).current` read during render. Use `const [x] = useState(() => new Animated.Value(..))`.
+- **Notifications/device:** `Constants.isDevice` no longer exists (use `expo-device`, now a dependency); `expo-notifications` handlers use `shouldShowBanner` + `shouldShowList` (`shouldShowAlert` is deprecated).
+- **Native builds:** any existing dev build is obsolete. Rebuild with `npm run ios` / `npm run android` (or EAS). `ios/` and `android/` are generated and gitignored; delete them before rebuilding if they exist.
+- **Verified on this Mac (no device/simulator build possible):** Jest 638/638, `expo-doctor` 21/21, `expo export` for iOS/Android/web, `expo prebuild` for both platforms, and the dev server serving all three dev bundles. Not verified: native compilation and runtime behaviour on a device.
+- Deprecated but not yet migrated: `@expo/vector-icons` is being replaced by `@react-native-vector-icons/*` (codemod: `npx @react-native-vector-icons/codemod`).
 
 ## Expected development workflow
 

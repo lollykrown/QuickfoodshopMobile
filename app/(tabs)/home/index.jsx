@@ -1,5 +1,5 @@
 import { View, Text,BackHandler, StyleSheet, FlatList, ScrollView, TouchableOpacity, Pressable } from 'react-native'
-import { Link, useRouter } from 'expo-router'
+import { Link, useFocusEffect, useRouter } from 'expo-router'
 import { Image } from 'expo-image';
 import { ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,7 +17,6 @@ import { useEffect, useCallback, useState } from 'react';
 import { ItemCard } from '@/components/ItemCard';
 import { useDrawer } from '@/contexts/DrawerProvider';
 import {useAuth } from '@/contexts/authContext'
-import { useFocusEffect } from '@react-navigation/native';
 import ShimmerExpoImage from '@/components/ShimmerImg';
 import RipplePressable from '@/components/RipplePressable';
 import { useCart } from '@/contexts/cartContext'; 

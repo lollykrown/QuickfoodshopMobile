@@ -38,7 +38,7 @@ const slides = [
 
 export default function Onboarding() {
   const flatListRef = useRef(null)
-  const scrollX = useRef(new Animated.Value(0)).current
+  const [scrollX] = useState(() => new Animated.Value(0))
   const [index, setIndex] = useState(0)
 
   const haptic = () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)

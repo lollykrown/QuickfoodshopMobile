@@ -8,6 +8,8 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/$1',
     '^@expo/vector-icons(/.*)?$': '<rootDir>/jest/mocks/vector-icons.js',
   },
+  // React Native's resolver + react-native-worklets' (Reanimated 4's mock needs it); see the file.
+  resolver: '<rootDir>/jest/resolver.js',
   // Tests live in __tests__/ (not app/, where Expo Router would treat them as routes).
   testMatch: ['<rootDir>/__tests__/**/*.test.{js,jsx}'],
   testPathIgnorePatterns: ['/node_modules/', '/.expo/', '/android/', '/ios/'],

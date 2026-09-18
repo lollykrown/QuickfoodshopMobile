@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Animated, Easing } from 'react-native';
 import { Image } from 'expo-image';
 
@@ -7,7 +7,7 @@ const blurhash =
 
 export default function ShimmerExpoImage({ uri, width = 200, height = 200,accessibilityLabel, styles }) {
   const [loaded, setLoaded] = useState(false);
-  const shimmerAnim = useRef(new Animated.Value(-1)).current;
+  const [shimmerAnim] = useState(() => new Animated.Value(-1));
 
   // Start shimmer animation
   useEffect(() => {

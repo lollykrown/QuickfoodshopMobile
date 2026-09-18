@@ -14,10 +14,6 @@ jest.mock('@/services/api', () => ({
   fetchPopularDishes: jest.fn(),
   fetchPopularStores: jest.fn(),
 }));
-// Home imports useFocusEffect from react-navigation directly (not via expo-router).
-jest.mock('@react-navigation/native', () => ({
-  useFocusEffect: (callback) => require('react').useEffect(() => callback(), [callback]),
-}));
 
 const user = { firstName: 'ada', lastName: 'lovelace', image: 'https://example.com/a.png' };
 const dish = (id, name, category = 'Food') => ({

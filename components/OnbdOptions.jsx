@@ -3,7 +3,7 @@ import Octicons from '@expo/vector-icons/Octicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import {
   Animated,
   Dimensions,
@@ -23,7 +23,7 @@ const options2 = ['customer', 'vendor', 'rider'];
 
 export default function OnbdOptions({auth}) {
   const router = useRouter();
-  const buttonScale = useRef(new Animated.Value(1)).current;
+  const [buttonScale] = useState(() => new Animated.Value(1));
   const [selected, setSelected] = useState(null);
   const [visible, setVisible] = useState(false);
   const [authRoute, setAuthRoute] = useState(auth||'signup');

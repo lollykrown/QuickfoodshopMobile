@@ -20,7 +20,7 @@ const RouteMap = ({
     useCart();
   const [routeCoords, setRouteCoords] = useState([]);
   const mapRef = useRef(null);
-  const pulseAnim = useRef(new Animated.Value(0)).current;
+  const [pulseAnim] = useState(() => new Animated.Value(0));
 
   // Pulsating animation
   useEffect(() => {

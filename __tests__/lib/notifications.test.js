@@ -1,6 +1,6 @@
 import { Alert, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
-import Constants from 'expo-constants';
+import * as Device from 'expo-device';
 
 jest.mock('expo-notifications', () => ({
   setNotificationHandler: jest.fn(),
@@ -12,7 +12,7 @@ jest.mock('expo-notifications', () => ({
   AndroidImportance: { MAX: 5 },
 }));
 
-jest.mock('expo-constants', () => ({ __esModule: true, default: { isDevice: true } }));
+jest.mock('expo-device', () => ({ isDevice: true }));
 
 describe('registerForPushNotificationsAsync', () => {
   const { registerForPushNotificationsAsync } = require('@/lib/pushNotifications');
@@ -20,7 +20,7 @@ describe('registerForPushNotificationsAsync', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    Constants.isDevice = true;
+    Device.isDevice = true;
     alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     Notifications.getPermissionsAsync.mockResolvedValue({ status: 'granted' });
     Notifications.getExpoPushTokenAsync.mockResolvedValue({ data: 'ExponentPushToken[abc]' });
@@ -29,7 +29,7 @@ describe('registerForPushNotificationsAsync', () => {
   afterEach(() => alertSpy.mockRestore());
 
   it('refuses to register on a simulator', async () => {
-    Constants.isDevice = false;
+    Device.isDevice = false;
 
     await expect(registerForPushNotificationsAsync()).resolves.toBeUndefined();
     expect(alertSpy).toHaveBeenCalledWith('Must use a physical device for Push Notifications');
@@ -78,12 +78,13 @@ describe('registerForPushNotificationsAsync', () => {
 });
 
 describe('notificationHandlers', () => {
-  it('shows alerts and plays sound for foreground notifications (no badge)', async () => {
+  it('shows a banner and list entry, and plays sound, for foreground notifications (no badge)', async () => {
     require('@/lib/notificationHandlers');
 
     const { handleNotification } = Notifications.setNotificationHandler.mock.calls[0][0];
     await expect(handleNotification()).resolves.toEqual({
-      shouldShowAlert: true,
+      shouldShowBanner: true,
+      shouldShowList: true,
       shouldPlaySound: true,
       shouldSetBadge: false,
     });

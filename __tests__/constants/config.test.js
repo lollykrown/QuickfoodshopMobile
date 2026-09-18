@@ -1,7 +1,14 @@
 describe('constants/config', () => {
   const original = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
+  let warn;
+
+  // The module warns (in dev) when the key is missing, which several tests below trigger on purpose.
+  beforeEach(() => {
+    warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  });
 
   afterEach(() => {
+    warn.mockRestore();
     if (original === undefined) delete process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
     else process.env.EXPO_PUBLIC_GOOGLE_API_KEY = original;
     jest.resetModules();
@@ -24,21 +31,17 @@ describe('constants/config', () => {
 
   it('warns in development when the key is missing', () => {
     delete process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
-    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     load();
 
     expect(warn).toHaveBeenCalledWith(expect.stringContaining('EXPO_PUBLIC_GOOGLE_API_KEY'));
-    warn.mockRestore();
   });
 
   it('does not warn when the key is present', () => {
     process.env.EXPO_PUBLIC_GOOGLE_API_KEY = 'abc123';
-    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     load();
 
     expect(warn).not.toHaveBeenCalled();
-    warn.mockRestore();
   });
 });
